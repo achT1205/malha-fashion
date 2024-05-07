@@ -425,6 +425,37 @@
           </div>
         </div>
       </div>
+      <div aria-labelledby="category-heading" class="bg-gray-50">
+        <div class="mx-auto max-w-xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+          <h2 class="text-2xl font-bold tracking-tight text-gray-900">Nos collections</h2>
+          <p class="mt-4 text-base text-gray-500">
+            Pour chaque occasion, nos collections de robes kabyles pour femmes célèbrent les
+            traditions et le style unique de la mode kabyle, offrant une variété d'options.
+          </p>
+
+          <div class="mt-10 space-y-12 lg:grid lg:grid-cols-3 lg:gap-x-8 lg:space-y-0">
+            <a
+              v-for="category in categories"
+              :key="category.name"
+              :href="category.href"
+              class="group block"
+            >
+              <div
+                aria-hidden="true"
+                class="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg lg:aspect-h-6 lg:aspect-w-5 group-hover:opacity-75"
+              >
+                <img
+                  :src="category.imageSrc"
+                  :alt="category.imageAlt"
+                  class="h-full w-full object-cover object-center"
+                />
+              </div>
+              <h3 class="mt-4 text-base font-semibold text-gray-900">{{ category.name }}</h3>
+              <p class="mt-2 text-sm text-gray-500">{{ category.description }}</p>
+            </a>
+          </div>
+        </div>
+      </div>
       <!-- CTA section -->
       <section aria-labelledby="sale-heading">
         <div class="overflow-hidden pt-32 sm:pt-14">
@@ -477,137 +508,17 @@
           </div>
         </div>
       </section>
-      <div aria-labelledby="category-heading" class="bg-gray-50">
-        <div class="mx-auto max-w-xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-          <h2 class="text-2xl font-bold tracking-tight text-gray-900">Nos collections</h2>
-          <p class="mt-4 text-base text-gray-500">
-            Pour chaque occasion, nos collections de robes kabyles pour femmes célèbrent les
-            traditions et le style unique de la mode kabyle, offrant une variété d'options.
-          </p>
-
-          <div class="mt-10 space-y-12 lg:grid lg:grid-cols-3 lg:gap-x-8 lg:space-y-0">
-            <a
-              v-for="category in categories"
-              :key="category.name"
-              :href="category.href"
-              class="group block"
-            >
-              <div
-                aria-hidden="true"
-                class="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg lg:aspect-h-6 lg:aspect-w-5 group-hover:opacity-75"
-              >
-                <img
-                  :src="category.imageSrc"
-                  :alt="category.imageAlt"
-                  class="h-full w-full object-cover object-center"
-                />
-              </div>
-              <h3 class="mt-4 text-base font-semibold text-gray-900">{{ category.name }}</h3>
-              <p class="mt-2 text-sm text-gray-500">{{ category.description }}</p>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- CTA section -->
-      <section aria-labelledby="sale-heading">
-        <div class="overflow-hidden pt-32 sm:pt-14">
-          <div class="bg-gray-800">
-            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-              <div class="relative pb-16 pt-48 sm:pb-24">
-                <div>
-                  <h2
-                    id="sale-heading"
-                    class="text-4xl font-bold tracking-tight text-white md:text-5xl"
-                  >
-                    Final Stock.
-                    <br />
-                    Up to 50% off.
-                  </h2>
-                  <div class="mt-6 text-base">
-                    <a href="#" class="font-semibold text-white">
-                      Shop the sale
-                      <span aria-hidden="true"> &rarr;</span>
-                    </a>
-                  </div>
-                </div>
-
-                <div
-                  class="absolute -top-32 left-1/2 -translate-x-1/2 transform sm:top-6 sm:translate-x-0"
-                >
-                  <div class="ml-24 flex min-w-max space-x-6 sm:ml-3 lg:space-x-8">
-                    <div class="flex space-x-6 sm:flex-col sm:space-x-0 sm:space-y-6 lg:space-y-8">
-                      <div class="flex-shrink-0">
-                        <img
-                          class="h-64 w-64 rounded-lg object-cover md:h-72 md:w-72"
-                          src="https://tailwindui.com/img/ecommerce-images/home-page-03-category-01.jpg"
-                          alt=""
-                        />
-                      </div>
-
-                      <div class="mt-6 flex-shrink-0 sm:mt-0">
-                        <img
-                          class="h-64 w-64 rounded-lg object-cover md:h-72 md:w-72"
-                          src="https://tailwindui.com/img/ecommerce-images/home-page-03-category-02.jpg"
-                          alt=""
-                        />
-                      </div>
-                    </div>
-                    <div
-                      class="flex space-x-6 sm:-mt-20 sm:flex-col sm:space-x-0 sm:space-y-6 lg:space-y-8"
-                    >
-                      <div class="flex-shrink-0">
-                        <img
-                          class="h-64 w-64 rounded-lg object-cover md:h-72 md:w-72"
-                          src="https://tailwindui.com/img/ecommerce-images/home-page-03-favorite-01.jpg"
-                          alt=""
-                        />
-                      </div>
-
-                      <div class="mt-6 flex-shrink-0 sm:mt-0">
-                        <img
-                          class="h-64 w-64 rounded-lg object-cover md:h-72 md:w-72"
-                          src="https://tailwindui.com/img/ecommerce-images/home-page-03-favorite-02.jpg"
-                          alt=""
-                        />
-                      </div>
-                    </div>
-                    <div class="flex space-x-6 sm:flex-col sm:space-x-0 sm:space-y-6 lg:space-y-8">
-                      <div class="flex-shrink-0">
-                        <img
-                          class="h-64 w-64 rounded-lg object-cover md:h-72 md:w-72"
-                          src="https://tailwindui.com/img/ecommerce-images/home-page-03-category-01.jpg"
-                          alt=""
-                        />
-                      </div>
-
-                      <div class="mt-6 flex-shrink-0 sm:mt-0">
-                        <img
-                          class="h-64 w-64 rounded-lg object-cover md:h-72 md:w-72"
-                          src="https://tailwindui.com/img/ecommerce-images/home-page-03-category-02.jpg"
-                          alt=""
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section aria-labelledby="trending-heading">
         <div class="mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:px-8 lg:pt-32">
           <div class="md:flex md:items-center md:justify-between">
             <h2 id="favorites-heading" class="text-2xl font-bold tracking-tight text-gray-900">
-              Trending Products
+              Les tendances du moment
             </h2>
             <a
               href="#"
               class="hidden text-sm font-medium text-indigo-600 hover:text-indigo-500 md:block"
             >
-              Shop the collection
+              Voir toute la liste
               <span aria-hidden="true"> &rarr;</span>
             </a>
           </div>
@@ -616,6 +527,52 @@
             class="mt-6 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-4 md:gap-y-0 lg:gap-x-8"
           >
             <div v-for="product in trendingProducts" :key="product.id" class="group relative">
+              <div
+                class="h-56 w-full overflow-hidden rounded-md group-hover:opacity-75 lg:h-72 xl:h-80"
+              >
+                <img
+                  :src="product.imageSrc"
+                  :alt="product.imageAlt"
+                  class="h-full w-full object-cover object-center"
+                />
+              </div>
+              <h3 class="mt-4 text-sm text-gray-700">
+                <a :href="product.href">
+                  <span class="absolute inset-0" />
+                  {{ product.name }}
+                </a>
+              </h3>
+              <p class="mt-1 text-sm font-medium text-gray-900">{{ product.price }}</p>
+            </div>
+          </div>
+
+          <div class="mt-8 text-sm md:hidden">
+            <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
+              Shop the collection
+              <span aria-hidden="true"> &rarr;</span>
+            </a>
+          </div>
+        </div>
+      </section>
+      <section aria-labelledby="trending-heading">
+        <div class="mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:px-8 lg:pt-32">
+          <div class="md:flex md:items-center md:justify-between">
+            <h2 id="favorites-heading" class="text-2xl font-bold tracking-tight text-gray-900">
+              Nos sacs et accessoires
+            </h2>
+            <a
+              href="#"
+              class="hidden text-sm font-medium text-indigo-600 hover:text-indigo-500 md:block"
+            >
+              Voir toute la liste
+              <span aria-hidden="true"> &rarr;</span>
+            </a>
+          </div>
+
+          <div
+            class="mt-6 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-4 md:gap-y-0 lg:gap-x-8"
+          >
+            <div v-for="product in accessoires" :key="product.id" class="group relative">
               <div
                 class="h-56 w-full overflow-hidden rounded-md group-hover:opacity-75 lg:h-72 xl:h-80"
               >
@@ -644,6 +601,59 @@
           </div>
         </div>
       </section>
+
+      <!-- CTA section -->
+      <section aria-labelledby="sale-heading">
+        <div class="overflow-hidden pt-32 sm:pt-14">
+          <div class="bg-gray-800">
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <div class="relative pb-16 pt-48 sm:pb-24">
+                <div>
+                  <h2
+                    id="sale-heading"
+                    class="text-4xl font-bold tracking-tight text-white md:text-5xl"
+                  >
+                    Promo en cours.
+                    <br />
+                    10% de remise.
+                  </h2>
+                  <div class="mt-6 text-base">
+                    <a href="#" class="font-semibold text-white">
+                      Voir la promo
+                      <span aria-hidden="true"> &rarr;</span>
+                    </a>
+                  </div>
+                </div>
+
+                <div
+                  class="absolute -top-32 left-1/2 -translate-x-1/2 transform sm:top-16 sm:translate-x-0"
+                >
+                  <div class="ml-24 flex min-w-max space-x-6 sm:ml-3 lg:space-x-8">
+                    <div class="flex space-x-6 sm:flex-col sm:space-x-0 sm:space-y-6 lg:space-y-8">
+                      <div class="flex-shrink-0">
+                        <img
+                          class="h-64 w-64 rounded-lg object-cover md:h-72 md:w-72"
+                          src="../assets/images/hero/robe-fete.png"
+                          alt=""
+                        />
+                      </div>
+                    </div>
+                    <div class="flex space-x-6 sm:flex-col sm:space-x-0 sm:space-y-6 lg:space-y-8">
+                      <div class="flex-shrink-0">
+                        <img
+                          class="h-64 w-64 rounded-lg object-cover md:h-72 md:w-72"
+                          src="../assets/images/hero/bournous-fete.png"
+                          alt=""
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
 
     <footer aria-labelledby="footer-heading" class="bg-gray-50">
@@ -668,7 +678,7 @@
             >
               <div class="grid grid-cols-1 gap-y-12 sm:col-span-2 sm:grid-cols-2 sm:gap-x-8">
                 <div>
-                  <h3 class="text-sm font-medium text-gray-900">Products</h3>
+                  <h3 class="text-sm font-medium text-gray-900">Robes & Burnous Kabyles</h3>
                   <ul role="list" class="mt-6 space-y-6">
                     <li v-for="item in footerNavigation.products" :key="item.name" class="text-sm">
                       <a :href="item.href" class="text-gray-500 hover:text-gray-600">{{
@@ -678,7 +688,7 @@
                   </ul>
                 </div>
                 <div>
-                  <h3 class="text-sm font-medium text-gray-900">Company</h3>
+                  <h3 class="text-sm font-medium text-gray-900">Bijoux & Accessoires Kabyles</h3>
                   <ul role="list" class="mt-6 space-y-6">
                     <li v-for="item in footerNavigation.company" :key="item.name" class="text-sm">
                       <a :href="item.href" class="text-gray-500 hover:text-gray-600">{{
@@ -689,7 +699,7 @@
                 </div>
               </div>
               <div>
-                <h3 class="text-sm font-medium text-gray-900">Customer Service</h3>
+                <h3 class="text-sm font-medium text-gray-900">Service client</h3>
                 <ul role="list" class="mt-6 space-y-6">
                   <li
                     v-for="item in footerNavigation.customerService"
@@ -708,12 +718,9 @@
             <div
               class="mt-12 md:col-span-8 md:col-start-3 md:row-start-2 md:mt-0 lg:col-span-4 lg:col-start-9 lg:row-start-1"
             >
-              <h3 class="text-sm font-medium text-gray-900">Sign up for our newsletter</h3>
-              <p class="mt-6 text-sm text-gray-500">
-                The latest deals and savings, sent to your inbox weekly.
-              </p>
+              <h3 class="text-sm font-medium text-gray-900">Restez informés des nouveautés</h3>
               <form class="mt-2 flex sm:max-w-md">
-                <label for="email-address" class="sr-only">Email address</label>
+                <label for="email-address" class="sr-only">Votre email</label>
                 <input
                   id="email-address"
                   type="text"
@@ -726,7 +733,7 @@
                     type="submit"
                     class="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                   >
-                    Sign up
+                    Sourcrire
                   </button>
                 </div>
               </form>
@@ -735,7 +742,7 @@
         </div>
 
         <div class="border-t border-gray-100 py-10 text-center">
-          <p class="text-sm text-gray-500">&copy; 2021 Your Company, Inc. All rights reserved.</p>
+          <p class="text-sm text-gray-500">Aller en haut de page</p>
         </div>
       </div>
     </footer>
@@ -947,42 +954,77 @@ const categories = [
 const trendingProducts = [
   {
     id: 1,
-    name: 'Leather Long Wallet',
-    color: 'Natural',
+    name: 'Thalssa',
     price: '$75',
     href: '#',
     imageSrc: '/images/collections/fete.png',
-    imageAlt: 'Hand stitched, orange leather long wallet.'
+    imageAlt: 'Thalssa'
   },
   {
     id: 2,
-    name: 'Leather Long Wallet',
-    color: 'Natural',
+    name: 'Thalssa',
+
     price: '$75',
     href: '#',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/home-page-04-trending-product-02.jpg',
-    imageAlt: 'Hand stitched, orange leather long wallet.'
+    imageSrc: '/images/collections/fete.png',
+    imageAlt: 'Thalssa'
   },
   {
     id: 3,
-    name: 'Leather Long Wallet',
-    color: 'Natural',
+    name: 'Thalssa',
     price: '$75',
     href: '#',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/home-page-04-trending-product-02.jpg',
-    imageAlt: 'Hand stitched, orange leather long wallet.'
+    imageSrc: '/images/collections/fete.png',
+    imageAlt: 'Thalssa'
   },
   {
     id: 4,
-    name: 'Leather Long Wallet',
-    color: 'Natural',
+    name: 'Thalssa',
     price: '$75',
     href: '#',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/home-page-04-trending-product-02.jpg',
-    imageAlt: 'Hand stitched, orange leather long wallet.'
+    imageSrc: '/images/collections/fete.png',
+    imageAlt: 'Thalssa'
   }
   // More products...
 ]
+
+const accessoires = [
+  {
+    id: 1,
+    name: 'Tassadi',
+    price: '$75',
+    href: '#',
+    imageSrc: '/images/accessoires/1.png',
+    imageAlt: 'Thalssa'
+  },
+  {
+    id: 2,
+    name: 'Tassadi',
+
+    price: '$75',
+    href: '#',
+    imageSrc: '/images/accessoires/2.png',
+    imageAlt: 'Thalssa'
+  },
+  {
+    id: 3,
+    name: 'Tassadi',
+    price: '$75',
+    href: '#',
+    imageSrc: '/images/accessoires/3.png',
+    imageAlt: 'Thalssa'
+  },
+  {
+    id: 4,
+    name: 'Tassadi',
+    price: '$75',
+    href: '#',
+    imageSrc: '/images/accessoires/1.png',
+    imageAlt: 'Thalssa'
+  }
+  // More products...
+]
+
 const perks = [
   {
     name: 'Free returns',
@@ -1011,28 +1053,36 @@ const perks = [
 ]
 const footerNavigation = {
   products: [
-    { name: 'Bags', href: '#' },
-    { name: 'Tees', href: '#' },
-    { name: 'Objects', href: '#' },
-    { name: 'Home Goods', href: '#' },
-    { name: 'Accessories', href: '#' }
+    { name: 'Robe de fete', href: '#' },
+    { name: 'Robe de sortie', href: '#' },
+    { name: 'Robe de de maison', href: '#' },
+    { name: 'Robe de simple', href: '#' },
+    { name: 'Burnous de fete', href: '#' },
+    { name: 'Burnous de sortie', href: '#' },
+    { name: 'Burnous de de maison', href: '#' },
+    { name: 'Burnous de simple', href: '#' }
   ],
   company: [
-    { name: 'Who we are', href: '#' },
-    { name: 'Sustainability', href: '#' },
-    { name: 'Press', href: '#' },
-    { name: 'Careers', href: '#' },
-    { name: 'Terms & Conditions', href: '#' },
-    { name: 'Privacy', href: '#' }
+    { name: 'Colliers ', href: '#' },
+    { name: 'Boucles ', href: '#' },
+    { name: 'Bagues ', href: '#' },
+    { name: 'Bracelets', href: '#' },
+    { name: 'Broches ', href: '#' },
+    { name: 'Bijoux de têtes', href: '#' },
+    { name: 'Bijoux de pieds ', href: '#' },
+    { name: 'Bijoux Ceintures ', href: '#' },
+    { name: 'Accessoires', href: '#' },
+    { name: 'Sacs', href: '#' },
+    { name: 'Chapeaux', href: '#' },
+    { name: 'Cintures', href: '#' }
   ],
   customerService: [
-    { name: 'Contact', href: '#' },
+    { name: 'Contacter nous', href: '#' },
     { name: 'Shipping', href: '#' },
     { name: 'Returns', href: '#' },
     { name: 'Warranty', href: '#' },
     { name: 'Secure Payments', href: '#' },
-    { name: 'FAQ', href: '#' },
-    { name: 'Find a store', href: '#' }
+    { name: 'FAQ', href: '#' }
   ]
 }
 
