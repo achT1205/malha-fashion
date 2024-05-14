@@ -98,27 +98,8 @@
           Pour chaque occasion, nos collections de robes kabyles pour femmes célèbrent les
           traditions et le style unique de la mode kabyle, offrant une variété d'options.
         </p>
-
-        <div class="mt-10 space-y-12 lg:grid lg:grid-cols-3 lg:gap-x-8 lg:space-y-0">
-          <router-link
-            v-for="collection in collections"
-            :key="collection.name"
-            :to="`/collections/${collection.id}`"
-            class="group block"
-          >
-            <div
-              aria-hidden="true"
-              class="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg lg:aspect-h-6 lg:aspect-w-5 group-hover:opacity-75"
-            >
-              <img
-                :src="collection.imageSrc"
-                :alt="collection.imageAlt"
-                class="h-full w-full object-cover object-center"
-              />
-            </div>
-            <h3 class="mt-4 text-base font-semibold text-gray-900">{{ collection.name }}</h3>
-            <p class="mt-2 text-sm text-gray-500">{{ collection.description }}</p>
-          </router-link>
+        <div class="mt-10 space-y-12 lg:gap-x-8 lg:space-y-0">
+          <CollectionCarousel :collections="collections" />
         </div>
       </div>
     </div>
@@ -169,101 +150,115 @@
     </section>
     <section aria-labelledby="trending-heading">
       <div class="mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:px-8 lg:pt-32">
-        <div class="md:flex md:items-center md:justify-between">
-          <h2 id="favorites-heading" class="text-2xl font-bold tracking-tight text-gray-900">
-            Les tendances du moment
-          </h2>
-          <a
-            href="#"
-            class="hidden text-sm font-medium text-indigo-600 hover:text-indigo-500 md:block"
-          >
-            Voir toute la liste
-            <span aria-hidden="true"> &rarr;</span>
-          </a>
+        <div>
+          <div class="md:flex md:items-center md:justify-between">
+            <h2 id="favorites-heading" class="text-2xl font-bold tracking-tight text-gray-900">
+              Les tendances du moment
+            </h2>
+            <a
+              href="#"
+              class="hidden text-sm font-medium text-indigo-600 hover:text-indigo-500 md:block"
+            >
+              Voir toute la liste
+              <span aria-hidden="true"> &rarr;</span>
+            </a>
+          </div>
+
+          <div class="mt-6 gap-x-4 gap-y-10 sm:gap-x-6 md:gap-y-0 lg:gap-x-8">
+            <ProductCarousel :products="trendingProducts" />
+          </div>
         </div>
 
-        <div
-          class="mt-6 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-4 md:gap-y-0 lg:gap-x-8"
-        >
-          <ProductCard v-for="product in trendingProducts" :key="product.id" :product="product" />
+        <div>
+          <div class="md:flex md:items-center md:justify-between">
+            <h2 id="favorites-heading" class="text-2xl font-bold tracking-tight text-gray-900">
+              Style et confort
+            </h2>
+            <a
+              href="#"
+              class="hidden text-sm font-medium text-indigo-600 hover:text-indigo-500 md:block"
+            >
+              Voir toute la liste
+              <span aria-hidden="true"> &rarr;</span>
+            </a>
+          </div>
+
+          <div class="mt-6 gap-x-4 gap-y-10 sm:gap-x-6 md:gap-y-0 lg:gap-x-8">
+            <ProductCarousel :products="trendingProducts" />
+          </div>
         </div>
 
-        <div class="mt-8 text-sm md:hidden">
-          <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
-            Shop the collection
-            <span aria-hidden="true"> &rarr;</span>
-          </a>
-        </div>
-      </div>
-    </section>
-    <section aria-labelledby="trending-heading">
-      <div class="mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:px-8 lg:pt-32">
-        <div class="md:flex md:items-center md:justify-between">
-          <h2 id="favorites-heading" class="text-2xl font-bold tracking-tight text-gray-900">
-            Nos sacs et accessoires
-          </h2>
-          <a
-            href="#"
-            class="hidden text-sm font-medium text-indigo-600 hover:text-indigo-500 md:block"
-          >
-            Voir toute la liste
-            <span aria-hidden="true"> &rarr;</span>
-          </a>
-        </div>
-
-        <div
-          class="mt-6 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-4 md:gap-y-0 lg:gap-x-8"
-        >
-          <ProductCard v-for="product in accessoires" :key="product.id" :product="product" />
-        </div>
-
-        <div class="mt-8 text-sm md:hidden">
-          <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
-            Shop the collection
-            <span aria-hidden="true"> &rarr;</span>
-          </a>
-        </div>
-      </div>
-    </section>
-    <section aria-labelledby="sale-heading">
-      <div class="overflow-hidden pt-32 sm:pt-14">
-        <div class="bg-white">
-          <div>
-            <div class="relative overflow-hidden rounded-lg lg:h-96">
-              <div class="absolute inset-0">
-                <img
-                  src="/images/collections/accessories/1.png"
-                  alt=""
-                  class="h-full w-full object-cover object-center"
-                />
-              </div>
-              <div aria-hidden="true" class="relative h-96 w-full lg:hidden" />
-              <div aria-hidden="true" class="relative h-32 w-full lg:hidden" />
-              <div
-                class="absolute inset-x-0 bottom-0 rounded-bl-lg rounded-br-lg bg-black bg-opacity-75 p-6 backdrop-blur backdrop-filter sm:flex sm:items-center sm:justify-between lg:inset-x-auto lg:inset-y-0 lg:w-96 lg:flex-col lg:items-start lg:rounded-br-none lg:rounded-tl-lg"
-              >
                 <div>
-                  <h2 class="text-xl font-bold text-white">Éclats de Tizi</h2>
-                  <p class="mt-1 text-sm text-gray-300">
-                    Inspirée par la ville de Tizi Ouzou, au cœur de la Kabylie.
-                  </p>
-                </div>
-                <a
-                  href="#"
-                  class="mt-6 flex flex-shrink-0 items-center justify-center rounded-md border border-white border-opacity-25 bg-white bg-opacity-0 px-4 py-3 text-base font-medium text-white hover:bg-opacity-10 sm:ml-8 sm:mt-0 lg:ml-0 lg:w-full"
-                  >Voir la collection</a
-                >
-              </div>
-            </div>
+          <div class="md:flex md:items-center md:justify-between">
+            <h2 id="favorites-heading" class="text-2xl font-bold tracking-tight text-gray-900">
+              Faites plaisir aux enfants
+            </h2>
+            <a
+              href="#"
+              class="hidden text-sm font-medium text-indigo-600 hover:text-indigo-500 md:block"
+            >
+              Voir toute la liste
+              <span aria-hidden="true"> &rarr;</span>
+            </a>
+          </div>
+
+          <div class="mt-6 gap-x-4 gap-y-10 sm:gap-x-6 md:gap-y-0 lg:gap-x-8">
+            <ProductCarousel :products="trendingProducts" />
+          </div>
+        </div>
+
+        <div>
+          <div class="md:flex md:items-center md:justify-between">
+            <h2 id="favorites-heading" class="text-2xl font-bold tracking-tight text-gray-900">
+              Nos sacs et accessoires
+            </h2>
+            <a
+              href="#"
+              class="hidden text-sm font-medium text-indigo-600 hover:text-indigo-500 md:block"
+            >
+              Voir toute la liste
+              <span aria-hidden="true"> &rarr;</span>
+            </a>
+          </div>
+          <div class="mt-6 gap-x-4 gap-y-10 sm:gap-x-6 md:gap-y-0 lg:gap-x-8">
+            <ProductCarousel :products="accessoires" />
           </div>
         </div>
       </div>
     </section>
+
+    <div class="relative overflow-hidden lg:h-96">
+      <div class="absolute inset-0">
+        <img
+          src="../assets/images/hero/robe-fete.png"
+          alt=""
+          class="h-full w-full object-cover object-center"
+        />
+      </div>
+      <div aria-hidden="true" class="relative h-96 w-full lg:hidden" />
+      <div aria-hidden="true" class="relative h-32 w-full lg:hidden" />
+      <div
+        class="absolute inset-x-0 bottom-0 rounded-bl-lg rounded-br-lg bg-black bg-opacity-75 p-6 backdrop-blur backdrop-filter sm:flex sm:items-center sm:justify-between lg:inset-x-auto lg:inset-y-0 lg:w-96 lg:flex-col lg:items-start lg:rounded-br-none lg:rounded-tl-lg"
+      >
+        <div>
+          <h2 class="text-xl font-bold text-white">Éclats de Tizi</h2>
+          <p class="mt-1 text-sm text-gray-300">
+            Inspirée par la ville de Tizi Ouzou, au cœur de la Kabylie.
+          </p>
+        </div>
+        <a
+          href="#"
+          class="mt-6 flex flex-shrink-0 items-center justify-center rounded-md border border-white border-opacity-25 bg-white bg-opacity-0 px-4 py-3 text-base font-medium text-white hover:bg-opacity-10 sm:ml-8 sm:mt-0 lg:ml-0 lg:w-full"
+          >Voir la collection</a
+        >
+      </div>
+    </div>
   </main>
 </template>
 
 <script setup>
-import ProductCard from '../components/ProductCardWithQuickView.vue'
+import CollectionCarousel from '../components/CollectionCarousel.vue'
+import ProductCarousel from '../components/ProductCarousel.vue'
 
 const collections = [
   {

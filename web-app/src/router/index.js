@@ -22,6 +22,16 @@ const router = createRouter({
       path: '/collections/:id',
       name: 'CollectionDetails',
       component: () => import('../views/CollectionDetailsView.vue')
+    },
+    {
+      path: '/test',
+      name: 'MyTest',
+      component: () => import('../views/MyTest.vue')
+    },
+    {
+      path: '/test1',
+      name: 'MyTest1',
+      component: () => import('../views/MyTest1.vue')
     }
   ]
 })
