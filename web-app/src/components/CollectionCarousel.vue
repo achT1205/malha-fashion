@@ -3,11 +3,13 @@
   <div class="card">
     <Carousel-T
       :value="collections"
-      :numVisible="3"
-      :numScroll="1"
+      :numVisible="numVisible"
+      :numScroll="numScroll"
       :responsiveOptions="responsiveOptions"
       circular
-      :autoplayInterval="6000"
+      :autoplayInterval="autoplayInterval"
+      :showNavigators="showNavigators"
+      :showIndicators="showIndicators"
     >
       <template #item="slotProps">
         <CollectionCard :collection="slotProps.data" />
@@ -24,6 +26,31 @@ const props = defineProps({
   collections: {
     type: [Array, null],
     required: true
+  },
+  autoplayInterval: {
+    type: Number,
+    required: true,
+    default: 6000
+  },
+  numVisible: {
+    type: Number,
+    required: true,
+    default: 3
+  },
+  numScroll: {
+    type: Number,
+    required: true,
+    default: 1
+  },
+  showNavigators: {
+    type: Number,
+    required: true,
+    default: 1
+  },
+  showIndicators: {
+    type: Number,
+    required: true,
+    default: 1
   }
 })
 

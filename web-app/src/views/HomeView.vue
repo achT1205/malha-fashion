@@ -83,7 +83,7 @@
 
               <a
                 href="#"
-                class="inline-block rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-center font-medium text-white hover:bg-indigo-700"
+                class="inline-block rounded-md border border-transparent bg-pink-600 px-8 py-3 text-center font-medium text-white hover:bg-pink-700"
                 >Voir les collections</a
               >
             </div>
@@ -99,7 +99,14 @@
           traditions et le style unique de la mode kabyle, offrant une variété d'options.
         </p>
         <div class="mt-10 space-y-12 lg:gap-x-8 lg:space-y-0">
-          <CollectionCarousel :collections="collections" />
+          <CollectionCarousel
+            :collections="collections"
+            :numVisible="3"
+            :numScroll="1"
+            :autoplayInterval="8000"
+            :showNavigators="false"
+            :showIndicators="true"
+          />
         </div>
       </div>
     </div>
@@ -157,7 +164,7 @@
             </h2>
             <a
               href="#"
-              class="hidden text-sm font-medium text-indigo-600 hover:text-indigo-500 md:block"
+              class="hidden text-sm font-medium text-pink-600 hover:text-pink-500 md:block"
             >
               Voir toute la liste
               <span aria-hidden="true"> &rarr;</span>
@@ -165,7 +172,14 @@
           </div>
 
           <div class="mt-6 gap-x-4 gap-y-10 sm:gap-x-6 md:gap-y-0 lg:gap-x-8">
-            <ProductCarousel :products="trendingProducts" />
+            <ProductCarousel
+              :products="trendingProducts"
+              :numVisible="4"
+              :numScroll="1"
+              :autoplayInterval="12000"
+              :showNavigators="false"
+              :showIndicators="true"
+            />
           </div>
         </div>
 
@@ -176,7 +190,7 @@
             </h2>
             <a
               href="#"
-              class="hidden text-sm font-medium text-indigo-600 hover:text-indigo-500 md:block"
+              class="hidden text-sm font-medium text-pink-600 hover:text-pink-500 md:block"
             >
               Voir toute la liste
               <span aria-hidden="true"> &rarr;</span>
@@ -184,18 +198,25 @@
           </div>
 
           <div class="mt-6 gap-x-4 gap-y-10 sm:gap-x-6 md:gap-y-0 lg:gap-x-8">
-            <ProductCarousel :products="trendingProducts" />
+            <ProductCarousel
+              :products="trendingProducts"
+              :numVisible="4"
+              :numScroll="1"
+              :autoplayInterval="18000"
+              :showNavigators="false"
+              :showIndicators="true"
+            />
           </div>
         </div>
 
-                <div>
+        <div>
           <div class="md:flex md:items-center md:justify-between">
             <h2 id="favorites-heading" class="text-2xl font-bold tracking-tight text-gray-900">
               Faites plaisir aux enfants
             </h2>
             <a
               href="#"
-              class="hidden text-sm font-medium text-indigo-600 hover:text-indigo-500 md:block"
+              class="hidden text-sm font-medium text-pink-600 hover:text-pink-500 md:block"
             >
               Voir toute la liste
               <span aria-hidden="true"> &rarr;</span>
@@ -203,7 +224,14 @@
           </div>
 
           <div class="mt-6 gap-x-4 gap-y-10 sm:gap-x-6 md:gap-y-0 lg:gap-x-8">
-            <ProductCarousel :products="trendingProducts" />
+            <ProductCarousel
+              :products="trendingProducts"
+              :numVisible="4"
+              :numScroll="1"
+              :autoplayInterval="22000"
+              :showNavigators="false"
+              :showIndicators="true"
+            />
           </div>
         </div>
 
@@ -214,14 +242,21 @@
             </h2>
             <a
               href="#"
-              class="hidden text-sm font-medium text-indigo-600 hover:text-indigo-500 md:block"
+              class="hidden text-sm font-medium text-pink-600 hover:text-pink-500 md:block"
             >
               Voir toute la liste
               <span aria-hidden="true"> &rarr;</span>
             </a>
           </div>
           <div class="mt-6 gap-x-4 gap-y-10 sm:gap-x-6 md:gap-y-0 lg:gap-x-8">
-            <ProductCarousel :products="accessoires" />
+            <ProductCarousel
+              :products="accessoires"
+              :numVisible="3"
+              :numScroll="1"
+              :autoplayInterval="25000"
+              :showNavigators="false"
+              :showIndicators="true"
+            />
           </div>
         </div>
       </div>
@@ -238,7 +273,7 @@
       <div aria-hidden="true" class="relative h-96 w-full lg:hidden" />
       <div aria-hidden="true" class="relative h-32 w-full lg:hidden" />
       <div
-        class="absolute inset-x-0 bottom-0 rounded-bl-lg rounded-br-lg bg-black bg-opacity-75 p-6 backdrop-blur backdrop-filter sm:flex sm:items-center sm:justify-between lg:inset-x-auto lg:inset-y-0 lg:w-96 lg:flex-col lg:items-start lg:rounded-br-none lg:rounded-tl-lg"
+        class="absolute inset-x-0 bottom-0 bg-black bg-opacity-75 p-6 backdrop-blur backdrop-filter sm:flex sm:items-center sm:justify-between lg:inset-x-auto lg:inset-y-0 lg:w-96 lg:flex-col lg:items-start lg:rounded-br-none"
       >
         <div>
           <h2 class="text-xl font-bold text-white">Éclats de Tizi</h2>
@@ -288,7 +323,7 @@ const collections = [
     id: 4,
     name: 'Azur Amazigh ',
 
-    imageSrc: '/images/collections//dresses/2.png',
+    imageSrc: '/images/collections/dresses/2.png',
     imageAlt: 'Robe de Sortie ',
     description: `Soulignant la beauté et la profondeur des couleurs souvent utilisées dans les tenues kabyles, avec un clin d'œil à l'identité amazighe.`
   },
@@ -337,12 +372,17 @@ const trendingProducts = [
   {
     id: 1,
     name: 'Thalssa',
-    price: '$75',
+    price: '75',
     imageSrc: '/images/trending/1.png',
     imageAlt: 'Thalssa',
     rating: 3.9,
     reviewCount: 117,
-
+    code: 'f230fh0g3',
+    description: 'Product Description',
+    image: 'bamboo-watch.jpg',
+    category: 'Accessories',
+    quantity: 24,
+    inventoryStatus: 'INSTOCK',
     colors: [
       { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
       { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
@@ -362,12 +402,17 @@ const trendingProducts = [
   {
     id: 2,
     name: 'Thalssa',
-    price: '$75',
+    price: '75',
     imageSrc: '/images/trending/2.png',
     imageAlt: 'Thalssa',
     rating: 3.9,
     reviewCount: 117,
-
+    code: 'f230fh0g3',
+    description: 'Product Description',
+    image: 'bamboo-watch.jpg',
+    category: 'Accessories',
+    quantity: 24,
+    inventoryStatus: 'LOWSTOCK',
     colors: [
       { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
       { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
@@ -387,12 +432,17 @@ const trendingProducts = [
   {
     id: 3,
     name: 'Thalssa',
-    price: '$75',
+    price: '75',
     imageSrc: '/images/trending/3.png',
     imageAlt: 'Thalssa',
     rating: 3.9,
     reviewCount: 117,
-
+    code: 'f230fh0g3',
+    description: 'Product Description',
+    image: 'bamboo-watch.jpg',
+    category: 'Accessories',
+    quantity: 24,
+    inventoryStatus: 'INSTOCK',
     colors: [
       { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
       { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
@@ -412,12 +462,47 @@ const trendingProducts = [
   {
     id: 4,
     name: 'Thalssa',
-    price: '$75',
+    price: '75',
     imageSrc: '/images/trending/4.png',
     imageAlt: 'Thalssa',
     rating: 3.9,
     reviewCount: 117,
-
+    code: 'f230fh0g3',
+    description: 'Product Description',
+    image: 'bamboo-watch.jpg',
+    category: 'Accessories',
+    quantity: 24,
+    inventoryStatus: 'OUTOFSTOCK',
+    colors: [
+      { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
+      { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
+      { name: 'Black', class: 'bg-gray-900', selectedClass: 'ring-gray-900' }
+    ],
+    sizes: [
+      { name: 'XXS', inStock: true },
+      { name: 'XS', inStock: true },
+      { name: 'S', inStock: true },
+      { name: 'M', inStock: true },
+      { name: 'L', inStock: true },
+      { name: 'XL', inStock: true },
+      { name: 'XXL', inStock: true },
+      { name: 'XXXL', inStock: false }
+    ]
+  },
+  {
+    id: 5,
+    name: 'Thalssa',
+    price: '75',
+    imageSrc: '/images/trending/4.png',
+    imageAlt: 'Thalssa',
+    rating: 3.9,
+    reviewCount: 117,
+    code: 'f230fh0g3',
+    description: 'Product Description',
+    image: 'bamboo-watch.jpg',
+    category: 'Accessories',
+    quantity: 24,
+    inventoryStatus: 'OUTOFSTOCK',
     colors: [
       { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
       { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
@@ -439,36 +524,123 @@ const accessoires = [
   {
     id: 1,
     name: 'Tassadi',
-    price: '$75',
-
+    price: '75',
+    rating: 3.9,
+    reviewCount: 117,
+    code: 'f230fh0g3',
+    description: 'Product Description',
+    image: 'bamboo-watch.jpg',
+    category: 'Accessories',
+    quantity: 24,
+    inventoryStatus: 'INSTOCK',
     imageSrc: '/images/accessoires/1.png',
-    imageAlt: 'Thalssa'
+    imageAlt: 'Thalssa',
+    colors: [
+      { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
+      { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
+      { name: 'Black', class: 'bg-gray-900', selectedClass: 'ring-gray-900' }
+    ],
+    sizes: [
+      { name: 'XXS', inStock: true },
+      { name: 'XS', inStock: true },
+      { name: 'S', inStock: true },
+      { name: 'M', inStock: true },
+      { name: 'L', inStock: true },
+      { name: 'XL', inStock: true },
+      { name: 'XXL', inStock: true },
+      { name: 'XXXL', inStock: false }
+    ]
   },
   {
     id: 2,
     name: 'Tassadi',
-
-    price: '$75',
-
+    rating: 3.9,
+    reviewCount: 117,
+    code: 'f230fh0g3',
+    description: 'Product Description',
+    image: 'bamboo-watch.jpg',
+    category: 'Accessories',
+    quantity: 24,
+    inventoryStatus: 'INSTOCK',
+    price: '75',
     imageSrc: '/images/accessoires/2.png',
-    imageAlt: 'Thalssa'
+    imageAlt: 'Thalssa',
+    colors: [
+      { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
+      { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
+      { name: 'Black', class: 'bg-gray-900', selectedClass: 'ring-gray-900' }
+    ],
+    sizes: [
+      { name: 'XXS', inStock: true },
+      { name: 'XS', inStock: true },
+      { name: 'S', inStock: true },
+      { name: 'M', inStock: true },
+      { name: 'L', inStock: true },
+      { name: 'XL', inStock: true },
+      { name: 'XXL', inStock: true },
+      { name: 'XXXL', inStock: false }
+    ]
   },
   {
     id: 3,
     name: 'Tassadi',
-    price: '$75',
-
+    price: '75',
+    rating: 3.9,
+    reviewCount: 117,
+    code: 'f230fh0g3',
+    description: 'Product Description',
+    image: 'bamboo-watch.jpg',
+    category: 'Accessories',
+    quantity: 24,
+    inventoryStatus: 'INSTOCK',
     imageSrc: '/images/accessoires/3.png',
-    imageAlt: 'Thalssa'
+    imageAlt: 'Thalssa',
+    colors: [
+      { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
+      { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
+      { name: 'Black', class: 'bg-gray-900', selectedClass: 'ring-gray-900' }
+    ],
+    sizes: [
+      { name: 'XXS', inStock: true },
+      { name: 'XS', inStock: true },
+      { name: 'S', inStock: true },
+      { name: 'M', inStock: true },
+      { name: 'L', inStock: true },
+      { name: 'XL', inStock: true },
+      { name: 'XXL', inStock: true },
+      { name: 'XXXL', inStock: false }
+    ]
   },
   {
     id: 4,
     name: 'Tassadi',
-    price: '$75',
-
+    price: '75',
+    rating: 3.9,
+    reviewCount: 117,
+    code: 'f230fh0g3',
+    description: 'Product Description',
+    image: 'bamboo-watch.jpg',
+    category: 'Accessories',
+    quantity: 24,
+    inventoryStatus: 'INSTOCK',
     imageSrc: '/images/accessoires/1.png',
-    imageAlt: 'Thalssa'
+    imageAlt: 'Thalssa',
+
+    colors: [
+      { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
+      { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
+      { name: 'Black', class: 'bg-gray-900', selectedClass: 'ring-gray-900' }
+    ],
+    sizes: [
+      { name: 'XXS', inStock: true },
+      { name: 'XS', inStock: true },
+      { name: 'S', inStock: true },
+      { name: 'M', inStock: true },
+      { name: 'L', inStock: true },
+      { name: 'XL', inStock: true },
+      { name: 'XXL', inStock: true },
+      { name: 'XXXL', inStock: false }
+    ]
   }
-  // More products...
 ]
 </script>

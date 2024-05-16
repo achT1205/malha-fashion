@@ -1,36 +1,37 @@
 <template>
-  <div class="group relative" v-if="props.product">
-    <div class="border border-surface-200 dark:border-surface-700 rounded-md m-2 p-3">
+  <div class="group relative m-2 p-3" v-if="props.product">
+    <div class="h-56 w-full overflow-hidden rounded-md group-hover:opacity-75 lg:h-72 xl:h-80">
       <router-link :to="`/products/${props.product.id}`">
-        <div class="mb-3">
-          <div class="relative mx-auto">
-            <img
-              :src="props.product.imageSrc"
-              :alt="props.product.name"
-              class="w-full rounded-md"
-            />
-            <Tag-T
-              :value="props.product.inventoryStatus"
-              :severity="getSeverity(props.product.inventoryStatus)"
-              class="absolute"
-              style="left: 5px; top: 5px"
-            />
-          </div>
-        </div>
-        <div class="mb-3 font-medium">{{ props.product.name }}</div>
+        <img
+          :src="props.product.imageSrc"
+          :alt="props.product.imageAlt"
+          class="h-full w-full object-cover object-center"
+        />
       </router-link>
-      <div class="flex justify-between items-center">
-        <div class="mt-0 font-semibold text-xl">
-          {{ props.product.price }} <span class="ml-1">€</span>
-        </div>
-        <span>
-          <Button-T icon="pi pi-heart" severity="secondary" outlined />
-          <Button-T icon="pi pi-shopping-cart" severity="primary" class="ml-2" />
-          <Button-T icon="pi pi-eye" severity="info" class="ml-2" @click="open = true" />
-        </span>
-      </div>
     </div>
-
+    <h3 class="mt-4 text-sm text-gray-700">
+      <router-link :to="`/products/${props.product.id}`">
+        {{ props.product.name }}
+      </router-link>
+    </h3>
+    <p class="mt-1 text-sm text-gray-500">{{ props.product.color }}</p>
+    <p class="mt-1 text-sm font-medium text-gray-900">{{ props.product.price }}</p>
+    <div
+      class="mt-3 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2 z-10 w-full rounded-md bg-white bg-opacity-75 text-sm text-gray-900 opacity-0 focus:opacity-100 group-hover:opacity-100"
+    >
+      <button
+        type="button"
+        class="flex w-full items-center justify-center rounded-md border border-transparent bg-pink-600 px-8 py-3 text-base font-medium text-white hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+      >
+        <ShoppingBagIcon class="-mr-0.5 h-5 w-5" aria-hidden="true" />
+      </button>
+      <button
+        @click="open = true"
+        class="flex w-full items-center justify-center rounded-md border border-transparent bg-pink-50 px-8 py-3 text-base font-medium text-pink-700 hover:bg-pink-100 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+      >
+        <EyeIcon class="-mr-0.5 h-5 w-5" aria-hidden="true" />
+      </button>
+    </div>
     <TransitionRoot as="template" :show="open">
       <Dialog class="relative z-10" @close="open = false">
         <TransitionChild
@@ -249,7 +250,7 @@
   </div>
 </template>
 <script setup>
-import { XMarkIcon } from '@heroicons/vue/24/outline'
+import { ShoppingBagIcon, EyeIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 import {
   Dialog,
   DialogPanel,
@@ -272,20 +273,4 @@ const props = defineProps({
 const open = ref(false)
 const selectedColor = ref({ name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' })
 const selectedSize = ref({ name: 'S', inStock: true })
-
-const getSeverity = (status) => {
-  switch (status) {
-    case 'INSTOCK':
-      return 'success'
-
-    case 'LOWSTOCK':
-      return 'warning'
-
-    case 'OUTOFSTOCK':
-      return 'danger'
-
-    default:
-      return null
-  }
-}
 </script>

@@ -52,7 +52,7 @@
                       <button
                         :class="[
                           selected
-                            ? 'border-indigo-600 text-indigo-600'
+                            ? 'border-pink-600 text-pink-600'
                             : 'border-transparent text-gray-900',
                           'flex-1 whitespace-nowrap border-b-2 px-1 py-4 text-base font-medium'
                         ]"
@@ -85,7 +85,7 @@
                         </div>
                         <router-link
                           :to="item.href"
-                          class="mt-6 block text-sm font-medium text-gray-900"
+                          class="mt-6 block text-sm font-medium text-gray-900 no-underline"
                         >
                           <span class="absolute inset-0 z-10" aria-hidden="true" />
                           {{ item.name }}</router-link
@@ -156,7 +156,7 @@
                       <div class="relative flex">
                         <PopoverButton
                           :class="[
-                            open ? 'text-indigo-600' : 'text-gray-700 hover:text-gray-800',
+                            open ? 'text-pink-600' : 'text-gray-700 hover:text-gray-800',
                             'relative flex items-center justify-center text-sm font-medium transition-colors duration-200 ease-out'
                           ]"
                         >
@@ -221,7 +221,7 @@
 
                                     <router-link
                                       :to="item.href"
-                                      class="mt-6 block font-medium text-gray-900"
+                                      class="mt-6 block font-medium text-gray-900 no-underline"
                                     >
                                       <span class="absolute inset-0 z-10" aria-hidden="true" />
                                       {{ item.name }}</router-link
@@ -247,7 +247,7 @@
                                         :key="item.name"
                                         class="flex"
                                       >
-                                        <router-link :to="item.href" class="hover:text-gray-800">{{
+                                        <router-link :to="item.href" class="hover:text-gray-800 no-underline">{{
                                           item.name
                                         }}</router-link>
                                       </li>

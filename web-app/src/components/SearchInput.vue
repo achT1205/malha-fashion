@@ -78,7 +78,7 @@ const items = [
     name: 'Text',
     description: 'Add freeform text with basic formatting options.',
     url: '#',
-    color: 'bg-indigo-500',
+    color: 'bg-pink-500',
     icon: PencilSquareIcon,
   },
   // More items...

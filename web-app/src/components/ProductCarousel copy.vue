@@ -3,12 +3,9 @@
   <div class="card">
     <Carousel-T
       :value="products"
-      :numVisible="numVisible"
-      :numScroll="numScroll"
-      :autoplayInterval="autoplayInterval"
+      :numVisible="4"
+      :numScroll="1"
       :responsiveOptions="responsiveOptions"
-      :showNavigators="showNavigators"
-      :showIndicators="showIndicators"
       circular
     >
       <template #item="slotProps">
@@ -24,33 +21,8 @@ import ProductCardWithQuickView from './ProductCardWithQuickView.vue'
 
 const props = defineProps({
   products: {
-    type: Array,
+    type: [Array, null],
     required: true
-  },
-  autoplayInterval: {
-    type: Number,
-    required: true,
-    default: 6000
-  },
-  numVisible: {
-    type: Number,
-    required: true,
-    default: 3
-  },
-  numScroll: {
-    type: Number,
-    required: true,
-    default: 1
-  },
-  showNavigators: {
-    type: Number,
-    required: true,
-    default: 1
-  },
-  showIndicators: {
-    type: Number,
-    required: true,
-    default: 1
   }
 })
 

@@ -44,14 +44,14 @@
                 <form class="mt-4 border-t border-gray-200">
                   <h3 class="sr-only">Categories</h3>
                   <ul role="list" class="px-2 py-3 font-medium text-gray-900">
-                    <li v-for="category in subCategories" :key="category.name">
+                    <li v-for="category in props.subCategories" :key="category.name">
                       <a :href="category.href" class="block px-2 py-3">{{ category.name }}</a>
                     </li>
                   </ul>
 
                   <Disclosure
                     as="div"
-                    v-for="section in filters"
+                    v-for="section in props.filters"
                     :key="section.id"
                     class="border-t border-gray-200 px-4 py-6"
                     v-slot="{ open }"
@@ -80,7 +80,7 @@
                             :value="option.value"
                             type="checkbox"
                             :checked="option.checked"
-                            class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                            class="h-4 w-4 rounded border-gray-300 text-pink-600 focus:ring-pink-500"
                           />
                           <label
                             :for="`filter-mobile-${section.id}-${optionIdx}`"
@@ -128,7 +128,7 @@
                   class="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none"
                 >
                   <div class="py-1">
-                    <MenuItem v-for="option in sortOptions" :key="option.name" v-slot="{ active }">
+                    <MenuItem v-for="option in props.sortOptions" :key="option.name" v-slot="{ active }">
                       <a
                         :href="option.href"
                         :class="[
@@ -170,7 +170,7 @@
                 role="list"
                 class="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900"
               >
-                <li v-for="category in subCategories" :key="category.name">
+                <li v-for="category in props.subCategories" :key="category.name">
                   <a :href="category.href">{{ category.name }}</a>
                 </li>
               </ul>
@@ -206,7 +206,7 @@
                         :value="option.value"
                         type="checkbox"
                         :checked="option.checked"
-                        class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                        class="h-4 w-4 rounded border-gray-300 text-pink-600 focus:ring-pink-500"
                       />
                       <label
                         :for="`filter-${section.id}-${optionIdx}`"
@@ -225,7 +225,7 @@
                 class="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:gap-x-8 xl:grid-cols-3"
               >
                 <div
-                  v-for="product in products"
+                  v-for="product in props.products"
                   :key="product.id"
                   class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white"
                 >
@@ -284,99 +284,25 @@ import {
   Squares2X2Icon
 } from '@heroicons/vue/20/solid'
 
-const sortOptions = [
-  { name: 'Most Popular', href: '#', current: true },
-  { name: 'Best Rating', href: '#', current: false },
-  { name: 'Newest', href: '#', current: false },
-  { name: 'Price: Low to High', href: '#', current: false },
-  { name: 'Price: High to Low', href: '#', current: false }
-]
-const subCategories = [
-  { name: 'Robes', href: '#' },
-  { name: 'Burnous', href: '#' },
-  { name: 'Sacs', href: '#' },
-  { name: 'Bijoux', href: '#' },
-  { name: 'Accessories', href: '#' }
-]
-const filters = [
-  {
-    id: 'color',
-    name: 'Couleur',
-    options: [
-      { value: 'white', label: 'White', checked: false },
-      { value: 'beige', label: 'Beige', checked: false },
-      { value: 'blue', label: 'Blue', checked: true },
-      { value: 'brown', label: 'Brown', checked: false },
-      { value: 'green', label: 'Green', checked: false },
-      { value: 'purple', label: 'Purple', checked: false }
-    ]
-  },
-  {
-    id: 'category',
-    name: 'Catégorie',
-    options: [
-      { value: 'new-arrivals', label: 'Nouvaux', checked: false },
-      { value: 'sale', label: 'Promo', checked: false },
-      { value: 'selebration', label: 'Fete', checked: true },
-      { value: 'house', label: 'Maison', checked: false },
-      { value: 'casual', label: 'Décontracté', checked: false },
-      { value: 'accessories', label: 'Accessories', checked: false }
-    ]
-  },
-  {
-    id: 'size',
-    name: 'Taile',
-    options: [
-      { value: 'standard', label: 'Standard', checked: false },
-      { value: 'big', label: 'Grande Taille', checked: false },
-      { value: 's-m', label: 'S/M', checked: false },
-      { value: 'm-l', label: 'M/L', checked: false },
-      { value: 'l-xl', label: 'L/XL', checked: false },
-      { value: 'xl-xxl', label: 'XL/XXL', checked: true },
-      { value: 's', label: 'S', checked: false },
-      { value: 'm', label: 'M', checked: false },
-      { value: 'l', label: 'L', checked: false },
-      { value: 'xl', label: 'XL', checked: false },
-      { value: 'xxl', label: 'XXL', checked: false },
-    ]
-  }
-]
 
-const products = [
-  {
-    id: 1,
-    name: 'Aline',
-    href: '#',
-    price: '$256',
-    color: '',
-    category: {
-      id: '',
-      name: ''
-    },
-    collection: {
-      id: '',
-      name: ''
-    },
-    description:
-      'Get the full lineup of our Basic Tees. Have a fresh shirt all week, and an extra for laundry day.',
-    options: '8 colors',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-01.jpg',
-    moreImages: ['', '', ''],
-    imageAlt:
-      'Eight shirts arranged on table in black, olive, grey, blue, white, red, mustard, and green.'
+const props = defineProps({
+  sortOptions: {
+    type: [Array, null],
+    required: true
   },
-  {
-    id: 2,
-    name: 'Basic Tee',
-    href: '#',
-    price: '$32',
-    description: 'Look like a visionary CEO and wear the same black t-shirt every day.',
-    options: 'Black',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-02.jpg',
-    imageAlt: 'Front of plain black t-shirt.'
+    subCategories: {
+    type: [Array, null],
+    required: true
+  },
+    filters: {
+    type: [Array, null],
+    required: true
+  },
+    products: {
+    type: [Array, null],
+    required: true
   }
-  // More products...
-]
 
+})
 const mobileFiltersOpen = ref(false)
 </script>
