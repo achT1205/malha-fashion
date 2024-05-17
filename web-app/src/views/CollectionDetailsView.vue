@@ -731,7 +731,7 @@ const collections = [
     id: 1,
     name: 'Berbère Éclat ',
     image: {
-      src: '/images/collections/dresses/1.png',
+      src: '/images/collections/1.png',
       alt: 'BRobe de Fête '
     },
     description: `Mettant en avant le rayonnement et la modernité des designs tout en restant fidèle aux racines berbères traditionnelles.`
@@ -740,7 +740,7 @@ const collections = [
     id: 2,
     name: 'Montagnes de Djurdjura',
     image: {
-      src: '/images/collections/burnous/1.png',
+      src: '/images/collections/2.png',
       alt: 'BRobe de Fête '
     },
     description: `Évoquant les sommets majestueux et le patrimoine robuste de la Kabylie.`
@@ -749,7 +749,7 @@ const collections = [
     id: 3,
     name: 'Lune de Kabylie',
     image: {
-      src: '/images/collections/joularies/1.png',
+      src: '/images/collections/3.png',
       alt: 'BRobe de Fête '
     },
     description: `Inspirée par les motifs lunaires récurrents dans l'art kabyle, cette collection capture la mystique et l'élégance des bijoux traditionnels.`
@@ -758,7 +758,7 @@ const collections = [
     id: 4,
     name: 'Azur Amazigh ',
     image: {
-      src: '/images/collections/joularies/1.png',
+      src: '/images/collections/4.png',
       alt: 'BRobe de Fête '
     },
     description: `Soulignant la beauté et la profondeur des couleurs souvent utilisées dans les tenues kabyles, avec un clin d'œil à l'identité amazighe.`
@@ -767,7 +767,7 @@ const collections = [
     id: 5,
     name: 'Echo des Aït',
     image: {
-      src: '/images/collections/joularies/1.png',
+      src: '/images/collections/5.png',
       alt: 'BRobe de Fête '
     },
     description: `Rendant hommage aux tribus Aït de Kabylie, ce nom reflète la transmission des traditions et des savoir-faire ancestraux.`
@@ -776,7 +776,7 @@ const collections = [
     id: 6,
     name: 'Souveraines Berbères',
     image: {
-      src: '/images/collections/joularies/1.png',
+      src: '/images/collections/6.png',
       alt: 'BRobe de Fête '
     },
     description: `Célébrant les figures féminines puissantes de l'histoire kabyle, cette collection allie force et finesse dans chaque pièce.`
@@ -785,7 +785,7 @@ const collections = [
     id: 7,
     name: 'Jardin de Numidie ',
     image: {
-      src: '/images/collections/joularies/1.png',
+      src: '/images/collections/7.png',
       alt: 'BRobe de Fête '
     },
     description: `Inspirée par l'histoire et la nature de Kabylie, cette collection intègre des motifs floraux et des éléments naturels.`
@@ -794,7 +794,7 @@ const collections = [
     id: 8,
     name: 'Voile de Yemma Gouraya',
     image: {
-      src: '/images/collections/joularies/1.png',
+      src: '/images/collections/8.png',
       alt: 'BRobe de Fête '
     },
     description: `Inspiré par la légendaire montagne qui surplombe la ville de Béjaïa, symbolisant protection et majesté.`
@@ -803,7 +803,7 @@ const collections = [
     id: 9,
     name: `Jardins d'Agadez`,
     image: {
-      src: '/images/collections/joularies/1.png',
+      src: '/images/collections/9.png',
       alt: 'BRobe de Fête '
     },
     description: `Évoquant les designs floraux et organiques typiques de la bijouterie kabyle, cette collection rend hommage à la nature et à la fertilité des terres berbères.`

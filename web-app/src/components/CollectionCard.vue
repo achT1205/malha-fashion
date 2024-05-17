@@ -5,8 +5,8 @@
       class="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg lg:aspect-h-6 lg:aspect-w-5 group-hover:opacity-75"
     >
       <img
-        :src="props.collection.imageSrc"
-        :alt="props.collection.imageAlt"
+        :src="props.collection.image.src"
+        :alt="props.collection.image.alt"
         class="h-full w-full object-cover object-center"
       />
       <Tag-T
