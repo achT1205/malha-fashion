@@ -24,6 +24,16 @@ const router = createRouter({
       component: () => import('../views/CollectionDetailsView.vue')
     },
     {
+      path: '/cart',
+      name: 'ShoppingCart',
+      component: () => import('../views/ShoppingCartView.vue')
+    },
+    {
+      path: '/checkout',
+      name: 'CheckoutView',
+      component: () => import('../views/CheckoutView.vue')
+    },
+    {
       path: '/test',
       name: 'MyTest',
       component: () => import('../views/MyTest.vue')
@@ -32,7 +42,9 @@ const router = createRouter({
       path: '/test1',
       name: 'MyTest1',
       component: () => import('../views/MyTest1.vue')
-    }
+    },
+
+    
   ]
 })
 

@@ -253,11 +253,12 @@
                             }}
                           </button>
                           <p class="absolute left-4 top-4 text-center sm:static sm:mt-6">
-                            <a
-                              :href="product.href"
+                            <router-link
                               class="font-medium text-pink-600 hover:text-pink-500"
-                              >View full details</a
+                              :to="`/products/${product.id}`"
                             >
+                              Voir le details
+                            </router-link>
                           </p>
                         </form>
                       </section>
