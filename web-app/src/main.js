@@ -7,6 +7,7 @@ import { createPinia } from 'pinia'
 import Tag from "primevue/tag"
 import Carousel from 'primevue/carousel';
 import Button from 'primevue/button';
+import Tooltip from 'primevue/tooltip';
 
 import App from './App.vue'
 import router from './router'
@@ -14,7 +15,7 @@ import PrimeVue from 'primevue/config';
 
 
 const app = createApp(App)
-
+app.directive('tooltip', Tooltip);
 app.use(createPinia())
 app.use(router)
 app.use(PrimeVue);

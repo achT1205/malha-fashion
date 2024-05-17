@@ -5,13 +5,13 @@
         <div class="mb-3">
           <div class="relative mx-auto">
             <img
-              :src="props.product.imageSrc"
+              :src="props.product.image.src"
               :alt="props.product.name"
               class="w-full rounded-md"
-            />
+            />{{ subcategory.name }}
             <Tag-T
-              :value="props.product.inventoryStatus"
-              :severity="getSeverity(props.product.inventoryStatus)"
+              :value="productStatus.status"
+              :severity="productStatus.severity"
               class="absolute"
               style="left: 5px; top: 5px"
             />
@@ -80,11 +80,12 @@
                       class="aspect-h-3 aspect-w-2 overflow-hidden rounded-lg bg-gray-100 sm:col-span-4 lg:col-span-5"
                     >
                       <img
-                        :src="props.product.imageSrc"
-                        :alt="props.product.imageAlt"
+                        :src="selectedColor.images[0].src"
+                        :alt="selectedColor.images[0].alt"
                         class="object-cover object-center"
                       />
                     </div>
+
                     <div class="sm:col-span-8 lg:col-span-7">
                       <h2 class="text-2xl font-bold text-gray-900 sm:pr-12">
                         {{ props.product.name }}
@@ -93,28 +94,32 @@
                       <section aria-labelledby="information-heading" class="mt-2">
                         <h3 id="information-heading" class="sr-only">Product information</h3>
 
-                        <p class="text-2xl text-gray-900">{{ props.product.price }}</p>
+                        <p class="text-2xl text-gray-900">{{ selectedColor.price }}</p>
 
                         <!-- Reviews -->
                         <div class="mt-6">
-                          <h4 class="sr-only">Reviews</h4>
+                          <h3 class="sr-only">Reviews</h3>
                           <div class="flex items-center">
                             <div class="flex items-center">
                               <StarIcon
                                 v-for="rating in [0, 1, 2, 3, 4]"
                                 :key="rating"
                                 :class="[
-                                  props.product.rating > rating ? 'text-gray-900' : 'text-gray-200',
+                                  selectedColor.reviews.average > rating
+                                    ? 'text-gray-900'
+                                    : 'text-gray-200',
                                   'h-5 w-5 flex-shrink-0'
                                 ]"
                                 aria-hidden="true"
                               />
                             </div>
-                            <p class="sr-only">{{ props.product.rating }} out of 5 stars</p>
+                            <p class="sr-only">
+                              {{ selectedColor.reviews.average }} out of 5 stars
+                            </p>
                             <a
-                              href="#"
+                              :href="selectedColor.reviews.href"
                               class="ml-3 text-sm font-medium text-pink-600 hover:text-pink-500"
-                              >{{ props.product.reviewCount }} reviews</a
+                              >{{ selectedColor.reviews.totalCount }} reviews</a
                             >
                           </div>
                         </div>
@@ -126,11 +131,11 @@
                         <form>
                           <!-- Colors -->
                           <div>
-                            <h4 class="text-sm font-medium text-gray-900">Color</h4>
+                            <h3 class="text-sm font-medium text-gray-900">Color</h3>
 
                             <RadioGroup v-model="selectedColor" class="mt-4">
                               <RadioGroupLabel class="sr-only">Choose a color</RadioGroupLabel>
-                              <span class="flex items-center space-x-3">
+                              <div class="flex items-center space-x-3">
                                 <RadioGroupOption
                                   as="template"
                                   v-for="color in props.product.colors"
@@ -145,6 +150,7 @@
                                       !active && checked ? 'ring-2' : '',
                                       'relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none'
                                     ]"
+                                    v-tooltip.bottom="color.name"
                                   >
                                     <RadioGroupLabel as="span" class="sr-only">{{
                                       color.name
@@ -158,14 +164,14 @@
                                     />
                                   </div>
                                 </RadioGroupOption>
-                              </span>
+                              </div>
                             </RadioGroup>
                           </div>
 
                           <!-- Sizes -->
-                          <div class="mt-10">
+                          <div class="mt-10" v-if="!isAccessory">
                             <div class="flex items-center justify-between">
-                              <h4 class="text-sm font-medium text-gray-900">Size</h4>
+                              <h3 class="text-sm font-medium text-gray-900">Size</h3>
                               <a
                                 href="#"
                                 class="text-sm font-medium text-pink-600 hover:text-pink-500"
@@ -175,27 +181,27 @@
 
                             <RadioGroup v-model="selectedSize" class="mt-4">
                               <RadioGroupLabel class="sr-only">Choose a size</RadioGroupLabel>
-                              <div class="grid grid-cols-4 gap-4">
+                              <div class="grid grid-cols-4 gap-4 sm:grid-cols-8 lg:grid-cols-4">
                                 <RadioGroupOption
                                   as="template"
-                                  v-for="size in props.product.sizes"
+                                  v-for="size in selectedColor.sizes"
                                   :key="size.name"
                                   :value="size"
-                                  :disabled="!size.inStock"
+                                  :disabled="size.quantity === 0"
                                   v-slot="{ active, checked }"
                                 >
                                   <div
                                     :class="[
-                                      size.inStock
+                                      size.quantity > 0
                                         ? 'cursor-pointer bg-white text-gray-900 shadow-sm'
                                         : 'cursor-not-allowed bg-gray-50 text-gray-200',
                                       active ? 'ring-2 ring-pink-500' : '',
-                                      'group relative flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1'
+                                      'group relative flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 sm:py-6'
                                     ]"
                                   >
                                     <RadioGroupLabel as="span">{{ size.name }}</RadioGroupLabel>
                                     <span
-                                      v-if="size.inStock"
+                                      v-if="size.quantity > 0"
                                       :class="[
                                         active ? 'border' : 'border-2',
                                         checked ? 'border-pink-500' : 'border-transparent',
@@ -230,11 +236,29 @@
                           </div>
 
                           <button
-                            type="submit"
-                            class="mt-6 flex w-full items-center justify-center rounded-md border border-transparent bg-pink-600 px-8 py-3 text-base font-medium text-white hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
+                            type="button"
+                            :class="[
+                              available
+                                ? 'bg-pink-600 hover:bg-pink-700 focus:ring-pink-500'
+                                : 'bg-gray-600 hover:bg-gray-700 focus:ring-gray-500',
+                              'mt-6 flex w-full items-center justify-center rounded-md border border-transparent px-8 py-3 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2'
+                            ]"
                           >
-                            Add to bag
+                            {{
+                              !selectedSize
+                                ? 'Select your size'
+                                : selectedSize && !available
+                                ? 'OUTOFSTOCK'
+                                : 'Add to bag'
+                            }}
                           </button>
+                          <p class="absolute left-4 top-4 text-center sm:static sm:mt-6">
+                            <a
+                              :href="product.href"
+                              class="font-medium text-pink-600 hover:text-pink-500"
+                              >View full details</a
+                            >
+                          </p>
                         </form>
                       </section>
                     </div>
@@ -260,32 +284,64 @@ import {
   TransitionRoot
 } from '@headlessui/vue'
 import { StarIcon } from '@heroicons/vue/20/solid'
-import { ref } from 'vue'
+import { ref, computed, watch } from 'vue'
 
 const props = defineProps({
   product: {
     type: [String, null],
     required: true
+  },
+  threshold: {
+    type: Number,
+    required: true,
+    default: 20
   }
 })
 
 const open = ref(false)
-const selectedColor = ref({ name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' })
-const selectedSize = ref({ name: 'S', inStock: true })
+const selectedColor = ref(props.product.colors[0])
+const subcategory = props.product.subcategory
+const selectedSize = ref()
 
-const getSeverity = (status) => {
-  switch (status) {
-    case 'INSTOCK':
-      return 'success'
+const available = computed(() => {
+  if (subcategory.name === 'bag' || subcategory.name === 'accessory')
+    return selectedColor.value.quantity > 0
+  return selectedSize.value?.quantity > 0
+})
 
-    case 'LOWSTOCK':
-      return 'warning'
+const isAccessory = computed(() => {
+  return subcategory.name === 'bag' || subcategory.name === 'accessory'
+})
 
-    case 'OUTOFSTOCK':
-      return 'danger'
+watch(selectedColor, (newValue, oldValue) => {
+  if (newValue !== oldValue) selectedSize.value = null
+})
 
-    default:
-      return null
+const productStatus = computed(() => {
+  const status = { status: 'OUTOFSTOCK', severity: 'danger' }
+
+  if (!props.product.colors) return status
+  else {
+    let totalQuantity = 0
+    if (subcategory.name === 'bag' || subcategory.name === 'accessory') {
+      totalQuantity = props.product.colors.reduce((sum, color) => sum + color.quantity, 0)
+    } else {
+      totalQuantity = props.product.colors.reduce((sum, color) => {
+        return sum + color.sizes.reduce((sizeSum, size) => sizeSum + size.quantity, 0)
+      }, 0)
+    }
+
+    if (totalQuantity > props.threshold) {
+      status.status = 'INSTOCK'
+      status.severity = 'success'
+    } else if (totalQuantity <= props.threshold && totalQuantity > 0) {
+      status.status = 'LOWSTOCK'
+      status.severity = 'warning'
+    } else {
+      status.status = 'OUTOFSTOCK'
+      status.severity = 'danger'
+    }
+    return status
   }
-}
+})
 </script>

@@ -176,7 +176,7 @@
               :products="trendingProducts"
               :numVisible="4"
               :numScroll="1"
-              :autoplayInterval="12000"
+              :autoplayInterval="null"
               :showNavigators="false"
               :showIndicators="true"
             />
@@ -202,7 +202,7 @@
               :products="trendingProducts"
               :numVisible="4"
               :numScroll="1"
-              :autoplayInterval="18000"
+              :autoplayInterval="null"
               :showNavigators="false"
               :showIndicators="true"
             />
@@ -228,7 +228,7 @@
               :products="trendingProducts"
               :numVisible="4"
               :numScroll="1"
-              :autoplayInterval="22000"
+              :autoplayInterval="null"
               :showNavigators="false"
               :showIndicators="true"
             />
@@ -253,7 +253,7 @@
               :products="accessoires"
               :numVisible="3"
               :numScroll="1"
-              :autoplayInterval="25000"
+              :autoplayInterval="null"
               :showNavigators="false"
               :showIndicators="true"
             />
@@ -373,273 +373,1092 @@ const trendingProducts = [
     id: 1,
     name: 'Thalssa',
     price: '75',
-    imageSrc: '/images/trending/1.png',
-    imageAlt: 'Thalssa',
-    rating: 3.9,
-    reviewCount: 117,
     code: 'f230fh0g3',
-    description: 'Product Description',
-    image: 'bamboo-watch.jpg',
-    category: 'Accessories',
-    quantity: 24,
-    inventoryStatus: 'INSTOCK',
+    image: {
+      alt: 'Thalssa',
+      src: '/images/products/1/red/1.png'
+    },
     colors: [
-      { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
-      { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
-      { name: 'Black', class: 'bg-gray-900', selectedClass: 'ring-gray-900' }
+      {
+        name: 'Red',
+        class: 'bg-red-700',
+        selectedClass: 'ring-gray-400',
+        reviews: { href: '#', average: 4, totalCount: 117 },
+        price: '78',
+        sizes: [
+          { name: 'XXS', quantity: 5 },
+          { name: 'XS', quantity: 2 },
+          { name: 'S', quantity: 6 },
+          { name: 'M', quantity: 0 }
+        ],
+        images: [
+          {
+            src: '/images/products/1/red/1.png',
+            alt: 'Model wearing plain black basic tee.'
+          },
+          {
+            src: '/images/products/1/red/2.png',
+            alt: 'Model wearing plain gray basic tee.'
+          },
+          {
+            src: '/images/products/1/red/3.png',
+            alt: 'Model wearing plain white basic tee.'
+          },
+          {
+            src: '/images/products/1/red/4.png',
+            alt: 'Thalssa rouge ...'
+          }
+        ]
+      },
+      {
+        name: 'Pink',
+        class: 'bg-pink-200',
+        selectedClass: 'ring-gray-400',
+        reviews: { href: '#', average: 4, totalCount: 117 },
+        price: '81',
+
+        sizes: [
+          { name: 'XXS', quantity: 2 },
+          { name: 'S', quantity: 6 },
+          { name: 'M', quantity: 0 }
+        ],
+        images: [
+          {
+            src: '/images/products/1/pink/1.png',
+            alt: 'Model wearing plain black basic tee.'
+          },
+          {
+            src: '/images/products/1/pink/2.png',
+            alt: 'Model wearing plain gray basic tee.'
+          },
+          {
+            src: '/images/products/1/pink/3.png',
+            alt: 'Model wearing plain white basic tee.'
+          },
+          {
+            src: '/images/products/1/pink/4.png',
+            alt: 'Thalssa rouge ...'
+          }
+        ]
+      },
+      {
+        name: 'Green',
+        class: 'bg-green-200',
+        selectedClass: 'ring-gray-900',
+        reviews: { href: '#', average: 4, totalCount: 117 },
+        price: '78',
+
+        sizes: [
+          { name: 'XXS', quantity: 2 },
+          { name: 'XS', quantity: 1 },
+          { name: 'S', quantity: 2 },
+          { name: 'XXL', quantity: 2 },
+          { name: 'XXXL', quantity: 0 }
+        ],
+        images: [
+          {
+            src: '/images/products/1/green/4.png',
+            alt: 'Thalssa rouge ...'
+          },
+          {
+            src: '/images/products/1/green/1.png',
+            alt: 'Model wearing plain black basic tee.'
+          },
+          {
+            src: '/images/products/1/green/2.png',
+            alt: 'Model wearing plain gray basic tee.'
+          },
+          {
+            src: '/images/products/1/green/3.png',
+            alt: 'Model wearing plain white basic tee.'
+          }
+        ]
+      }
     ],
-    sizes: [
-      { name: 'XXS', inStock: true },
-      { name: 'XS', inStock: true },
-      { name: 'S', inStock: true },
-      { name: 'M', inStock: true },
-      { name: 'L', inStock: true },
-      { name: 'XL', inStock: true },
-      { name: 'XXL', inStock: true },
-      { name: 'XXXL', inStock: false }
+    category: {
+      id: 1,
+      name: 'woman',
+      label: 'Femme'
+    },
+    subcategory: {
+      id: 5,
+      name: 'dress',
+      label: 'Robe de fete'
+    },
+    collection: {
+      id: 1,
+      name: 'Berbère Éclat ',
+      image: {
+        src: '/images/collections/dresses/1.png',
+        alt: 'BRobe de Fête '
+      },
+      description: `Mettant en avant le rayonnement et la modernité des designs tout en restant fidèle aux racines berbères traditionnelles.`
+    },
+    description:
+      'The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: "Black". Need to add an extra pop of color to your outfit? Our white tee has you covered.',
+    details: [
+      {
+        name: 'Highlights',
+        items: [
+          'Hand cut and sewn locally',
+          'Dyed with our proprietary colors',
+          'Pre-washed & pre-shrunk',
+          'Ultra-soft 100% cotton'
+        ]
+      },
+      {
+        name: 'Shipping',
+        items: [
+          'Free shipping on orders over $300',
+          'International shipping available',
+          'Expedited shipping options',
+          'Signature required upon delivery'
+        ]
+      },
+      {
+        name: 'Returns',
+        items: [
+          'Easy return requests',
+          'Pre-paid shipping label included',
+          '10% restocking fee for returns',
+          '60 day return window'
+        ]
+      }
     ]
   },
   {
     id: 2,
     name: 'Thalssa',
     price: '75',
-    imageSrc: '/images/trending/2.png',
-    imageAlt: 'Thalssa',
-    rating: 3.9,
-    reviewCount: 117,
     code: 'f230fh0g3',
-    description: 'Product Description',
-    image: 'bamboo-watch.jpg',
-    category: 'Accessories',
-    quantity: 24,
-    inventoryStatus: 'LOWSTOCK',
+    image: {
+      alt: 'Thalssa',
+      src: '/images/products/2/golden/1.png'
+    },
     colors: [
-      { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
-      { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
-      { name: 'Black', class: 'bg-gray-900', selectedClass: 'ring-gray-900' }
+      {
+        name: 'Golden',
+        class: 'bg-yellow-700',
+        selectedClass: 'ring-gray-400',
+        reviews: { href: '#', average: 4, totalCount: 117 },
+        price: '78',
+        sizes: [
+          { name: 'XXS', quantity: 2 },
+          { name: 'XS', quantity: 2 },
+          { name: 'S', quantity: 1 },
+          { name: 'M', quantity: 0 }
+        ],
+        images: [
+          {
+            src: '/images/products/2/golden/1.png',
+            alt: 'Model wearing plain black basic tee.'
+          },
+          {
+            src: '/images/products/2/golden/2.png',
+            alt: 'Model wearing plain gray basic tee.'
+          },
+          {
+            src: '/images/products/2/golden/3.png',
+            alt: 'Model wearing plain white basic tee.'
+          },
+          {
+            src: '/images/products/2/golden/4.png',
+            alt: 'Thalssa rouge ...'
+          }
+        ]
+      }
     ],
-    sizes: [
-      { name: 'XXS', inStock: true },
-      { name: 'XS', inStock: true },
-      { name: 'S', inStock: true },
-      { name: 'M', inStock: true },
-      { name: 'L', inStock: true },
-      { name: 'XL', inStock: true },
-      { name: 'XXL', inStock: true },
-      { name: 'XXXL', inStock: false }
+    category: {
+      id: 1,
+      name: 'woman',
+      label: 'Femme'
+    },
+    subcategory: {
+      id: 5,
+      name: 'dress',
+      label: 'Robe de fete'
+    },
+    collection: {
+      id: 1,
+      name: 'Berbère Éclat ',
+      image: {
+        src: '/images/collections/dresses/1.png',
+        alt: 'BRobe de Fête '
+      },
+      description: `Mettant en avant le rayonnement et la modernité des designs tout en restant fidèle aux racines berbères traditionnelles.`
+    },
+    description:
+      'The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: "Black". Need to add an extra pop of color to your outfit? Our white tee has you covered.',
+    details: [
+      {
+        name: 'Highlights',
+        items: [
+          'Hand cut and sewn locally',
+          'Dyed with our proprietary colors',
+          'Pre-washed & pre-shrunk',
+          'Ultra-soft 100% cotton'
+        ]
+      },
+      {
+        name: 'Shipping',
+        items: [
+          'Free shipping on orders over $300',
+          'International shipping available',
+          'Expedited shipping options',
+          'Signature required upon delivery'
+        ]
+      },
+      {
+        name: 'Returns',
+        items: [
+          'Easy return requests',
+          'Pre-paid shipping label included',
+          '10% restocking fee for returns',
+          '60 day return window'
+        ]
+      }
     ]
   },
   {
     id: 3,
-    name: 'Thalssa',
+    name: 'Elegancia',
     price: '75',
-    imageSrc: '/images/trending/3.png',
-    imageAlt: 'Thalssa',
-    rating: 3.9,
-    reviewCount: 117,
     code: 'f230fh0g3',
-    description: 'Product Description',
-    image: 'bamboo-watch.jpg',
-    category: 'Accessories',
-    quantity: 24,
-    inventoryStatus: 'INSTOCK',
+    image: {
+      alt: 'Elegancia',
+      src: '/images/products/3/golden/1.png'
+    },
     colors: [
-      { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
-      { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
-      { name: 'Black', class: 'bg-gray-900', selectedClass: 'ring-gray-900' }
+      {
+        name: 'Golden',
+        class: 'bg-yellow-700',
+        selectedClass: 'ring-gray-400',
+        reviews: { href: '#', average: 4, totalCount: 117 },
+        price: '78',
+        sizes: [
+          { name: 'XXS', quantity: 5 },
+          { name: 'XS', quantity: 2 },
+          { name: 'S', quantity: 6 },
+          { name: 'M', quantity: 0 }
+        ],
+        images: [
+          {
+            src: '/images/products/3/golden/1.png',
+            alt: 'Thalssa rouge ...'
+          },
+          {
+            src: '/images/products/3/golden/1.png',
+            alt: 'Model wearing plain black basic tee.'
+          },
+          {
+            src: '/images/products/3/golden/1.png',
+            alt: 'Model wearing plain gray basic tee.'
+          },
+          {
+            src: '/images/products/3/golden/1.png',
+            alt: 'Model wearing plain white basic tee.'
+          }
+        ]
+      },
+      {
+        name: 'White',
+        class: 'bg-white-200',
+        selectedClass: 'ring-gray-400',
+        reviews: { href: '#', average: 4, totalCount: 117 },
+        price: '81',
+
+        sizes: [
+          { name: 'XXS', quantity: 2 },
+          { name: 'S', quantity: 6 },
+          { name: 'M', quantity: 0 }
+        ],
+        images: [
+          {
+            src: '/images/products/3/white/1.png',
+            alt: 'Thalssa rouge ...'
+          },
+          {
+            src: '/images/products/3/white/2.png',
+            alt: 'Model wearing plain black basic tee.'
+          },
+          {
+            src: '/images/products/3/white/3.png',
+            alt: 'Model wearing plain gray basic tee.'
+          },
+          {
+            src: '/images/products/3/white/4.png',
+            alt: 'Model wearing plain white basic tee.'
+          }
+        ]
+      }
     ],
-    sizes: [
-      { name: 'XXS', inStock: true },
-      { name: 'XS', inStock: true },
-      { name: 'S', inStock: true },
-      { name: 'M', inStock: true },
-      { name: 'L', inStock: true },
-      { name: 'XL', inStock: true },
-      { name: 'XXL', inStock: true },
-      { name: 'XXXL', inStock: false }
+    category: {
+      id: 1,
+      name: 'woman',
+      label: 'Femme'
+    },
+    subcategory: {
+      id: 5,
+      name: 'dress',
+      label: 'Robe de fete'
+    },
+    collection: {
+      id: 1,
+      name: 'Berbère Éclat ',
+      image: {
+        src: '/images/collections/dresses/1.png',
+        alt: 'BRobe de Fête '
+      },
+      description: `Mettant en avant le rayonnement et la modernité des designs tout en restant fidèle aux racines berbères traditionnelles.`
+    },
+    description:
+      'The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: "Black". Need to add an extra pop of color to your outfit? Our white tee has you covered.',
+    details: [
+      {
+        name: 'Highlights',
+        items: [
+          'Hand cut and sewn locally',
+          'Dyed with our proprietary colors',
+          'Pre-washed & pre-shrunk',
+          'Ultra-soft 100% cotton'
+        ]
+      },
+      {
+        name: 'Shipping',
+        items: [
+          'Free shipping on orders over $300',
+          'International shipping available',
+          'Expedited shipping options',
+          'Signature required upon delivery'
+        ]
+      },
+      {
+        name: 'Returns',
+        items: [
+          'Easy return requests',
+          'Pre-paid shipping label included',
+          '10% restocking fee for returns',
+          '60 day return window'
+        ]
+      }
     ]
   },
   {
     id: 4,
     name: 'Thalssa',
     price: '75',
-    imageSrc: '/images/trending/4.png',
-    imageAlt: 'Thalssa',
-    rating: 3.9,
-    reviewCount: 117,
     code: 'f230fh0g3',
-    description: 'Product Description',
-    image: 'bamboo-watch.jpg',
-    category: 'Accessories',
-    quantity: 24,
-    inventoryStatus: 'OUTOFSTOCK',
+    image: {
+      alt: 'Thalssa',
+      src: '/images/products/1/red/1.png'
+    },
     colors: [
-      { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
-      { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
-      { name: 'Black', class: 'bg-gray-900', selectedClass: 'ring-gray-900' }
+      {
+        name: 'Red',
+        class: 'bg-red-700',
+        selectedClass: 'ring-gray-400',
+        reviews: { href: '#', average: 4, totalCount: 117 },
+        price: '78',
+        sizes: [
+          { name: 'XXS', quantity: 5 },
+          { name: 'XS', quantity: 2 },
+          { name: 'S', quantity: 6 },
+          { name: 'M', quantity: 0 }
+        ],
+        images: [
+          {
+            src: '/images/products/1/red/1.png',
+            alt: 'Model wearing plain black basic tee.'
+          },
+          {
+            src: '/images/products/1/red/2.png',
+            alt: 'Model wearing plain gray basic tee.'
+          },
+          {
+            src: '/images/products/1/red/3.png',
+            alt: 'Model wearing plain white basic tee.'
+          },
+          {
+            src: '/images/products/1/red/4.png',
+            alt: 'Thalssa rouge ...'
+          }
+        ]
+      },
+      {
+        name: 'Pink',
+        class: 'bg-pink-200',
+        selectedClass: 'ring-gray-400',
+        reviews: { href: '#', average: 4, totalCount: 117 },
+        price: '81',
+
+        sizes: [
+          { name: 'XXS', quantity: 2 },
+          { name: 'S', quantity: 6 },
+          { name: 'M', quantity: 0 }
+        ],
+        images: [
+          {
+            src: '/images/products/1/pink/1.png',
+            alt: 'Model wearing plain black basic tee.'
+          },
+          {
+            src: '/images/products/1/pink/2.png',
+            alt: 'Model wearing plain gray basic tee.'
+          },
+          {
+            src: '/images/products/1/pink/3.png',
+            alt: 'Model wearing plain white basic tee.'
+          },
+          {
+            src: '/images/products/1/pink/4.png',
+            alt: 'Thalssa rouge ...'
+          }
+        ]
+      },
+      {
+        name: 'Green',
+        class: 'bg-green-200',
+        selectedClass: 'ring-gray-900',
+        reviews: { href: '#', average: 4, totalCount: 117 },
+        price: '78',
+
+        sizes: [
+          { name: 'XXS', quantity: 2 },
+          { name: 'XS', quantity: 1 },
+          { name: 'S', quantity: 2 },
+          { name: 'XXL', quantity: 2 },
+          { name: 'XXXL', quantity: 0 }
+        ],
+        images: [
+          {
+            src: '/images/products/1/green/1.png',
+            alt: 'Model wearing plain black basic tee.'
+          },
+          {
+            src: '/images/products/1/green/2.png',
+            alt: 'Model wearing plain gray basic tee.'
+          },
+          {
+            src: '/images/products/1/green/3.png',
+            alt: 'Model wearing plain white basic tee.'
+          },
+          {
+            src: '/images/products/1/green/4.png',
+            alt: 'Thalssa rouge ...'
+          }
+        ]
+      }
     ],
-    sizes: [
-      { name: 'XXS', inStock: true },
-      { name: 'XS', inStock: true },
-      { name: 'S', inStock: true },
-      { name: 'M', inStock: true },
-      { name: 'L', inStock: true },
-      { name: 'XL', inStock: true },
-      { name: 'XXL', inStock: true },
-      { name: 'XXXL', inStock: false }
+    category: {
+      id: 1,
+      name: 'woman',
+      label: 'Femme'
+    },
+    subcategory: {
+      id: 5,
+      name: 'dress',
+      label: 'Robe de fete'
+    },
+    collection: {
+      id: 1,
+      name: 'Berbère Éclat ',
+      image: {
+        src: '/images/collections/dresses/1.png',
+        alt: 'BRobe de Fête '
+      },
+      description: `Mettant en avant le rayonnement et la modernité des designs tout en restant fidèle aux racines berbères traditionnelles.`
+    },
+    description:
+      'The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: "Black". Need to add an extra pop of color to your outfit? Our white tee has you covered.',
+    details: [
+      {
+        name: 'Highlights',
+        items: [
+          'Hand cut and sewn locally',
+          'Dyed with our proprietary colors',
+          'Pre-washed & pre-shrunk',
+          'Ultra-soft 100% cotton'
+        ]
+      },
+      {
+        name: 'Shipping',
+        items: [
+          'Free shipping on orders over $300',
+          'International shipping available',
+          'Expedited shipping options',
+          'Signature required upon delivery'
+        ]
+      },
+      {
+        name: 'Returns',
+        items: [
+          'Easy return requests',
+          'Pre-paid shipping label included',
+          '10% restocking fee for returns',
+          '60 day return window'
+        ]
+      }
     ]
   },
   {
     id: 5,
     name: 'Thalssa',
     price: '75',
-    imageSrc: '/images/trending/4.png',
-    imageAlt: 'Thalssa',
-    rating: 3.9,
-    reviewCount: 117,
     code: 'f230fh0g3',
-    description: 'Product Description',
-    image: 'bamboo-watch.jpg',
-    category: 'Accessories',
-    quantity: 24,
-    inventoryStatus: 'OUTOFSTOCK',
+    image: {
+      alt: 'Thalssa',
+      src: '/images/products/2/golden/1.png'
+    },
     colors: [
-      { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
-      { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
-      { name: 'Black', class: 'bg-gray-900', selectedClass: 'ring-gray-900' }
+      {
+        name: 'Red',
+        class: 'bg-red-700',
+        selectedClass: 'ring-gray-400',
+        reviews: { href: '#', average: 4, totalCount: 117 },
+        price: '78',
+        sizes: [
+          { name: 'XXS', quantity: 2 },
+          { name: 'XS', quantity: 2 },
+          { name: 'S', quantity: 1 },
+          { name: 'M', quantity: 0 }
+        ],
+        images: [
+          {
+            src: '/images/products/2/golden/1.png',
+            alt: 'Model wearing plain black basic tee.'
+          },
+          {
+            src: '/images/products/2/golden/2.png',
+            alt: 'Model wearing plain gray basic tee.'
+          },
+          {
+            src: '/images/products/2/golden/3.png',
+            alt: 'Model wearing plain white basic tee.'
+          },
+          {
+            src: '/images/products/2/golden/4.png',
+            alt: 'Thalssa rouge ...'
+          }
+        ]
+      }
     ],
-    sizes: [
-      { name: 'XXS', inStock: true },
-      { name: 'XS', inStock: true },
-      { name: 'S', inStock: true },
-      { name: 'M', inStock: true },
-      { name: 'L', inStock: true },
-      { name: 'XL', inStock: true },
-      { name: 'XXL', inStock: true },
-      { name: 'XXXL', inStock: false }
+    category: {
+      id: 1,
+      name: 'woman',
+      label: 'Femme'
+    },
+    subcategory: {
+      id: 5,
+      name: 'dress',
+      label: 'Robe de fete'
+    },
+    collection: {
+      id: 1,
+      name: 'Berbère Éclat ',
+      image: {
+        src: '/images/collections/dresses/1.png',
+        alt: 'BRobe de Fête '
+      },
+      description: `Mettant en avant le rayonnement et la modernité des designs tout en restant fidèle aux racines berbères traditionnelles.`
+    },
+    description:
+      'The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: "Black". Need to add an extra pop of color to your outfit? Our white tee has you covered.',
+    details: [
+      {
+        name: 'Highlights',
+        items: [
+          'Hand cut and sewn locally',
+          'Dyed with our proprietary colors',
+          'Pre-washed & pre-shrunk',
+          'Ultra-soft 100% cotton'
+        ]
+      },
+      {
+        name: 'Shipping',
+        items: [
+          'Free shipping on orders over $300',
+          'International shipping available',
+          'Expedited shipping options',
+          'Signature required upon delivery'
+        ]
+      },
+      {
+        name: 'Returns',
+        items: [
+          'Easy return requests',
+          'Pre-paid shipping label included',
+          '10% restocking fee for returns',
+          '60 day return window'
+        ]
+      }
     ]
   }
 ]
+
 const accessoires = [
   {
-    id: 1,
-    name: 'Tassadi',
+    id: 6,
+    name: 'Thalssa',
     price: '75',
-    rating: 3.9,
-    reviewCount: 117,
     code: 'f230fh0g3',
-    description: 'Product Description',
-    image: 'bamboo-watch.jpg',
-    category: 'Accessories',
-    quantity: 24,
-    inventoryStatus: 'INSTOCK',
-    imageSrc: '/images/accessoires/1.png',
-    imageAlt: 'Thalssa',
+    image: {
+      alt: 'Thalssa',
+      src: '/images/products/4/red/1.png'
+    },
     colors: [
-      { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
-      { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
-      { name: 'Black', class: 'bg-gray-900', selectedClass: 'ring-gray-900' }
+      {
+        name: 'Red',
+        class: 'bg-red-700',
+        selectedClass: 'ring-gray-400',
+        reviews: { href: '#', average: 4, totalCount: 117 },
+        price: '78',
+        quantity: 4,
+        sizes: null,
+        images: [
+          {
+            src: '/images/products/4/red/1.png',
+            alt: 'Thalssa rouge ...'
+          },
+          {
+            src: '/images/products/4/red/2.png',
+            alt: 'Model wearing plain black basic tee.'
+          },
+          {
+            src: '/images/products/4/red/3.png',
+            alt: 'Model wearing plain gray basic tee.'
+          },
+          {
+            src: '/images/products/4/red/4.png',
+            alt: 'Model wearing plain white basic tee.'
+          }
+        ]
+      },
+      {
+        name: 'Pink',
+        class: 'bg-pink-200',
+        selectedClass: 'ring-gray-400',
+        reviews: { href: '#', average: 4, totalCount: 117 },
+        price: '81',
+        quantity: 0,
+        sizes: null,
+        images: [
+          {
+            src: '/images/products/4/red/2.png',
+            alt: 'Thalssa rouge ...'
+          },
+          {
+            src: '/images/products/4/red/2.png',
+            alt: 'Model wearing plain black basic tee.'
+          },
+          {
+            src: '/images/products/4/red/2.png',
+            alt: 'Model wearing plain gray basic tee.'
+          },
+          {
+            src: '/images/products/4/red/2.png',
+            alt: 'Model wearing plain white basic tee.'
+          }
+        ]
+      }
     ],
-    sizes: [
-      { name: 'XXS', inStock: true },
-      { name: 'XS', inStock: true },
-      { name: 'S', inStock: true },
-      { name: 'M', inStock: true },
-      { name: 'L', inStock: true },
-      { name: 'XL', inStock: true },
-      { name: 'XXL', inStock: true },
-      { name: 'XXXL', inStock: false }
+    category: {
+      id: 1,
+      name: 'woman',
+      label: 'Femme'
+    },
+    subcategory: {
+      id: 5,
+      name: 'bag',
+      label: 'Sac '
+    },
+    collection: {
+      id: 1,
+      name: 'Berbère Éclat ',
+      image: {
+        src: '/images/collections/dresses/1.png',
+        alt: 'BRobe de Fête '
+      },
+      description: `Mettant en avant le rayonnement et la modernité des designs tout en restant fidèle aux racines berbères traditionnelles.`
+    },
+    description:
+      'The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: "Black". Need to add an extra pop of color to your outfit? Our white tee has you covered.',
+    details: [
+      {
+        name: 'Highlights',
+        items: [
+          'Hand cut and sewn locally',
+          'Dyed with our proprietary colors',
+          'Pre-washed & pre-shrunk',
+          'Ultra-soft 100% cotton'
+        ]
+      },
+      {
+        name: 'Shipping',
+        items: [
+          'Free shipping on orders over $300',
+          'International shipping available',
+          'Expedited shipping options',
+          'Signature required upon delivery'
+        ]
+      },
+      {
+        name: 'Returns',
+        items: [
+          'Easy return requests',
+          'Pre-paid shipping label included',
+          '10% restocking fee for returns',
+          '60 day return window'
+        ]
+      }
     ]
   },
   {
-    id: 2,
-    name: 'Tassadi',
-    rating: 3.9,
-    reviewCount: 117,
-    code: 'f230fh0g3',
-    description: 'Product Description',
-    image: 'bamboo-watch.jpg',
-    category: 'Accessories',
-    quantity: 24,
-    inventoryStatus: 'INSTOCK',
+    id: 7,
+    name: 'Thalssa',
     price: '75',
-    imageSrc: '/images/accessoires/2.png',
-    imageAlt: 'Thalssa',
+    code: 'f230fh0g3',
+    image: {
+      alt: 'Thalssa',
+      src: '/images/products/4/red/2.png'
+    },
     colors: [
-      { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
-      { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
-      { name: 'Black', class: 'bg-gray-900', selectedClass: 'ring-gray-900' }
-    ],
-    sizes: [
-      { name: 'XXS', inStock: true },
-      { name: 'XS', inStock: true },
-      { name: 'S', inStock: true },
-      { name: 'M', inStock: true },
-      { name: 'L', inStock: true },
-      { name: 'XL', inStock: true },
-      { name: 'XXL', inStock: true },
-      { name: 'XXXL', inStock: false }
-    ]
-  },
-  {
-    id: 3,
-    name: 'Tassadi',
-    price: '75',
-    rating: 3.9,
-    reviewCount: 117,
-    code: 'f230fh0g3',
-    description: 'Product Description',
-    image: 'bamboo-watch.jpg',
-    category: 'Accessories',
-    quantity: 24,
-    inventoryStatus: 'INSTOCK',
-    imageSrc: '/images/accessoires/3.png',
-    imageAlt: 'Thalssa',
-    colors: [
-      { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
-      { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
-      { name: 'Black', class: 'bg-gray-900', selectedClass: 'ring-gray-900' }
-    ],
-    sizes: [
-      { name: 'XXS', inStock: true },
-      { name: 'XS', inStock: true },
-      { name: 'S', inStock: true },
-      { name: 'M', inStock: true },
-      { name: 'L', inStock: true },
-      { name: 'XL', inStock: true },
-      { name: 'XXL', inStock: true },
-      { name: 'XXXL', inStock: false }
-    ]
-  },
-  {
-    id: 4,
-    name: 'Tassadi',
-    price: '75',
-    rating: 3.9,
-    reviewCount: 117,
-    code: 'f230fh0g3',
-    description: 'Product Description',
-    image: 'bamboo-watch.jpg',
-    category: 'Accessories',
-    quantity: 24,
-    inventoryStatus: 'INSTOCK',
-    imageSrc: '/images/accessoires/1.png',
-    imageAlt: 'Thalssa',
+      {
+        name: 'Red',
+        class: 'bg-red-700',
+        selectedClass: 'ring-gray-400',
+        reviews: { href: '#', average: 4, totalCount: 117 },
+        price: '78',
+        quantity: 4,
+        sizes: null,
+        images: [
+          {
+            src: '/images/products/4/red/2.png',
 
-    colors: [
-      { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
-      { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
-      { name: 'Black', class: 'bg-gray-900', selectedClass: 'ring-gray-900' }
+            alt: 'Thalssa rouge ...'
+          },
+          {
+            src: '/images/products/4/red/2.png',
+            alt: 'Model wearing plain black basic tee.'
+          },
+          {
+            src: '/images/products/4/red/2.png',
+            alt: 'Model wearing plain gray basic tee.'
+          },
+          {
+            src: '/images/products/4/red/2.png',
+            alt: 'Model wearing plain white basic tee.'
+          }
+        ]
+      },
+      {
+        name: 'Pink',
+        class: 'bg-pink-200',
+        selectedClass: 'ring-gray-400',
+        reviews: { href: '#', average: 4, totalCount: 117 },
+        price: '81',
+        quantity: 4,
+        sizes: null,
+        images: [
+          {
+            src: '/images/products/4/red/1.png',
+            alt: 'Thalssa rouge ...'
+          },
+          {
+            src: '/images/products/4/red/1.png',
+            alt: 'Model wearing plain black basic tee.'
+          },
+          {
+            src: '/images/products/4/red/1.png',
+            alt: 'Model wearing plain gray basic tee.'
+          },
+          {
+            src: '/images/products/4/red/1.png',
+            alt: 'Model wearing plain white basic tee.'
+          }
+        ]
+      }
     ],
-    sizes: [
-      { name: 'XXS', inStock: true },
-      { name: 'XS', inStock: true },
-      { name: 'S', inStock: true },
-      { name: 'M', inStock: true },
-      { name: 'L', inStock: true },
-      { name: 'XL', inStock: true },
-      { name: 'XXL', inStock: true },
-      { name: 'XXXL', inStock: false }
+    category: {
+      id: 1,
+      name: 'woman',
+      label: 'Femme'
+    },
+    subcategory: {
+      id: 5,
+      name: 'bag',
+      label: 'Sac à main'
+    },
+    collection: {
+      id: 1,
+      name: 'Berbère Éclat ',
+      image: {
+        src: '/images/collections/dresses/1.png',
+        alt: 'BRobe de Fête '
+      },
+      description: `Mettant en avant le rayonnement et la modernité des designs tout en restant fidèle aux racines berbères traditionnelles.`
+    },
+    description:
+      'The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: "Black". Need to add an extra pop of color to your outfit? Our white tee has you covered.',
+    details: [
+      {
+        name: 'Highlights',
+        items: [
+          'Hand cut and sewn locally',
+          'Dyed with our proprietary colors',
+          'Pre-washed & pre-shrunk',
+          'Ultra-soft 100% cotton'
+        ]
+      },
+      {
+        name: 'Shipping',
+        items: [
+          'Free shipping on orders over $300',
+          'International shipping available',
+          'Expedited shipping options',
+          'Signature required upon delivery'
+        ]
+      },
+      {
+        name: 'Returns',
+        items: [
+          'Easy return requests',
+          'Pre-paid shipping label included',
+          '10% restocking fee for returns',
+          '60 day return window'
+        ]
+      }
+    ]
+  },
+  {
+    id: 8,
+    name: 'Thalssa',
+    price: '75',
+    code: 'f230fh0g3',
+    image: {
+      alt: 'Thalssa',
+      src: '/images/products/4/red/3.png'
+    },
+    colors: [
+      {
+        name: 'Red',
+        class: 'bg-red-700',
+        selectedClass: 'ring-gray-400',
+        reviews: { href: '#', average: 4, totalCount: 117 },
+        price: '78',
+        quantity: 4,
+        sizes: null,
+        images: [
+          {
+            src: '/images/products/4/red/3.png',
+            alt: 'Thalssa rouge ...'
+          },
+          {
+            src: '/images/products/4/red/3.png',
+            alt: 'Model wearing plain black basic tee.'
+          },
+          {
+            src: '/images/products/4/red/3.png',
+            alt: 'Model wearing plain gray basic tee.'
+          },
+          {
+            src: '/images/products/4/red/3.png',
+            alt: 'Model wearing plain white basic tee.'
+          }
+        ]
+      },
+      {
+        name: 'Pink',
+        class: 'bg-pink-200',
+        selectedClass: 'ring-gray-400',
+        reviews: { href: '#', average: 4, totalCount: 117 },
+        price: '81',
+        quantity: 4,
+        sizes: null,
+        images: [
+          {
+            src: '/images/products/4/red/4.png',
+            alt: 'Thalssa rouge ...'
+          },
+          {
+            src: '/images/products/4/red/4.png',
+            alt: 'Model wearing plain black basic tee.'
+          },
+          {
+            src: '/images/products/4/red/4.png',
+            alt: 'Model wearing plain gray basic tee.'
+          },
+          {
+            src: '/images/products/4/red/4.png',
+            alt: 'Model wearing plain white basic tee.'
+          }
+        ]
+      }
+    ],
+    category: {
+      id: 1,
+      name: 'woman',
+      label: 'Femme'
+    },
+    subcategory: {
+      id: 5,
+      name: 'accessory',
+      label: 'Colier '
+    },
+    collection: {
+      id: 1,
+      name: 'Berbère Éclat ',
+      image: {
+        src: '/images/collections/dresses/1.png',
+        alt: 'BRobe de Fête '
+      },
+      description: `Mettant en avant le rayonnement et la modernité des designs tout en restant fidèle aux racines berbères traditionnelles.`
+    },
+    description:
+      'The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: "Black". Need to add an extra pop of color to your outfit? Our white tee has you covered.',
+    details: [
+      {
+        name: 'Highlights',
+        items: [
+          'Hand cut and sewn locally',
+          'Dyed with our proprietary colors',
+          'Pre-washed & pre-shrunk',
+          'Ultra-soft 100% cotton'
+        ]
+      },
+      {
+        name: 'Shipping',
+        items: [
+          'Free shipping on orders over $300',
+          'International shipping available',
+          'Expedited shipping options',
+          'Signature required upon delivery'
+        ]
+      },
+      {
+        name: 'Returns',
+        items: [
+          'Easy return requests',
+          'Pre-paid shipping label included',
+          '10% restocking fee for returns',
+          '60 day return window'
+        ]
+      }
+    ]
+  },
+  {
+    id: 9,
+    name: 'Thalssa',
+    price: '75',
+    code: 'f230fh0g3',
+    image: {
+      alt: 'Thalssa',
+      src: '/images/products/4/red/4.png'
+    },
+    colors: [
+      {
+        name: 'Red',
+        class: 'bg-red-700',
+        selectedClass: 'ring-gray-400',
+        reviews: { href: '#', average: 4, totalCount: 117 },
+        price: '78',
+        quantity: 0,
+        sizes: null,
+        images: [
+          {
+            src: '/images/products/4/red/4.png',
+            alt: 'Thalssa rouge ...'
+          },
+          {
+            src: '/images/products/4/red/4.png',
+            alt: 'Model wearing plain black basic tee.'
+          },
+          {
+            src: '/images/products/4/red/4.png',
+            alt: 'Model wearing plain gray basic tee.'
+          },
+          {
+            src: '/images/products/4/red/4.png',
+            alt: 'Model wearing plain white basic tee.'
+          }
+        ]
+      },
+      {
+        name: 'Pink',
+        class: 'bg-pink-200',
+        selectedClass: 'ring-gray-400',
+        reviews: { href: '#', average: 4, totalCount: 117 },
+        price: '81',
+        quantity: 0,
+        sizes: null,
+        images: [
+          {
+            src: '/images/products/4/red/3.png',
+            alt: 'Thalssa rouge ...'
+          },
+          {
+            src: '/images/products/4/red/3.png',
+            alt: 'Model wearing plain black basic tee.'
+          },
+          {
+            src: '/images/products/4/red/3.png',
+            alt: 'Model wearing plain gray basic tee.'
+          },
+          {
+            src: '/images/products/4/red/3.png',
+            alt: 'Model wearing plain white basic tee.'
+          }
+        ]
+      }
+    ],
+    category: {
+      id: 1,
+      name: 'woman',
+      label: 'Femme'
+    },
+    subcategory: {
+      id: 5,
+      name: 'accessory',
+      label: 'Colier'
+    },
+    collection: {
+      id: 1,
+      name: 'Berbère Éclat ',
+      image: {
+        src: '/images/collections/dresses/1.png',
+        alt: 'BRobe de Fête '
+      },
+      description: `Mettant en avant le rayonnement et la modernité des designs tout en restant fidèle aux racines berbères traditionnelles.`
+    },
+    description:
+      'The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: "Black". Need to add an extra pop of color to your outfit? Our white tee has you covered.',
+    details: [
+      {
+        name: 'Highlights',
+        items: [
+          'Hand cut and sewn locally',
+          'Dyed with our proprietary colors',
+          'Pre-washed & pre-shrunk',
+          'Ultra-soft 100% cotton'
+        ]
+      },
+      {
+        name: 'Shipping',
+        items: [
+          'Free shipping on orders over $300',
+          'International shipping available',
+          'Expedited shipping options',
+          'Signature required upon delivery'
+        ]
+      },
+      {
+        name: 'Returns',
+        items: [
+          'Easy return requests',
+          'Pre-paid shipping label included',
+          '10% restocking fee for returns',
+          '60 day return window'
+        ]
+      }
     ]
   }
 ]
