@@ -44,7 +44,7 @@ const router = useRouter()
 const route = useRoute()
 
 const sortOptions = [
-  { name: 'Most Popular', href: '#', current: true },
+  { name: 'Most Popular', href: '#', current: false },
   { name: 'Best Rating', href: '#', current: false },
   { name: 'Newest', href: '#', current: false },
   { name: 'Price: Low to High', href: '#', current: false },

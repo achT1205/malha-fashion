@@ -108,7 +108,7 @@
               <MenuButton
                 class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900"
               >
-                Sort
+                Sort <span v-if="selectSortOption" class="ml-1"> by : {{ selectSortOption.name }}</span>
                 <ChevronDownIcon
                   class="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                   aria-hidden="true"
@@ -129,16 +129,16 @@
               >
                 <div class="py-1">
                   <MenuItem
-                    v-for="option in props.sortOptions"
+                    v-for="option in localSortOptions"
                     :key="option.name"
                     v-slot="{ active }"
                   >
                     <a
-                      :href="option.href"
+                      @click="sortBy(option)"
                       :class="[
                         option.current ? 'font-medium text-gray-900' : 'text-gray-500',
                         active ? 'bg-gray-100' : '',
-                        'block px-4 py-2 text-sm'
+                        'block px-4 py-2 text-sm cursor-pointer'
                       ]"
                       >{{ option.name }}</a
                     >
@@ -243,7 +243,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import {
   Dialog,
   DialogPanel,
@@ -290,6 +290,22 @@ const props = defineProps({
   }
 })
 
+const localSortOptions = reactive(props.sortOptions)
+const localFilters = reactive(props.filters)
+const localSubCategories = reactive(props.subCategories)
+
 const filters1 = ref(props.filters)
 const mobileFiltersOpen = ref(false)
+
+const sortBy = (op) => {
+  localSortOptions.forEach((option) => {
+    if (option === op) {
+      option.current = true
+    } else {
+      option.current = false
+    }
+  })
+}
+
+const selectSortOption = computed(() => localSortOptions.find((_) => _.current))
 </script>
