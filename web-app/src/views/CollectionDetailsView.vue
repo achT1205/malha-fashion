@@ -64,7 +64,7 @@ const filters = [
     options: [
       { value: 'white', label: 'White', checked: false },
       { value: 'beige', label: 'Beige', checked: false },
-      { value: 'blue', label: 'Blue', checked: true },
+      { value: 'blue', label: 'Blue', checked: false },
       { value: 'brown', label: 'Brown', checked: false },
       { value: 'green', label: 'Green', checked: false },
       { value: 'purple', label: 'Purple', checked: false }
@@ -76,7 +76,7 @@ const filters = [
     options: [
       { value: 'new-arrivals', label: 'Nouvaux', checked: false },
       { value: 'sale', label: 'Promo', checked: false },
-      { value: 'selebration', label: 'Fete', checked: true },
+      { value: 'selebration', label: 'Fete', checked: false },
       { value: 'house', label: 'Maison', checked: false },
       { value: 'casual', label: 'Décontracté', checked: false },
       { value: 'accessories', label: 'Accessories', checked: false }
@@ -91,7 +91,7 @@ const filters = [
       { value: 's-m', label: 'S/M', checked: false },
       { value: 'm-l', label: 'M/L', checked: false },
       { value: 'l-xl', label: 'L/XL', checked: false },
-      { value: 'xl-xxl', label: 'XL/XXL', checked: true },
+      { value: 'xl-xxl', label: 'XL/XXL', checked: false },
       { value: 's', label: 'S', checked: false },
       { value: 'm', label: 'M', checked: false },
       { value: 'l', label: 'L', checked: false },

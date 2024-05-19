@@ -108,7 +108,8 @@
               <MenuButton
                 class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900"
               >
-                Sort <span v-if="selectSortOption" class="ml-1"> by : {{ selectSortOption.name }}</span>
+                Sort
+                <span v-if="selectSortOption" class="ml-1"> by : {{ selectSortOption.name }}</span>
                 <ChevronDownIcon
                   class="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                   aria-hidden="true"
@@ -134,7 +135,7 @@
                     v-slot="{ active }"
                   >
                     <a
-                      @click="sortBy(option)"
+                      @click="handleSortOptionChange(option)"
                       :class="[
                         option.current ? 'font-medium text-gray-900' : 'text-gray-500',
                         active ? 'bg-gray-100' : '',
@@ -181,7 +182,7 @@
 
             <Disclosure
               as="div"
-              v-for="section in filters1"
+              v-for="section in localFilters"
               :key="section.id"
               class="border-b border-gray-200 py-6"
               v-slot="{ open }"
@@ -243,7 +244,6 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue'
 import {
   Dialog,
   DialogPanel,
@@ -266,46 +266,151 @@ import {
   Squares2X2Icon
 } from '@heroicons/vue/20/solid'
 import ProductCardWithQuickView from './ProductCardWithQuickView.vue'
+import { debounce } from 'lodash-es'
+import { ref, reactive, computed, onMounted, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import axios from 'axios'
+
+const router = useRouter()
+const route = useRoute()
 
 const props = defineProps({
-  sortOptions: {
-    type: [Array, null],
-    required: true
-  },
-  subCategories: {
-    type: [Array, null],
-    required: true
-  },
-  filters: {
-    type: [Array, null],
-    required: true
-  },
-  products: {
-    type: [Array, null],
-    required: true
-  },
-  collection: {
-    type: [Object, null],
-    required: true
-  }
+  sortOptions: { type: Array, default: () => [] },
+  subCategories: { type: Array, default: () => [] },
+  filters: { type: Array, default: () => [] },
+  products: { type: Array, default: () => [] },
+  collection: { type: Object, default: () => ({}) }
 })
 
-const localSortOptions = reactive(props.sortOptions)
-const localFilters = reactive(props.filters)
-const localSubCategories = reactive(props.subCategories)
+const loading = ref(false)
+const currentPage = ref(1)
+const pageSize = ref(10) // Adjustable based on needs
+const totalPages = ref(0) // This should be set based on backend data
 
-const filters1 = ref(props.filters)
+const localSortOptions = ref([...props.sortOptions])
+const localFilters = ref([...props.filters])
 const mobileFiltersOpen = ref(false)
 
-const sortBy = (op) => {
-  localSortOptions.forEach((option) => {
-    if (option === op) {
-      option.current = true
-    } else {
-      option.current = false
-    }
-  })
+const fetchFilteredData = debounce(async (query) => {
+  loading.value = true
+  try {
+    const response = await axios.get('/api/endpoint', { params: query })
+    console.log('Data:', response.data)
+    // Update your data view here
+    //totalPages.value = calculateTotalPages(response.data.totalCount, pageSize.value);
+  } catch (error) {
+    console.error('API Error:', error)
+  } finally {
+    loading.value = false
+  }
+}, 300)
+
+const updateRouterQuery = (params) => {
+  const currentQuery = { ...router.currentRoute.value.query, ...params }
+  router.push({ query: currentQuery })
 }
 
-const selectSortOption = computed(() => localSortOptions.find((_) => _.current))
+const selectSortOption = computed(() => localSortOptions.value.find((_) => _.current))
+watch(
+  localFilters,
+  () => {
+    const query = {}
+    localFilters.value.forEach((filter) => {
+      if (filter.options.every((_) => !_.checked)) {
+        const currentQuery = router.currentRoute.value.query
+        const name = currentQuery[filter.id]
+        if (name) {
+          delete router.currentRoute.value.query[filter.id]
+         router.push({ query: router.currentRoute.value.query }) //to be fixed
+         // return
+        }
+      } else {
+        const checkedOptions = filter.options
+          .filter((option) => option.checked)
+          .map((option) => option.value)
+        if (checkedOptions.length > 0) {
+          query[filter.id] = checkedOptions.join(',')
+        }
+      }
+    })
+    query.page = currentPage.value
+    query.pageSize = pageSize.value
+    updateRouterQuery(query)
+    fetchFilteredData(query)
+  },
+  { deep: true }
+)
+
+watch(
+  () => route.query.sort,
+  (newSort) => {
+    localSortOptions.value.forEach((option) => {
+      option.current = option.name === newSort
+    })
+
+    currentPage.value = Number(route.query.page) || 1
+    pageSize.value = Number(route.query.pageSize) || 10
+  }
+)
+
+const updateFilterAndSortFromRoute = (query) => {
+  const sortQuery = query.sort
+  const filterQueries = Object.keys(query).filter(
+    (k) => k !== 'sort' && k !== 'page' && k !== 'pageSize'
+  )
+
+  if (sortQuery) {
+    localSortOptions.value.forEach((option) => {
+      option.current = option.name === sortQuery
+    })
+  }
+
+  filterQueries.forEach((key) => {
+    const filter = localFilters.value.find((f) => f.id === key)
+    if (filter) {
+      const values = query[key].split(',')
+      filter.options.forEach((option) => {
+        option.checked = values.includes(option.value)
+      })
+    }
+  })
+
+  currentPage.value = Number(query.page) || 1
+  pageSize.value = Number(query.pageSize) || 10
+}
+
+const handleSortOptionChange = (selectedOption) => {
+  localSortOptions.value.forEach((option) => {
+    option.current = option === selectedOption
+  })
+  const sortParams = {
+    sort: selectedOption.name,
+    page: currentPage.value,
+    pageSize: pageSize.value
+  }
+  updateRouterQuery(sortParams)
+  fetchFilteredData(sortParams)
+}
+
+/*
+const changePage = (newPage) => {
+  currentPage.value = newPage;
+  const pageParams = {
+    page: newPage,
+    pageSize: pageSize.value
+  };
+  updateRouterQuery(pageParams);
+  fetchFilteredData(pageParams);
+};
+
+function calculateTotalPages(totalCount, pageSize) {
+  return Math.ceil(totalCount / pageSize);
+}
+
+*/
+
+onMounted(() => {
+  const initialQuery = route.query
+  updateFilterAndSortFromRoute(initialQuery)
+})
 </script>
