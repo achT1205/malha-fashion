@@ -384,6 +384,7 @@ const trendingProducts = [
     name: 'Thalssa',
     price: '75',
     code: 'f230fh0g3',
+    genderCategory: { name: 'woman', label: 'Femme' },
     image: {
       alt: 'Thalssa',
       src: '/images/products/1/red/1.png'
@@ -541,6 +542,8 @@ const trendingProducts = [
     name: 'Thalssa',
     price: '75',
     code: 'f230fh0g3',
+    genderCategory: { name: 'man', label: 'Homme' },
+
     image: {
       alt: 'Thalssa',
       src: '/images/products/2/golden/1.png'
@@ -634,6 +637,8 @@ const trendingProducts = [
     name: 'Elegancia',
     price: '75',
     code: 'f230fh0g3',
+    genderCategory: { name: 'girl', label: 'Fille' },
+
     image: {
       alt: 'Elegancia',
       src: '/images/products/3/golden/1.png'
@@ -758,6 +763,8 @@ const trendingProducts = [
     name: 'Thalssa',
     price: '75',
     code: 'f230fh0g3',
+    genderCategory: { name: 'boy', label: 'Garcon' },
+
     image: {
       alt: 'Thalssa',
       src: '/images/products/1/red/1.png'
@@ -915,6 +922,7 @@ const trendingProducts = [
     name: 'Thalssa',
     price: '75',
     code: 'f230fh0g3',
+    genderCategory: { name: 'woman', label: 'Femme' },
     image: {
       alt: 'Thalssa',
       src: '/images/products/2/golden/1.png'
@@ -1011,6 +1019,7 @@ const accessoires = [
     name: 'Thalssa',
     price: '75',
     code: 'f230fh0g3',
+    genderCategory: { name: 'woman', label: 'Femme' },
     image: {
       alt: 'Thalssa',
       src: '/images/products/4/red/1.png'
@@ -1127,6 +1136,8 @@ const accessoires = [
     name: 'Thalssa',
     price: '75',
     code: 'f230fh0g3',
+    genderCategory: { name: 'woman', label: 'Femme' },
+
     image: {
       alt: 'Thalssa',
       src: '/images/products/4/red/2.png'
@@ -1244,6 +1255,8 @@ const accessoires = [
     name: 'Thalssa',
     price: '75',
     code: 'f230fh0g3',
+    genderCategory: { name: 'woman', label: 'Femme' },
+
     image: {
       alt: 'Thalssa',
       src: '/images/products/4/red/3.png'
@@ -1360,6 +1373,8 @@ const accessoires = [
     name: 'Thalssa',
     price: '75',
     code: 'f230fh0g3',
+    genderCategory: { name: 'woman', label: 'Femme' },
+
     image: {
       alt: 'Thalssa',
       src: '/images/products/4/red/4.png'

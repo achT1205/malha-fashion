@@ -43,14 +43,14 @@ const props = defineProps({
     default: 1
   },
   showNavigators: {
-    type: Number,
+    type: Boolean,
     required: true,
-    default: 1
+    default: false
   },
   showIndicators: {
-    type: Number,
+    type: Boolean,
     required: true,
-    default: 1
+    default: false
   }
 })
 

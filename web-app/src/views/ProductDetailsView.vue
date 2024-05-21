@@ -10,7 +10,7 @@
           >
             <li>
               <div class="flex items-center">
-                <a class="mr-2 text-sm font-medium text-gray-900">{{ product.category.label }}</a>
+                <a class="mr-2 text-sm font-medium text-gray-900">{{ product.genderCategory.label }}</a>
                 <svg
                   width="16"
                   height="20"
@@ -29,7 +29,7 @@
                 <router-link
                   class="mr-2 text-sm font-medium text-gray-900"
                   :to="'/categories/1/?type=fete'"
-                  >{{ product.subcategory.label }}</router-link
+                  >{{ product.category.label }}</router-link
                 >
                 <svg
                   width="16"
@@ -428,12 +428,12 @@ const product = {
       ]
     }
   ],
-  category: {
+  genderCategory: {
     id: 1,
     name: 'woman',
     label: 'Femme'
   },
-  subcategory: {
+  category: {
     id: 5,
     name: 'dress',
     label: 'Robe de fete'

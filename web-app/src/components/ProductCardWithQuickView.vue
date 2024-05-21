@@ -79,11 +79,24 @@
                     <div
                       class="aspect-h-3 aspect-w-2 overflow-hidden rounded-lg bg-gray-100 sm:col-span-4 lg:col-span-5"
                     >
-                      <img
-                        :src="selectedColor.images[0].src"
-                        :alt="selectedColor.images[0].alt"
-                        class="object-cover object-center"
-                      />
+                      <Carousel-T
+                        :value="selectedColor.images"
+                        :numVisible="numVisible"
+                        :numScroll="numScroll"
+                        :autoplayInterval="autoplayInterval"
+                        :responsiveOptions="responsiveOptions"
+                        :showNavigators="showNavigators"
+                        :showIndicators="showIndicators"
+                        circular
+                      >
+                        <template #item="slotProps">
+                          <img
+                            :src="slotProps.data.src"
+                            :alt="slotProps.data.alt"
+                            class="object-cover object-center"
+                          />
+                        </template>
+                      </Carousel-T>
                     </div>
 
                     <div class="sm:col-span-8 lg:col-span-7">
@@ -286,7 +299,6 @@ import {
 } from '@headlessui/vue'
 import { StarIcon } from '@heroicons/vue/20/solid'
 import { ref, computed, watch } from 'vue'
-
 const props = defineProps({
   product: {
     type: [String, null],
@@ -296,6 +308,31 @@ const props = defineProps({
     type: Number,
     required: true,
     default: 20
+  },
+  autoplayInterval: {
+    type: [Number, null],
+    required: true,
+    default: null
+  },
+  numVisible: {
+    type: Number,
+    required: true,
+    default: 1
+  },
+  numScroll: {
+    type: Number,
+    required: true,
+    default: 1
+  },
+  showNavigators: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
+  showIndicators: {
+    type: Boolean,
+    required: true,
+    default: true
   }
 })
 

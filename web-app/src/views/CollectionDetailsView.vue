@@ -27,7 +27,6 @@
     </section>
     <ProductsGrid
       :sortOptions="sortOptions"
-      :subCategories="subCategories"
       :filters="filters"
       :products="products"
       :collection="collection"
@@ -50,13 +49,6 @@ const sortOptions = [
   { name: 'Price: Low to High', href: '#', current: false },
   { name: 'Price: High to Low', href: '#', current: false }
 ]
-const subCategories = [
-  { name: 'Robes', href: '#' },
-  { name: 'Burnous', href: '#' },
-  { name: 'Sacs', href: '#' },
-  { name: 'Bijoux', href: '#' },
-  { name: 'Accessories', href: '#' }
-]
 const filters = [
   {
     id: 'color',
@@ -76,10 +68,14 @@ const filters = [
     options: [
       { value: 'new-arrivals', label: 'Nouvaux', checked: false },
       { value: 'sale', label: 'Promo', checked: false },
+      { value: 'dresses', label: 'Robes', checked: false },
+      { value: 'burnous', label: 'Burnous', checked: false },
+      { value: 'bags', label: 'Sacs', checked: false },
+      { value: 'joularies', label: 'Bijoux', checked: false },
+      { value: 'accessories', label: 'Accessories', checked: false },
       { value: 'selebration', label: 'Fete', checked: false },
       { value: 'house', label: 'Maison', checked: false },
-      { value: 'casual', label: 'Décontracté', checked: false },
-      { value: 'accessories', label: 'Accessories', checked: false }
+      { value: 'casual', label: 'Décontracté', checked: false }
     ]
   },
   {
