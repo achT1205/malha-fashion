@@ -337,19 +337,30 @@ const route = useRoute()
 onMounted(() => {
   firstLoard.value = true
   if (id.value) {
-    ProductService.getProduct(id.value).then((data) => {
-      product.value = data
-      const initialQuery = route.query
-      if (!initialQuery.color) {
-        selectedColor.value = product.value ? product.value.colors[0] : {}
-      } else {
-        selectedColor.value = product.value.colors.find((_) => _.name == initialQuery.color)
-      }
-      if (initialQuery.size) {
-        selectedSize.value = selectedColor.value.sizes.find((_) => _.name == initialQuery.size)
-        firstLoard.value = false
-      }
-    })
+    ProductService.getProduct(id.value)
+      .then((data) => {
+        product.value = data
+        const initialQuery = route.query
+        if (!initialQuery.color) {
+          selectedColor.value = product.value ? product.value.colors[0] : {}
+        } else {
+          selectedColor.value = product.value.colors.find((_) => _.name == initialQuery.color)
+        }
+        if (initialQuery.size) {
+          selectedSize.value = selectedColor.value.sizes.find((_) => _.name == initialQuery.size)
+          firstLoard.value = false
+        }
+      })
+      .catch((error) => {
+       // if (error.response && error.response.status == 404) {
+          router.push({
+            name: '404Resource',
+            params: { resource: 'product' }
+          })
+       /* } else {
+          router.push({ name: 'NetworkError' })
+        }*/
+      })
   }
 })
 

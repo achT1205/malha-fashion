@@ -2064,14 +2064,24 @@ export const ProductService = {
         return Promise.resolve(this.getProductsData().slice(0, 8));
     },
     getCollection(id) {
-      return Promise.resolve(this.getCollectionsData().find(_=>_.id === id));
+      return new Promise((resolve, reject)=>{
+        const collection = this.getCollectionsData().find(_=>_.id === id)
+        if(collection)
+        resolve(collection)
+        else reject()
+     })
     },
     getCollections() {
         return Promise.resolve(this.getCollectionsData());
     },
     getProduct(id) {
-      return Promise.resolve(this.getProductsData().find(_=>_.id === id));
-  },
+      return new Promise((resolve, reject)=>{
+            const product = this.getProductsData().find(_=>_.id === id)
+            if(product)
+            resolve(product)
+            else reject()
+        })
+    },
 
     getProducts() {
         return Promise.resolve(this.getProductsData());

@@ -38,12 +38,27 @@
 import ProductsGrid from '../../components/ProductsGrid.vue'
 import { computed, onMounted, ref } from 'vue'
 import { ProductService } from '@/service/ProductService'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 onMounted(() => {
   if (id.value)
-    ProductService.getCollection(id.value).then((data) => {
-      collection.value = data
-    })
+    ProductService.getCollection(id.value)
+      .then((data) => {
+        collection.value = data
+      })
+      .catch((error) => {
+        // if (error.response && error.response.status == 404) {
+        router.push({
+          name: '404Resource',
+          params: { resource: 'collection' }
+        })
+        /* } else {
+          router.push({ name: 'NetworkError' })
+        }*/
+      })
+
   ProductService.getProducts().then((data) => (products.value = data))
   ProductService.getFilterOptions().then((data) => (filters.value = data))
   ProductService.getSortOptions().then((data) => (sortOptions.value = data))
