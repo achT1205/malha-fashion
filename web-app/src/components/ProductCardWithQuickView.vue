@@ -8,7 +8,7 @@
               :src="props.product.image.src"
               :alt="props.product.name"
               class="w-full rounded-md"
-            />{{ subcategory.name }}
+            />
             <Tag-T
               :value="productStatus.status"
               :severity="productStatus.severity"
@@ -338,17 +338,17 @@ const props = defineProps({
 
 const open = ref(false)
 const selectedColor = ref(props.product.colors[0])
-const subcategory = props.product.subcategory
+const category = props.product.category
 const selectedSize = ref()
 
 const available = computed(() => {
-  if (subcategory.name === 'bag' || subcategory.name === 'accessory')
+  if (category.name === 'bag' || category.name === 'accessory')
     return selectedColor.value.quantity > 0
   return selectedSize.value?.quantity > 0
 })
 
 const isAccessory = computed(() => {
-  return subcategory.name === 'bag' || subcategory.name === 'accessory'
+  return category.name === 'bag' || category.name === 'accessory'
 })
 
 watch(selectedColor, (newValue, oldValue) => {
@@ -361,7 +361,7 @@ const productStatus = computed(() => {
   if (!props.product.colors) return status
   else {
     let totalQuantity = 0
-    if (subcategory.name === 'bag' || subcategory.name === 'accessory') {
+    if (category.name === 'bag' || category.name === 'accessory') {
       totalQuantity = props.product.colors.reduce((sum, color) => sum + color.quantity, 0)
     } else {
       totalQuantity = props.product.colors.reduce((sum, color) => {

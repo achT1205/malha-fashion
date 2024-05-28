@@ -372,7 +372,6 @@ const updateFilterAndSortFromRoute = (query) => {
     }
   })
 }
-
 const handleSortOptionChange = (selectedOption) => {
   localSortOptions.value.forEach((option) => {
     option.current = option === selectedOption

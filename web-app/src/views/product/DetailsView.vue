@@ -147,6 +147,7 @@
                     v-for="color in product.colors"
                     :key="color.name"
                     :value="color"
+                    :aria-label="color.name"
                     v-slot="{ active, checked }"
                   >
                     <div
@@ -157,6 +158,7 @@
                         'relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none'
                       ]"
                       v-tooltip.bottom="color.name"
+                      @click="onColorChange"
                     >
                       <RadioGroupLabel as="span" class="sr-only">{{ color.name }}</RadioGroupLabel>
                       <span
@@ -173,7 +175,10 @@
             </div>
 
             <!-- Sizes -->
-            <div class="mt-10">
+            <div
+              class="mt-10"
+              v-if="product.category.name !== 'accessory' && product.category.name !== 'bag'"
+            >
               <div class="flex items-center justify-between">
                 <h3 class="text-sm font-medium text-gray-900">Size</h3>
                 <a href="#" class="text-sm font-medium text-pink-600 hover:text-pink-500"
@@ -200,6 +205,7 @@
                         active ? 'ring-2 ring-pink-500' : '',
                         'group relative flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 sm:py-6'
                       ]"
+                      @click="onSizeChange"
                     >
                       <RadioGroupLabel as="span">{{ size.name }}</RadioGroupLabel>
                       <span
@@ -247,7 +253,7 @@
                   'flex max-w-xs flex-1 items-center justify-center rounded-md border border-transparent  px-8 py-3 text-base font-medium text-white  focus:outline-none focus:ring-2  focus:ring-offset-2 focus:ring-offset-gray-50 sm:w-full'
                 ]"
               >
-                Add to bag
+                {{ available ? ' Add to bag' : 'OUT OF STOCK ' }}
               </button>
               <button
                 type="button"
@@ -306,7 +312,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, computed, watch, onMounted, watchEffect } from 'vue'
 import {
   Disclosure,
   DisclosureButton,
@@ -323,16 +329,31 @@ import {
 import { StarIcon } from '@heroicons/vue/20/solid'
 import { HeartIcon, MinusIcon, PlusIcon } from '@heroicons/vue/24/outline'
 import { ProductService } from '@/service/ProductService'
+import { useRoute, useRouter } from 'vue-router'
+
+const router = useRouter()
+const route = useRoute()
 
 onMounted(() => {
+  firstLoard.value = true
   if (id.value) {
     ProductService.getProduct(id.value).then((data) => {
       product.value = data
-      selectedColor.value = product.value ? product.value.colors[0] : {}
+      const initialQuery = route.query
+      if (!initialQuery.color) {
+        selectedColor.value = product.value ? product.value.colors[0] : {}
+      } else {
+        selectedColor.value = product.value.colors.find((_) => _.name == initialQuery.color)
+      }
+      if (initialQuery.size) {
+        selectedSize.value = selectedColor.value.sizes.find((_) => _.name == initialQuery.size)
+        firstLoard.value = false
+      }
     })
   }
 })
 
+const firstLoard = ref(false)
 const product = ref()
 const props = defineProps({
   id: { type: Number }
@@ -341,9 +362,31 @@ const id = computed(() => props.id)
 
 const selectedColor = ref()
 const selectedSize = ref()
-const available = computed(() => selectedSize.value && selectedSize.value.quantity > 0)
+const available = computed(
+  () =>
+    (product.value.category.name !== 'accessory' &&
+      product.value.category.name !== 'bag' &&
+      selectedSize.value &&
+      selectedSize.value.quantity > 0) ||
+    ((product.value.category.name === 'accessory' || product.value.category.name === 'bag') &&
+      selectedColor.value &&
+      selectedColor.value.quantity > 0)
+)
 
-watch(selectedColor, (newValue, oldValue) => {
-  if (newValue !== oldValue) selectedSize.value = null
-})
+const onColorChange = () => {
+  selectedSize.value = null
+  updateRouterQuery()
+}
+
+const onSizeChange = () => {
+  updateRouterQuery()
+}
+
+const updateRouterQuery = () => {
+  const params = {}
+  if (selectedColor.value && selectedColor.value.name) params.color = selectedColor.value.name
+  if (selectedSize.value && selectedSize.value.name) params.size = selectedSize.value.name
+  const currentQuery = { ...router.currentRoute.value.query, ...params }
+  router.push({ query: currentQuery })
+}
 </script>
