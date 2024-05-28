@@ -11,17 +11,20 @@ const router = createRouter({
     {
       path: '/categories/:id',
       name: 'Categories',
-      component: () => import('../views/CategoriesView.vue')
+      component: () => import('../views/product/CategoriesView.vue')
     },
     {
       path: '/products/:id',
       name: 'ProductDetails',
-      component: () => import('../views/ProductDetailsView.vue')
+      component: () => import('../views/product/DetailsView.vue'),
+      props : (route) =>({id:parseInt(route.params.id)})
+
     },
     {
       path: '/collections/:id',
       name: 'CollectionDetails',
-      component: () => import('../views/CollectionDetailsView.vue')
+      component: () => import('../views/product/CollectionDetailsView.vue'),
+      props : (route) =>({id:parseInt(route.params.id), page:parseInt(route.query.page) || 1, pageSize:parseInt(route.query.pageSize) || 10})
     },
     {
       path: '/cart',

@@ -1,6 +1,6 @@
 
 <template>
-  <div class="bg-white">
+  <div class="bg-white" v-if="product">
     <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
       <div class="mb-5">
         <nav aria-label="Breadcrumb">
@@ -10,7 +10,9 @@
           >
             <li>
               <div class="flex items-center">
-                <a class="mr-2 text-sm font-medium text-gray-900">{{ product.genderCategory.label }}</a>
+                <a class="mr-2 text-sm font-medium text-gray-900">{{
+                  product.genderCategory.label
+                }}</a>
                 <svg
                   width="16"
                   height="20"
@@ -304,7 +306,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import {
   Disclosure,
   DisclosureButton,
@@ -320,169 +322,25 @@ import {
 } from '@headlessui/vue'
 import { StarIcon } from '@heroicons/vue/20/solid'
 import { HeartIcon, MinusIcon, PlusIcon } from '@heroicons/vue/24/outline'
+import { ProductService } from '@/service/ProductService'
 
-const product = {
-  id: 1,
-  name: 'Aline',
-  price: '75',
-  code: 'f230fh0g3',
-  quantity: 24,
-  image: {
-    alt: 'Thalssa',
-    src: '/images/collections/dresses/1.png'
-  },
-  colors: [
-    {
-      name: 'Red',
-      class: 'bg-red-700',
-      selectedClass: 'ring-gray-400',
-      reviews: { href: '#', average: 4, totalCount: 117 },
-      price: '78',
-      sizes: [
-        { name: 'XXS', quantity: 5 },
-        { name: 'XS', quantity: 2 },
-        { name: 'S', quantity: 6 },
-        { name: 'M', quantity: 0 }
-      ],
-      images: [
-        {
-          src: '/images/products/1/red/5.png',
-          alt: 'Thalssa rouge ...'
-        },
-        {
-          src: '/images/products/1/red/1.png',
-          alt: 'Model wearing plain black basic tee.'
-        },
-        {
-          src: '/images/products/1/red/2.png',
-          alt: 'Model wearing plain gray basic tee.'
-        },
-        {
-          src: '/images/products/1/red/3.png',
-          alt: 'Model wearing plain white basic tee.'
-        }
-      ]
-    },
-    {
-      name: 'Pink',
-      class: 'bg-pink-200',
-      selectedClass: 'ring-gray-400',
-      reviews: { href: '#', average: 4, totalCount: 117 },
-      price: '81',
+onMounted(() => {
+  if (id.value) {
+    ProductService.getProduct(id.value).then((data) => {
+      product.value = data
+      selectedColor.value = product.value ? product.value.colors[0] : {}
+    })
+  }
+})
 
-      sizes: [
-        { name: 'XXS', quantity: 2 },
-        { name: 'S', quantity: 6 },
-        { name: 'M', quantity: 0 }
-      ],
-      images: [
-        {
-          src: '/images/products/1/pink/4.png',
-          alt: 'Thalssa rouge ...'
-        },
-        {
-          src: '/images/products/1/pink/1.png',
-          alt: 'Model wearing plain black basic tee.'
-        },
-        {
-          src: '/images/products/1/pink/2.png',
-          alt: 'Model wearing plain gray basic tee.'
-        },
-        {
-          src: '/images/products/1/pink/3.png',
-          alt: 'Model wearing plain white basic tee.'
-        }
-      ]
-    },
-    {
-      name: 'Green',
-      class: 'bg-green-200',
-      selectedClass: 'ring-gray-900',
-      reviews: { href: '#', average: 4, totalCount: 117 },
-      price: '78',
+const product = ref()
+const props = defineProps({
+  id: { type: Number }
+})
+const id = computed(() => props.id)
 
-      sizes: [
-        { name: 'XXS', quantity: 2 },
-        { name: 'XS', quantity: 1 },
-        { name: 'S', quantity: 2 },
-        { name: 'XXL', quantity: 2 },
-        { name: 'XXXL', quantity: 0 }
-      ],
-      images: [
-        {
-          src: '/images/products/1/green/4.png',
-          alt: 'Thalssa rouge ...'
-        },
-        {
-          src: '/images/products/1/green/1.png',
-          alt: 'Model wearing plain black basic tee.'
-        },
-        {
-          src: '/images/products/1/green/2.png',
-          alt: 'Model wearing plain gray basic tee.'
-        },
-        {
-          src: '/images/products/1/green/3.png',
-          alt: 'Model wearing plain white basic tee.'
-        }
-      ]
-    }
-  ],
-  genderCategory: {
-    id: 1,
-    name: 'woman',
-    label: 'Femme'
-  },
-  category: {
-    id: 5,
-    name: 'dress',
-    label: 'Robe de fete'
-  },
-  collection: {
-    id: 1,
-    name: 'Berbère Éclat ',
-    image: {
-      src: '/images/collections/dresses/1.png',
-      alt: 'BRobe de Fête '
-    },
-    description: `Mettant en avant le rayonnement et la modernité des designs tout en restant fidèle aux racines berbères traditionnelles.`
-  },
-  description:
-    'The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: "Black". Need to add an extra pop of color to your outfit? Our white tee has you covered.',
-  details: [
-    {
-      name: 'Highlights',
-      items: [
-        'Hand cut and sewn locally',
-        'Dyed with our proprietary colors',
-        'Pre-washed & pre-shrunk',
-        'Ultra-soft 100% cotton'
-      ]
-    },
-    {
-      name: 'Shipping',
-      items: [
-        'Free shipping on orders over $300',
-        'International shipping available',
-        'Expedited shipping options',
-        'Signature required upon delivery'
-      ]
-    },
-    {
-      name: 'Returns',
-      items: [
-        'Easy return requests',
-        'Pre-paid shipping label included',
-        '10% restocking fee for returns',
-        '60 day return window'
-      ]
-    }
-  ]
-}
-
-const selectedColor = ref(product.colors[0])
+const selectedColor = ref()
 const selectedSize = ref()
-
 const available = computed(() => selectedSize.value && selectedSize.value.quantity > 0)
 
 watch(selectedColor, (newValue, oldValue) => {

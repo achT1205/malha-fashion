@@ -8,7 +8,7 @@ import Tag from "primevue/tag"
 import Carousel from 'primevue/carousel';
 import Button from 'primevue/button';
 import Tooltip from 'primevue/tooltip';
-
+import Paginator from 'primevue/paginator';
 import App from './App.vue'
 import router from './router'
 import PrimeVue from 'primevue/config';
@@ -22,4 +22,5 @@ app.use(PrimeVue);
 app.component('Tag-T', Tag);
 app.component('Carousel-T', Carousel);
 app.component('Button-T', Button);
+app.component('Paginator-T', Paginator);
 app.mount('#app')

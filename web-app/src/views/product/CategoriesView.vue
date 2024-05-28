@@ -5,5 +5,5 @@
 </template>
 
 <script setup>
-import ProductsGrid from '../components/ProductsGrid.vue'
+import ProductsGrid from '../../components/ProductsGrid.vue'
 </script>

@@ -219,6 +219,16 @@
                 :product="product"
               />
             </div>
+            <div class="card">
+              <Paginator-T
+                :rows="currentPageSize"
+                :totalRecords="products.length"
+                :rowsPerPageOptions="[10, 20, 30]"
+                @page="onHandlePageChange"
+              >
+                <template #start="slotProps"> Page: {{ slotProps.state.page + 1 }} </template>
+              </Paginator-T>
+            </div>
           </div>
         </div>
       </section>
@@ -250,7 +260,7 @@ import {
 } from '@heroicons/vue/20/solid'
 import ProductCardWithQuickView from './ProductCardWithQuickView.vue'
 import { debounce } from 'lodash-es'
-import { ref, reactive, computed, onMounted, watch } from 'vue'
+import { ref, reactive, computed, onMounted, watch, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 
@@ -261,12 +271,15 @@ const props = defineProps({
   sortOptions: { type: Array, default: () => [] },
   filters: { type: Array, default: () => [] },
   products: { type: Array, default: () => [] },
-  collection: { type: Object, default: () => ({}) }
+  collection: { type: Object, default: () => ({}) },
+  page: { type: Number, default: 1 },
+  pageSize: { type: Number, default: 10 }
 })
 
+const currentPage = ref(1) //computed(() => props.page)
+const currentPageSize = ref(10) // computed(() => props.pageSize)
+const selectSortOption = ref()
 const loading = ref(false)
-const currentPage = ref(1)
-const pageSize = ref(10) // Adjustable based on needs
 const totalPages = ref(0) // This should be set based on backend data
 
 const localSortOptions = ref([...props.sortOptions])
@@ -276,7 +289,12 @@ const mobileFiltersOpen = ref(false)
 const fetchFilteredData = debounce(async (query) => {
   loading.value = true
   try {
-    const response = await axios.get('/api/endpoint', { params: query })
+    const response = await axios.get(
+      `/api/products?_limit=${currentPageSize.value}&_page=${currentPage.value}`,
+      {
+        params: query
+      }
+    )
     console.log('Data:', response.data)
     // Update your data view here
     //totalPages.value = calculateTotalPages(response.data.totalCount, pageSize.value);
@@ -292,7 +310,6 @@ const updateRouterQuery = (params) => {
   router.push({ query: currentQuery })
 }
 
-const selectSortOption = computed(() => localSortOptions.value.find((_) => _.current))
 watch(
   localFilters,
   () => {
@@ -303,8 +320,8 @@ watch(
         const name = currentQuery[filter.id]
         if (name) {
           delete router.currentRoute.value.query[filter.id]
-         router.push({ query: router.currentRoute.value.query }) //to be fixed
-         // return
+          router.push({ query: router.currentRoute.value.query }) //to be fixed
+          // return
         }
       } else {
         const checkedOptions = filter.options
@@ -316,7 +333,7 @@ watch(
       }
     })
     query.page = currentPage.value
-    query.pageSize = pageSize.value
+    query.pageSize = currentPageSize.value
     updateRouterQuery(query)
     fetchFilteredData(query)
   },
@@ -329,9 +346,6 @@ watch(
     localSortOptions.value.forEach((option) => {
       option.current = option.name === newSort
     })
-
-    currentPage.value = Number(route.query.page) || 1
-    pageSize.value = Number(route.query.pageSize) || 10
   }
 )
 
@@ -344,6 +358,7 @@ const updateFilterAndSortFromRoute = (query) => {
   if (sortQuery) {
     localSortOptions.value.forEach((option) => {
       option.current = option.name === sortQuery
+      selectSortOption.value = option
     })
   }
 
@@ -356,35 +371,31 @@ const updateFilterAndSortFromRoute = (query) => {
       })
     }
   })
-
-  currentPage.value = Number(query.page) || 1
-  pageSize.value = Number(query.pageSize) || 10
 }
 
 const handleSortOptionChange = (selectedOption) => {
   localSortOptions.value.forEach((option) => {
     option.current = option === selectedOption
+    selectSortOption.value = selectedOption
   })
   const sortParams = {
     sort: selectedOption.name,
     page: currentPage.value,
-    pageSize: pageSize.value
+    pageSize: currentPageSize.value
   }
   updateRouterQuery(sortParams)
   fetchFilteredData(sortParams)
 }
 
-/*
-const changePage = (newPage) => {
-  currentPage.value = newPage;
+const onHandlePageChange = (ev) => {
   const pageParams = {
-    page: newPage,
-    pageSize: pageSize.value
-  };
-  updateRouterQuery(pageParams);
-  fetchFilteredData(pageParams);
-};
-
+    page: ev.page + 1,
+    pageSize: ev.rows
+  }
+  updateRouterQuery(pageParams)
+  fetchFilteredData(pageParams)
+}
+/*
 function calculateTotalPages(totalCount, pageSize) {
   return Math.ceil(totalCount / pageSize);
 }
@@ -392,7 +403,11 @@ function calculateTotalPages(totalCount, pageSize) {
 */
 
 onMounted(() => {
-  const initialQuery = route.query
-  updateFilterAndSortFromRoute(initialQuery)
+  watchEffect(() => {
+    const initialQuery = route.query
+    currentPage.value = parseInt(initialQuery.page)
+    currentPageSize.value = parseInt(initialQuery.pageSize)
+    updateFilterAndSortFromRoute(initialQuery)
+  })
 })
 </script>
