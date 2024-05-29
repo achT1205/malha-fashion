@@ -106,28 +106,6 @@
                         </li>
                       </ul>
                     </li>
-                    <li>
-                      <div class="text-xs font-semibold leading-6 text-gray-400">Your teams</div>
-                      <ul role="list" class="-mx-2 mt-2 space-y-1">
-                        <li v-for="team in teams" :key="team.name">
-                          <a
-                            :href="team.href"
-                            :class="[
-                              team.current
-                                ? 'bg-gray-800 text-white'
-                                : 'text-gray-400 hover:text-white hover:bg-gray-800',
-                              'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                            ]"
-                          >
-                            <span
-                              class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white"
-                              >{{ team.initial }}</span
-                            >
-                            <span class="truncate">{{ team.name }}</span>
-                          </a>
-                        </li>
-                      </ul>
-                    </li>
                     <li class="mt-auto">
                       <a
                         href="#"
@@ -172,28 +150,37 @@
                       'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                     ]"
                   >
-                    <component :is="item.icon" class="h-6 w-6 shrink-0" aria-hidden="true" />
+                    <component
+                      :is="item.icon"
+                      class="h-6 w-6 shrink-0 text-gray-400"
+                      aria-hidden="true"
+                    />
                     {{ item.name }}
                   </a>
-                  <span v-else>{{item.name}}</span>
-                  <!--<Disclosure as="div" v-else v-slot="{ open }">
+                  <Disclosure as="div" v-else v-slot="{ open }">
                     <DisclosureButton
                       :class="[
                         item.current ? 'bg-gray-50' : 'hover:bg-gray-50',
                         'flex items-center w-full text-left rounded-md p-2 gap-x-3 text-sm leading-6 font-semibold text-gray-700'
                       ]"
                     >
-                      <ChevronRightIcon
-                        :class="[
-                          open ? 'rotate-90 text-gray-500' : 'text-gray-400',
-                          'h-5 w-5 shrink-0'
-                        ]"
+                      <component
+                        :is="item.icon"
+                        class="h-6 w-6 shrink-0 text-gray-400"
                         aria-hidden="true"
                       />
                       {{ item.name }}
+                      <ChevronRightIcon
+                        :class="[
+                          open ? 'rotate-90 text-gray-500' : 'text-gray-400',
+                          'ml-auto h-5 w-5 shrink-0'
+                        ]"
+                        aria-hidden="true"
+                      />
                     </DisclosureButton>
                     <DisclosurePanel as="ul" class="mt-1 px-2">
                       <li v-for="subItem in item.children" :key="subItem.name">
+                        <!-- 44px -->
                         <DisclosureButton
                           as="a"
                           :href="subItem.href"
@@ -205,29 +192,7 @@
                         >
                       </li>
                     </DisclosurePanel>
-                  </Disclosure>-->
-                </li>
-              </ul>
-            </li>
-            <li>
-              <div class="text-xs font-semibold leading-6 text-gray-400">Your teams</div>
-              <ul role="list" class="-mx-2 mt-2 space-y-1">
-                <li v-for="team in teams" :key="team.name">
-                  <a
-                    :href="team.href"
-                    :class="[
-                      team.current
-                        ? 'bg-gray-800 text-white'
-                        : 'text-gray-400 hover:text-white hover:bg-gray-800',
-                      'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                    ]"
-                  >
-                    <span
-                      class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white"
-                      >{{ team.initial }}</span
-                    >
-                    <span class="truncate">{{ team.name }}</span>
-                  </a>
+                  </Disclosure>
                 </li>
               </ul>
             </li>
@@ -250,7 +215,15 @@
 
 <script setup>
 import { ref } from 'vue'
-import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue'
+import {
+  Dialog,
+  DialogPanel,
+  TransitionChild,
+  TransitionRoot,
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel
+} from '@headlessui/vue'
 import {
   CalendarIcon,
   ChartPieIcon,
@@ -264,26 +237,14 @@ import {
 
 const navigation = [
   { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
-  { name: 'Team', href: '#', icon: UsersIcon, current: false },
-  { name: 'Projects', href: '#', icon: FolderIcon, current: false },
-  { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
-  { name: 'Documents', href: '#', icon: DocumentDuplicateIcon, current: false },
-  { name: 'Reports', href: '#', icon: ChartPieIcon, current: false },
-  {
-    name: 'Teams',
-    current: false,
-    icon: UsersIcon,
-    children: [
-      { name: 'Engineering', href: '#' },
-      { name: 'Human Resources', href: '#' },
-      { name: 'Customer Success', href: '#' }
-    ]
-  }
-]
-const teams = [
-  { id: 1, name: 'Heroicons', href: '#', initial: 'H', current: false },
-  { id: 2, name: 'Tailwind Labs', href: '#', initial: 'T', current: false },
-  { id: 3, name: 'Workcation', href: '#', initial: 'W', current: false }
+  { name: 'Collections', href: '#', icon: UsersIcon, current: false },
+  { name: 'Catégories', href: '#', icon: FolderIcon, current: false },
+  { name: 'Couleurs', href: '#', icon: CalendarIcon, current: false },
+  { name: 'Tailles', href: '#', icon: DocumentDuplicateIcon, current: false },
+  { name: 'Produits', href: '#', icon: ChartPieIcon, current: false },
+  { name: 'Commandes', href: '#', icon: ChartPieIcon, current: false },
+  { name: 'Banque', href: '#', icon: ChartPieIcon, current: false },
+  { name: 'Reports', href: '#', icon: ChartPieIcon, current: false }
 ]
 const sidebarOpen = ref(false)
 </script>

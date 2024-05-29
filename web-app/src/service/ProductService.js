@@ -108,7 +108,6 @@ export const ProductService = {
                   ]
                 }
               ],
-
               category: {
                 id: 5,
                 name: 'dress',
@@ -1157,7 +1156,6 @@ export const ProductService = {
             }
           ]
     },
-
     getFilterOptionsData(){
       return   [
         {
