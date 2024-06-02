@@ -1,0 +1,22 @@
+{
+    "data": [
+        {
+            "id": 1,
+            "name": "Coton ",
+            "value": "coton",
+            "description": "Coton"
+        },
+        {
+            "id": 2,
+            "name": "Soie",
+            "value": "silk",
+            "description": "Soie "
+        },
+        {
+            "id": 3,
+            "name": "Laine",
+            "value": "wool",
+            "description": "Laine"
+        }
+    ]
+}

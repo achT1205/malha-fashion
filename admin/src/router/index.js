@@ -79,6 +79,22 @@ const routes = [
                 component: () => import('@/views/e-commerce/ModelList.vue')
             },
             {
+                path: '/ecommerce/color-list',
+                name: 'color-list',
+                meta: {
+                    breadcrumb: ['E-Commerce', 'Color List']
+                },
+                component: () => import('@/views/e-commerce/ColorList.vue')
+            },
+            {
+                path: '/ecommerce/tag-list',
+                name: 'tag-list',
+                meta: {
+                    breadcrumb: ['E-Commerce', 'Tag List']
+                },
+                component: () => import('@/views/e-commerce/TagList.vue')
+            },
+            {
                 path: '/profile/create',
                 name: 'user-create',
                 meta: {

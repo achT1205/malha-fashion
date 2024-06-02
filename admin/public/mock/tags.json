@@ -1,0 +1,52 @@
+{
+    "data": [
+        {
+            "id": 1,
+            "name": "Traditionnel ",
+            "value": "traditional",
+            "description": "Traditionnel"
+        },
+        {
+            "id": 2,
+            "name": "Moderne",
+            "value": "modern",
+            "description": "Moderne "
+        },
+        {
+            "id": 3,
+            "name": "Tissé à la main",
+            "value": "hand-woven",
+            "description": "Tissé à la main"
+        },
+        {
+            "id": 4,
+            "name": "Brodé",
+            "value": "embroidered",
+            "description": "Brodé"
+        },
+        {
+            "id": 5,
+            "name": "Confort",
+            "value": "confort",
+            "description": "Confort"
+        },
+        {
+            "id": 6,
+            "name": "Élégance",
+            "value": "elegance",
+            "description": "Élégance"
+        },
+        {
+            "id": 7,
+            "name": "Artisanat",
+            "value": "craft",
+            "description": "Artisanat"
+        },
+        {
+            "id": 8,
+            "name": "Local",
+            "value": "local",
+            "description": "Local"
+        }
+    ]
+}

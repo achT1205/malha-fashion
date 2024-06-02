@@ -55,6 +55,16 @@ const navigation = ref([
                 to: '/ecommerce/model-list'
             },
             {
+                label: 'Listes des Mots-Clés',
+                icon: 'pi pi-fw pi-list',
+                to: '/ecommerce/tag-list'
+            },
+            {
+                label: 'Liste des Couleurs',
+                icon: 'pi pi-fw pi-list',
+                to: '/ecommerce/color-list'
+            },
+            {
                 label: 'Product List',
                 icon: 'pi pi-fw pi-list',
                 to: '/ecommerce/product-list'

@@ -1,0 +1,236 @@
+<script setup>
+import { FilterMatchMode } from 'primevue/api';
+import { ref, onBeforeMount } from 'vue';
+import { useToast } from 'primevue/usetoast';
+const toast = useToast();
+
+const itemDialog = ref(false);
+const deleteItemDialog = ref(false);
+const deleteItemsDialog = ref(false);
+const item = ref({});
+const selectedLocalItems = ref(null);
+const dt = ref(null);
+const filters = ref({});
+const submitted = ref(false);
+const valid = ref(true);
+
+const props = defineProps({
+    messages: { type: Object, required: true },
+    name: {
+        type: Object,
+        required: true
+    },
+    items: {
+        type: [Array, null],
+        required: true
+    },
+    headers: {
+        type: Array,
+        required: true
+    }
+});
+const emit = defineEmits(['save', 'update', 'delete']);
+const localItems = ref(props.items);
+
+onBeforeMount(() => {
+    initFilters();
+});
+
+const openNew = () => {
+    item.value = {};
+    submitted.value = false;
+    itemDialog.value = true;
+};
+
+const hideDialog = () => {
+    itemDialog.value = false;
+    submitted.value = false;
+};
+
+const saveItem = () => {
+    submitted.value = true;
+
+    valid.value = props.headers.some((header) => header.required && (!item.value || !item.value[header.fieldName]));
+
+    if (valid.value) return;
+
+    if (item.value.id) {
+        localItems.value[findIndexById(item.value.id)] = item.value;
+        emit('update', item);
+        toast.add({ severity: 'success', summary: 'Successful', detail: `${item.value.name} ${props.messages.updated}`, life: 3000 });
+    } else {
+        item.value.id = createId();
+        item.value.code = createId();
+        item.value.image = 'ategory-placeholder.svg';
+        localItems.value.push(item.value);
+        emit('save', item);
+        toast.add({ severity: 'success', summary: 'Successful', detail: `${item.value.name} ${props.messages.added}`, life: 3000 });
+    }
+    itemDialog.value = false;
+    item.value = {};
+};
+
+const editItem = (editItem) => {
+    item.value = { ...editItem };
+    itemDialog.value = true;
+};
+
+const confirmDeleteItem = (editItem) => {
+    item.value = editItem;
+    deleteItemDialog.value = true;
+};
+
+const deleteItem = () => {
+    localItems.value = localItems.value.filter((val) => val.id !== item.value.id);
+    emit('delete', item);
+    deleteItemDialog.value = false;
+    item.value = {};
+    toast.add({ severity: 'success', summary: 'Successful', detail: `${item.value.name} ${props.messages.deleted}`, life: 3000 });
+};
+
+const findIndexById = (id) => {
+    let index = -1;
+    for (let i = 0; i < localItems.value.length; i++) {
+        if (localItems.value[i].id === id) {
+            index = i;
+            break;
+        }
+    }
+    return index;
+};
+
+const createId = () => {
+    let id = '';
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < 5; i++) {
+        id += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return id;
+};
+
+const exportCSV = () => {
+    dt.value.exportCSV();
+};
+
+const confirmDeleteSelected = () => {
+    deleteItemsDialog.value = true;
+};
+const deleteSelectedLocalItems = () => {
+    localItems.value = localItems.value.filter((val) => !selectedLocalItems.value.includes(val));
+    deleteItemsDialog.value = false;
+    selectedLocalItems.value = null;
+    toast.add({ severity: 'success', summary: 'Successful', detail: ` ${props.messages.deleteds}`, life: 3000 });
+};
+
+const initFilters = () => {
+    filters.value = {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS }
+    };
+};
+</script>
+
+<template>
+    <div class="grid">
+        <div class="col-12">
+            <div class="card">
+                <Toolbar class="mb-4">
+                    <template v-slot:start>
+                        <div class="my-2">
+                            <Button label="Ajout" icon="pi pi-plus" class="mr-2" severity="success" @click="openNew" />
+                            <Button label="Suppression" icon="pi pi-trash" severity="danger" @click="confirmDeleteSelected" :disabled="!selectedLocalItems || !selectedLocalItems.length" />
+                        </div>
+                    </template>
+
+                    <template v-slot:end>
+                        <FileUpload mode="basic" accept="image/*" :maxFileSize="1000000" label="Import" chooseLabel="Import" class="mr-2 inline-block" />
+                        <Button label="Export" icon="pi pi-upload" severity="help" @click="exportCSV($event)" />
+                    </template>
+                </Toolbar>
+
+                <DataTable
+                    ref="dt"
+                    :value="localItems"
+                    v-model:selection="selectedLocalItems"
+                    dataKey="id"
+                    :paginator="true"
+                    :rows="10"
+                    :filters="filters"
+                    paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                    :rowsPerPageOptions="[5, 10, 25]"
+                    :currentPageReportTemplate="`${props.name.plural}` + ' {first} à {last} sur {totalRecords} '"
+                >
+                    <template #header>
+                        <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                            <h5 class="m-0">{{ props.messages.title }}</h5>
+                            <IconField iconPosition="left" class="block mt-2 md:mt-0">
+                                <InputIcon class="pi pi-search" />
+                                <InputText class="w-full sm:w-auto" v-model="filters['global'].value" placeholder="Search..." />
+                            </IconField>
+                        </div>
+                    </template>
+
+                    <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
+
+                    <Column v-for="header in headers" :key="header.fieldName" :field="header.fieldName" :header="header.headerName" :sortable="header.sortable" :headerStyle="header.headerStyle">
+                        <template #body="slotProps">
+                            <span class="p-column-title">Nom</span>
+                            {{ slotProps.data[header.fieldName] }}
+                        </template>
+                    </Column>
+                    <Column headerStyle="min-width:10rem;">
+                        <template #body="slotProps">
+                            <Button icon="pi pi-pencil" class="mr-2" severity="success" rounded @click="editItem(slotProps.data)" />
+                            <Button icon="pi pi-trash" class="mt-2" severity="warning" rounded @click="confirmDeleteItem(slotProps.data)" />
+                        </template>
+                    </Column>
+                </DataTable>
+
+                <Dialog v-model:visible="itemDialog" :style="{ width: '450px' }" :header="props.name.single" :modal="true" class="p-fluid">
+                    <div class="field" v-for="header in headers" :key="header.fieldName">
+                        <label :for="header.fieldName">{{ header.headerName }}</label>
+                        <InputText v-if="!header.extarea" :id="header.fieldName" v-model.trim="item[header.fieldName]" :required="item.required" autofocus :invalid="submitted && !item.name" />
+                        <Textarea v-else :id="header.fieldName" v-model="item[header.fieldName]" :required="item.required" rows="3" cols="20" />
+                        <small class="p-invalid" v-if="submitted && (!tem || !tem[header.fieldName]) && header.required">Le champs "{{ header.headerName }}" est requis.</small>
+                    </div>
+
+                    <template #footer>
+                        <Button label="Cancel" icon="pi pi-times" text="" @click="hideDialog" />
+                        <Button label="Save" icon="pi pi-check" text="" @click="saveItem" />
+                    </template>
+                </Dialog>
+
+                <Dialog v-model:visible="deleteItemDialog" :style="{ width: '450px' }" header="Confirmation" :modal="true">
+                    <div class="flex align-items-center justify-content-center">
+                        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
+                        <span v-if="item"
+                            >Etes-vous sûr de vouloir supprimer <b>{{ item.name }}</b
+                            >?</span
+                        >
+                    </div>
+                    <template #footer>
+                        <Button label="No" icon="pi pi-times" text @click="deleteItemDialog = false" />
+                        <Button label="Yes" icon="pi pi-check" text @click="deleteItem" />
+                    </template>
+                </Dialog>
+
+                <Dialog v-model:visible="deleteItemsDialog" :style="{ width: '450px' }" header="Confirmation" :modal="true">
+                    <div class="flex align-items-center justify-content-center">
+                        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
+                        <span v-if="item">Etes-vous sûr de vouloir supprimer les Items selectionnées ?</span>
+                    </div>
+                    <template #footer>
+                        <Button label="No" icon="pi pi-times" text @click="deleteItemsDialog = false" />
+                        <Button label="Yes" icon="pi pi-check" text @click="deleteSelectedLocalItems" />
+                    </template>
+                </Dialog>
+            </div>
+        </div>
+    </div>
+</template>
+<style scoped lang="scss">
+.remove-file-wrapper:hover {
+    .remove-button {
+        display: flex !important;
+    }
+}
+</style>

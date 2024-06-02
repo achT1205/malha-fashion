@@ -3,37 +3,43 @@
         {
             "id": 1,
             "name": "Robes kabyles pour femme ",
+            "value":"dress-woman",
             "image": { "src": "/images/collections/1.png", "alt": "BRobe de Fête " },
             "description": "Mettant en avant le rayonnement et la modernité des designs tout en restant fidèle aux racines berbères traditionnelles."
         },
-        { "id": 2, "name": "Robes kabyles pour filles", "image": { "src": "/images/collections/2.png", "alt": "BRobe de Fête " }, "description": "Évoquant les sommets majestueux et le patrimoine robuste de la Kabylie." },
+        { "id": 2, "name": "Robes kabyles pour filles",  "value":"dress-girl", "image": { "src": "/images/collections/2.png", "alt": "BRobe de Fête " }, "description": "Évoquant les sommets majestueux et le patrimoine robuste de la Kabylie." },
         {
             "id": 3,
             "name": "Burnous pour hommes",
+            "value":"burnous-man",
             "image": { "src": "/images/collections/3.png", "alt": "BRobe de Fête " },
             "description": "Inspirée par les motifs lunaires récurrents dans l'art kabyle, cette collection capture la mystique et l'élégance des bijoux traditionnels."
         },
         {
             "id": 4,
             "name": "Burnous pour garçons",
+            "value":"burnous-boy",
             "image": { "src": "/images/collections/4.png", "alt": "BRobe de Fête " },
             "description": "Soulignant la beauté et la profondeur des couleurs souvent utilisées dans les tenues kabyles, avec un clin d'œil à l'identité amazighe."
         },
         {
             "id": 5,
             "name": "Sacs",
+            "value":"bags",
             "image": { "src": "/images/collections/5.png", "alt": "BRobe de Fête " },
             "description": "Rendant hommage aux tribus Aït de Kabylie, ce nom reflète la transmission des traditions et des savoir-faire ancestraux."
         },
         {
             "id": 6,
             "name": "Bijoux",
+            "value":"jewelry",
             "image": { "src": "/images/collections/5.png", "alt": "BRobe de Fête " },
             "description": "Rendant hommage aux tribus Aït de Kabylie, ce nom reflète la transmission des traditions et des savoir-faire ancestraux."
         },
         {
             "id": 7,
             "name": "Accessoires",
+            "value":"accessories",
             "image": { "src": "/images/collections/5.png", "alt": "BRobe de Fête " },
             "description": "Rendant hommage aux tribus Aït de Kabylie, ce nom reflète la transmission des traditions et des savoir-faire ancestraux."
         }
