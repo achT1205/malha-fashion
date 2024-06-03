@@ -1,9 +1,9 @@
 <script setup>
-import ItemCrud from '../../components/ItemCrud.vue';
-import { SizeService } from '@/service/SizeService';
+import ItemCrud from '../../../components/ItemCrud.vue';
+import { MaterialService } from '@/service/MaterialService';
 import { ref, onMounted } from 'vue';
-const sizes = ref(null);
-const sizeService = new SizeService();
+const materials = ref(null);
+const materialService = new MaterialService();
 const headers = [
     {
         fieldName: 'name',
@@ -31,7 +31,7 @@ const headers = [
     }
 ];
 const messages = {
-    title: 'Gestion des tailles',
+    title: 'Gestion des matière',
     updated: 'a été modifiée',
     added: 'a été ajoutée',
     deleted: 'a été supprimée',
@@ -42,7 +42,7 @@ const name = {
     plural: 'Taiiles'
 };
 onMounted(() => {
-    sizeService.getSizes().then((data) => (sizes.value = data));
+    materialService.getMaterials().then((data) => (materials.value = data));
 });
 
 const saveOccasion = (oc) => {
@@ -57,7 +57,7 @@ const deleteOccasion = (oc) => {
 </script>
 
 <template>
-    <ItemCrud :messages="messages" :name="name" v-if="sizes && sizes.length" :items="sizes" :headers="headers" @save="saveOccasion" @update="updateOccasion" @delete="deleteOccasion" />
+    <ItemCrud :messages="messages" :name="name" v-if="materials && materials.length" :items="materials" :headers="headers" @save="saveOccasion" @update="updateOccasion" @delete="deleteOccasion" />
 </template>
 <style scoped lang="scss">
 .remove-file-wrapper:hover {

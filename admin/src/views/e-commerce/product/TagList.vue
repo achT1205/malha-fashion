@@ -1,9 +1,9 @@
 <script setup>
-import ItemCrud from '../../components/ItemCrud.vue';
-import { OccasionService } from '@/service/OccasionService';
+import ItemCrud from '../../../components/ItemCrud.vue';
+import { TagService } from '@/service/TagService';
 import { ref, onMounted } from 'vue';
-const occasions = ref(null);
-const occasionService = new OccasionService();
+const tags = ref(null);
+const tagService = new TagService();
 const headers = [
     {
         fieldName: 'name',
@@ -31,18 +31,18 @@ const headers = [
     }
 ];
 const messages = {
-    title: 'Gestion des occasions',
-    updated: 'a été modifiée',
-    added: 'a été ajoutée',
-    deleted: 'a été supprimée',
-    deleteds: 'Les occations selectionnées ont été supprimées'
+    title: 'Gestion des tags',
+    updated: 'a été modifié',
+    added: 'a été ajouté',
+    deleted: 'a été supprimé',
+    deleteds: 'Les occations selectionnées ont été supprimés'
 };
 const name = {
-    single: 'Occasion',
-    plural: 'Occasions'
+    single: 'Taiile',
+    plural: 'Taiiles'
 };
 onMounted(() => {
-    occasionService.getOccasions().then((data) => (occasions.value = data));
+    tagService.getTags().then((data) => (tags.value = data));
 });
 
 const saveOccasion = (oc) => {
@@ -57,7 +57,7 @@ const deleteOccasion = (oc) => {
 </script>
 
 <template>
-    <ItemCrud :messages="messages" :name="name" v-if="occasions && occasions.length" :items="occasions" :headers="headers" @save="saveOccasion" @update="updateOccasion" @delete="deleteOccasion" />
+    <ItemCrud :messages="messages" :name="name" v-if="tags && tags.length" :items="tags" :headers="headers" @save="saveOccasion" @update="updateOccasion" @delete="deleteOccasion" />
 </template>
 <style scoped lang="scss">
 .remove-file-wrapper:hover {

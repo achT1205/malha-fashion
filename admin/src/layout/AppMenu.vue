@@ -25,55 +25,94 @@ const navigation = ref([
         icon: 'pi pi-fw pi-wallet',
         items: [
             {
-                label: 'Liste des collections',
-                icon: 'pi pi-fw pi-list',
-                to: '/ecommerce/collection-list'
+                label: 'Gestion de produits',
+                icon: '',
+                items: [
+                    {
+                        label: 'Liste des collections',
+                        icon: 'pi pi-fw pi-list',
+                        to: '/ecommerce/product/collection-list'
+                    },
+                    {
+                        label: 'Liste des catégories',
+                        icon: 'pi pi-fw pi-list',
+                        to: '/ecommerce/product/category-list'
+                    },
+                    {
+                        label: 'Liste des occasions',
+                        icon: 'pi pi-fw pi-list',
+                        to: '/ecommerce/product/occasion-list'
+                    },
+                    {
+                        label: 'Liste des tailles',
+                        icon: 'pi pi-fw pi-list',
+                        to: '/ecommerce/product/size-list'
+                    },
+                    {
+                        label: 'Liste des Matières',
+                        icon: 'pi pi-fw pi-list',
+                        to: '/ecommerce/product/material-list'
+                    },
+                    {
+                        label: 'Liste des Modèles',
+                        icon: 'pi pi-fw pi-list',
+                        to: '/ecommerce/product/model-list'
+                    },
+                    {
+                        label: 'Listes des Mots-Clés',
+                        icon: 'pi pi-fw pi-list',
+                        to: '/ecommerce/product/tag-list'
+                    },
+                    {
+                        label: 'Liste des Couleurs',
+                        icon: 'pi pi-fw pi-list',
+                        to: '/ecommerce/product/color-list'
+                    },
+                    {
+                        label: 'Product List',
+                        icon: 'pi pi-fw pi-list',
+                        to: '/ecommerce/product/product-list'
+                    }
+                ]
             },
             {
-                label: 'Liste des catégories',
-                icon: 'pi pi-fw pi-list',
-                to: '/ecommerce/category-list'
+                label: 'Gestion des commandes',
+                icon: '',
+                items: [
+                    {
+                        label: 'Liste des commandes',
+                        icon: 'pi pi-fw pi-list',
+                        to: '/ecommerce/commande/commande-list'
+                    }
+                ]
             },
             {
-                label: 'Liste des occasions',
-                icon: 'pi pi-fw pi-list',
-                to: '/ecommerce/occasion-list'
+                label: 'Gestion des clients',
+                icon: '',
+                items: [
+                    {
+                        label: 'Liste des clients',
+                        icon: 'pi pi-fw pi-list',
+                        to: '/ecommerce/client/client-list'
+                    }
+                ]
             },
             {
-                label: 'Liste des tailles',
-                icon: 'pi pi-fw pi-list',
-                to: '/ecommerce/size-list'
-            },
-            {
-                label: 'Liste des Matières',
-                icon: 'pi pi-fw pi-list',
-                to: '/ecommerce/material-list'
-            },
-            {
-                label: 'Liste des Modèles',
-                icon: 'pi pi-fw pi-list',
-                to: '/ecommerce/model-list'
-            },
-            {
-                label: 'Listes des Mots-Clés',
-                icon: 'pi pi-fw pi-list',
-                to: '/ecommerce/tag-list'
-            },
-            {
-                label: 'Liste des Couleurs',
-                icon: 'pi pi-fw pi-list',
-                to: '/ecommerce/color-list'
-            },
-            {
-                label: 'Product List',
-                icon: 'pi pi-fw pi-list',
-                to: '/ecommerce/product-list'
+                label: 'Gestion des codes promo',
+                icon: '',
+                items: [
+                    {
+                        label: 'Liste des prolotion',
+                        icon: 'pi pi-fw pi-list',
+                        to: '/ecommerce/promo/promo-list'
+                    }
+                ]
             }
         ]
     },
     { separator: true },
     {
-        label: 'User Management',
+        label: 'Utilisateurs',
         icon: 'pi pi-fw pi-user',
         items: [
             {

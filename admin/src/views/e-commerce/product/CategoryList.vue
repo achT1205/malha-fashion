@@ -1,10 +1,18 @@
 <script setup>
-import ItemCrud from '../../components/ItemCrud.vue';
-import { ModelService } from '@/service/ModelService';
+import ItemWithImageCrud from '../../../components/ItemWithImageCrud.vue';
+import { CategoryService } from '@/service/CategoryService';
 import { ref, onMounted } from 'vue';
-const models = ref(null);
-const modelService = new ModelService();
+const categories = ref(null);
+const categoryService = new CategoryService();
 const headers = [
+    {
+        fieldName: 'image',
+        headerName: 'Image',
+        sortable: false,
+        extarea: false,
+        required: true,
+        headerStyle: 'width:16%; min-width:10rem;'
+    },
     {
         fieldName: 'name',
         headerName: 'Nom',
@@ -14,10 +22,9 @@ const headers = [
         headerStyle: 'width:16%; min-width:10rem;'
     },
     {
-        fieldName: 'value',
-        headerName: 'Valeur',
-        sortable: true,
-        required: true,
+        fieldName: 'rating',
+        headerName: 'Rating',
+        sortable: false,
         extarea: false,
         headerStyle: 'width:16%; min-width:10rem;'
     },
@@ -31,18 +38,18 @@ const headers = [
     }
 ];
 const messages = {
-    title: 'Gestion des Modèles',
+    title: 'Gestion des catégories',
     updated: 'a été modifiée',
     added: 'a été ajoutée',
     deleted: 'a été supprimée',
     deleteds: 'Les occations selectionnées ont été supprimées'
 };
 const name = {
-    single: 'Taiile',
-    plural: 'Taiiles'
+    single: 'Catégorie',
+    plural: 'Catégories'
 };
 onMounted(() => {
-    modelService.getModels().then((data) => (models.value = data));
+    categoryService.getCategories().then((data) => (categories.value = data));
 });
 
 const saveOccasion = (oc) => {
@@ -57,7 +64,9 @@ const deleteOccasion = (oc) => {
 </script>
 
 <template>
-    <ItemCrud :messages="messages" :name="name" v-if="models && models.length" :items="models" :headers="headers" @save="saveOccasion" @update="updateOccasion" @delete="deleteOccasion" />
+    <div>
+        <ItemWithImageCrud :messages="messages" :name="name" v-if="categories && categories.length" :items="categories" :headers="headers" @save="saveOccasion" @update="updateOccasion" @delete="deleteOccasion" />
+    </div>
 </template>
 <style scoped lang="scss">
 .remove-file-wrapper:hover {

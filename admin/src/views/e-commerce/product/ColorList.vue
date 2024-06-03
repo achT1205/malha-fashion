@@ -1,9 +1,9 @@
 <script setup>
-import ItemCrud from '../../components/ItemCrud.vue';
-import { MaterialService } from '@/service/MaterialService';
+import ItemCrud from '../../../components/ItemCrud.vue';
+import { ColorService } from '@/service/ColorService';
 import { ref, onMounted } from 'vue';
-const materials = ref(null);
-const materialService = new MaterialService();
+const colors = ref(null);
+const colorService = new ColorService();
 const headers = [
     {
         fieldName: 'name',
@@ -31,7 +31,7 @@ const headers = [
     }
 ];
 const messages = {
-    title: 'Gestion des matière',
+    title: 'Gestion des tailles',
     updated: 'a été modifiée',
     added: 'a été ajoutée',
     deleted: 'a été supprimée',
@@ -42,7 +42,7 @@ const name = {
     plural: 'Taiiles'
 };
 onMounted(() => {
-    materialService.getMaterials().then((data) => (materials.value = data));
+    colorService.getColors().then((data) => (colors.value = data));
 });
 
 const saveOccasion = (oc) => {
@@ -57,7 +57,7 @@ const deleteOccasion = (oc) => {
 </script>
 
 <template>
-    <ItemCrud :messages="messages" :name="name" v-if="materials && materials.length" :items="materials" :headers="headers" @save="saveOccasion" @update="updateOccasion" @delete="deleteOccasion" />
+    <ItemCrud :messages="messages" :name="name" v-if="colors && colors.length" :items="colors" :headers="headers" @save="saveOccasion" @update="updateOccasion" @delete="deleteOccasion" />
 </template>
 <style scoped lang="scss">
 .remove-file-wrapper:hover {

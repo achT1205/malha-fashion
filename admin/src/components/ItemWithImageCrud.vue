@@ -1,9 +1,9 @@
 <script setup>
 import { FilterMatchMode } from 'primevue/api';
-import { ref, onBeforeMount } from 'vue';
+import { ref, onBeforeMount, watch, nextTick } from 'vue';
 import { useToast } from 'primevue/usetoast';
 const toast = useToast();
-const fileUploaderRef1 = ref(null);
+const fileUploaderRef = ref(null);
 const uploadFile = ref();
 const itemDialog = ref(false);
 const deleteItemDialog = ref(false);
@@ -37,6 +37,15 @@ onBeforeMount(() => {
     initFilters();
 });
 
+watch(itemDialog, (newVal) => {
+    if (newVal) {
+        // Assurez-vous que le DOM est mis à jour
+        nextTick(() => {
+            console.log(fileUploaderRef.value);
+        });
+    }
+});
+
 const openNew = () => {
     item.value = {};
     submitted.value = false;
@@ -51,15 +60,24 @@ const hideDialog = () => {
 const saveItem = () => {
     submitted.value = true;
 
-    valid.value = props.headers.some((header) => header.required && (!item.value || !item.value[header.fieldName]));
-
-    if (valid.value) return;
-
+    valid.value = props.headers.some((header) => header.fieldName !== 'image' && header.required && (!item.value || !item.value[header.fieldName]));
+    if (valid.value) {
+        toast.add({ severity: 'error', summary: 'Saisie incorrecte !', detail: `Les champs saisis sont incorrects`, life: 3000 });
+        return;
+    }
     if (item.value.id) {
+        if ((!item.value.image || !item.value.image.src) && !uploadFile.value) {
+            toast.add({ severity: 'error', summary: 'Image obligatoire !', detail: `L'image de couverture est obligatoire`, life: 3000 });
+            return;
+        }
         localItems.value[findIndexById(item.value.id)] = item.value;
         emit('update', item);
         toast.add({ severity: 'success', summary: 'Successful', detail: `${item.value.name} ${props.messages.updated}`, life: 3000 });
     } else {
+        if (!uploadFile.value) {
+            toast.add({ severity: 'error', summary: 'Image obligatoire !', detail: `L'image de couverture est obligatoire`, life: 3000 });
+            return;
+        }
         item.value.id = createId();
         item.value.code = createId();
         item.value.image = 'ategory-placeholder.svg';
@@ -130,7 +148,7 @@ const initFilters = () => {
 };
 
 const onChooseUploadFiles = () => {
-    fileUploaderRef1.value.choose();
+    fileUploaderRef.value[0].choose();
 };
 const onSelectedFiles = (event) => {
     uploadFile.value = event.files[0];
@@ -205,7 +223,7 @@ const onRemoveFile = () => {
                             <div class="card p-0">
                                 <div class="card">
                                     <FileUpload
-                                        ref="fileUploaderRef1"
+                                        ref="fileUploaderRef"
                                         id="files-fileupload"
                                         name="demo[]"
                                         url="./upload.php"
@@ -260,7 +278,7 @@ const onRemoveFile = () => {
                             <label :for="header.fieldName">{{ header.headerName }}</label>
                             <InputText v-if="!header.extarea" :id="header.fieldName" v-model.trim="item[header.fieldName]" :required="item.required" autofocus :invalid="submitted && !item.name" />
                             <Textarea v-else :id="header.fieldName" v-model="item[header.fieldName]" :required="item.required" rows="3" cols="20" />
-                            <small class="p-invalid" v-if="submitted && (!tem || !tem[header.fieldName]) && header.required">Le champs "{{ header.headerName }}" est requis.</small>
+                            <small class="p-invalid" v-if="submitted && (!item || !item[header.fieldName]) && header.required">Le champs "{{ header.headerName }}" est requis.</small>
                         </template>
                     </div>
 

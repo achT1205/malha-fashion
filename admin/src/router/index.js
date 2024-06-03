@@ -23,76 +23,76 @@ const routes = [
                 component: () => import('@/views/dashboards/Banking.vue')
             },
             {
-                path: '/ecommerce/product-list',
+                path: '/ecommerce/product/product-list',
                 name: 'product-list',
                 meta: {
                     breadcrumb: ['E-Commerce', 'Product List']
                 },
-                component: () => import('@/views/e-commerce/ProductList.vue')
+                component: () => import('@/views/e-commerce/product/ProductList.vue')
             },
             {
-                path: '/ecommerce/collection-list',
+                path: '/ecommerce/product/collection-list',
                 name: 'collection-list',
                 meta: {
                     breadcrumb: ['E-Commerce', 'Collection List']
                 },
-                component: () => import('@/views/e-commerce/CollectionList.vue')
+                component: () => import('@/views/e-commerce/product/CollectionList.vue')
             },
             {
-                path: '/ecommerce/category-list',
+                path: '/ecommerce/product/category-list',
                 name: 'category-list',
                 meta: {
                     breadcrumb: ['E-Commerce', 'Category List']
                 },
-                component: () => import('@/views/e-commerce/CategoryList.vue')
+                component: () => import('@/views/e-commerce/product/CategoryList.vue')
             },
             {
-                path: '/ecommerce/occasion-list',
+                path: '/ecommerce/product/occasion-list',
                 name: 'occasion-list',
                 meta: {
                     breadcrumb: ['E-Commerce', 'Occasion List']
                 },
-                component: () => import('@/views/e-commerce/OccasionList.vue')
+                component: () => import('@/views/e-commerce/product/OccasionList.vue')
             },
             {
-                path: '/ecommerce/size-list',
+                path: '/ecommerce/product/size-list',
                 name: 'size-list',
                 meta: {
                     breadcrumb: ['E-Commerce', 'Size List']
                 },
-                component: () => import('@/views/e-commerce/SizeList.vue')
+                component: () => import('@/views/e-commerce/product/SizeList.vue')
             },
             {
-                path: '/ecommerce/material-list',
+                path: '/ecommerce/product/material-list',
                 name: 'material-list',
                 meta: {
                     breadcrumb: ['E-Commerce', 'Material List']
                 },
-                component: () => import('@/views/e-commerce/MaterialList.vue')
+                component: () => import('@/views/e-commerce/product/MaterialList.vue')
             },
             {
-                path: '/ecommerce/model-list',
+                path: '/ecommerce/product/model-list',
                 name: 'model-list',
                 meta: {
                     breadcrumb: ['E-Commerce', 'Model List']
                 },
-                component: () => import('@/views/e-commerce/ModelList.vue')
+                component: () => import('@/views/e-commerce/product/ModelList.vue')
             },
             {
-                path: '/ecommerce/color-list',
+                path: '/ecommerce/product/color-list',
                 name: 'color-list',
                 meta: {
                     breadcrumb: ['E-Commerce', 'Color List']
                 },
-                component: () => import('@/views/e-commerce/ColorList.vue')
+                component: () => import('@/views/e-commerce/product/ColorList.vue')
             },
             {
-                path: '/ecommerce/tag-list',
+                path: '/ecommerce/product/tag-list',
                 name: 'tag-list',
                 meta: {
                     breadcrumb: ['E-Commerce', 'Tag List']
                 },
-                component: () => import('@/views/e-commerce/TagList.vue')
+                component: () => import('@/views/e-commerce/product/TagList.vue')
             },
             {
                 path: '/profile/create',
@@ -150,6 +150,40 @@ const routes = [
                 name: 'lockscreen',
                 component: () => import('@/views/auth/LockScreen.vue')
             },
+            {
+                path: '/ecommerce/commande/commande-list',
+                name: 'commande-list',
+                meta: {
+                    breadcrumb: ['E-Commerce', 'Commande List']
+                },
+                component: () => import('@/views/e-commerce/commande/CommandeList.vue')
+            },
+            {
+                path: '/ecommerce/client/client-list',
+                name: 'client-list',
+                meta: {
+                    breadcrumb: ['E-Commerce', 'Client List']
+                },
+                component: () => import('@/views/e-commerce/client/ClientList.vue')
+            },
+            {
+                path: '/ecommerce/promo/promo-list',
+                name: 'promo-list',
+                meta: {
+                    breadcrumb: ['E-Commerce', 'Promo List']
+                },
+                component: () => import('@/views/e-commerce/promo/PromoList.vue')
+            },
+
+
+
+
+
+
+
+
+
+
             {
                 path: '/:pathMatch(.*)*',
                 name: 'notfound',
