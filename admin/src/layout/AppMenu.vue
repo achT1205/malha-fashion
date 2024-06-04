@@ -111,6 +111,56 @@ const navigation = ref([
         ]
     },
     { separator: true },
+
+    {
+        label: 'Auth',
+        icon: 'pi pi-fw pi-user',
+        items: [
+            {
+                label: 'Register',
+                icon: 'pi pi-fw pi-user-plus',
+                to: '/auth/register'
+            }
+            /*
+                    {
+                        label: 'Login',
+                        icon: 'pi pi-fw pi-sign-in',
+                        to: '/auth/login'
+                    },
+                    {
+                        label: 'Error',
+                        icon: 'pi pi-fw pi-times-circle',
+                        to: '/auth/error'
+                    },
+                    {
+                        label: 'Access Denied',
+                        icon: 'pi pi-fw pi-lock',
+                        to: '/auth/access'
+                    },
+                    
+                    {
+                        label: 'Forgot Password',
+                        icon: 'pi pi-fw pi-question',
+                        to: '/auth/forgotpassword'
+                    },
+                    {
+                        label: 'New Password',
+                        icon: 'pi pi-fw pi-cog',
+                        to: '/auth/newpassword'
+                    },
+                    {
+                        label: 'Verification',
+                        icon: 'pi pi-fw pi-envelope',
+                        to: '/auth/verification'
+                    },
+                    {
+                        label: 'Lock Screen',
+                        icon: 'pi pi-fw pi-eye-slash',
+                        to: '/auth/lockscreen'
+                    }*/
+        ]
+    },
+    { separator: true },
     {
         label: 'Utilisateurs',
         icon: 'pi pi-fw pi-user',

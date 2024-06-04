@@ -4,6 +4,24 @@ import { useLayout } from '@/layout/composables/layout';
 import AppSidebar from '@/layout/AppSidebar.vue';
 import AppBreadcrumb from './AppBreadcrumb.vue';
 import { usePrimeVue } from 'primevue/config';
+import { useCurrentUser, useFirebaseAuth } from 'vuefire';
+import { signOut } from '@firebase/auth';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+const user = useCurrentUser();
+const auth = useFirebaseAuth();
+
+const logout = async () => {
+    await signOut(auth)
+        .then(() => {
+            console.log('logged out');
+            router.push('/auth/login');
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+};
 
 const $primevue = usePrimeVue();
 
@@ -124,7 +142,7 @@ const isOutsideClicked = (event) => {
                     </ul>
                 </li>
 
-                <li class="profile-item static sm:relative">
+                <li class="profile-item static sm:relative" v-if="user">
                     <a tabindex="0" v-styleclass="{ selector: '@next', enterClass: 'hidden', enterActiveClass: 'scalein', leaveActiveClass: 'fadeout', leaveToClass: 'hidden', hideOnOutsideClick: true }">
                         <img src="/layout/images/profile.jpg" alt="diamond-layout" class="profile-image" />
                         <span class="profile-name">Amelia Stone</span>
@@ -155,7 +173,7 @@ const isOutsideClicked = (event) => {
                                     <span class="font-semibold">Inbox</span>
                                 </span>
                             </a>
-                            <a v-ripple class="p-ripple flex p-2 border-round align-items-center hover:surface-hover transition-colors transition-duration-150 cursor-pointer">
+                            <a v-ripple class="p-ripple flex p-2 border-round align-items-center hover:surface-hover transition-colors transition-duration-150 cursor-pointer" @click="logout">
                                 <i class="pi pi-power-off mr-3"></i>
                                 <span class="flex flex-column">
                                     <span class="font-semibold">Logout</span>
@@ -163,6 +181,9 @@ const isOutsideClicked = (event) => {
                             </a>
                         </li>
                     </ul>
+                </li>
+                <li v-else>
+                    <Button label="Login" severity="secondary" outlined />
                 </li>
 
                 <li class="right-sidebar-item">

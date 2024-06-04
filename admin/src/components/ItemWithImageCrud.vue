@@ -66,7 +66,7 @@ const saveItem = () => {
         return;
     }
     if (item.value.id) {
-        if ((!item.value.image || !item.value.image.src) && !uploadFile.value) {
+        if ((!item.value.image || !item.value.imageSrc) && !uploadFile.value) {
             toast.add({ severity: 'error', summary: 'Image obligatoire !', detail: `L'image de couverture est obligatoire`, life: 3000 });
             return;
         }
@@ -78,10 +78,6 @@ const saveItem = () => {
             toast.add({ severity: 'error', summary: 'Image obligatoire !', detail: `L'image de couverture est obligatoire`, life: 3000 });
             return;
         }
-        item.value.id = createId();
-        item.value.code = createId();
-        item.value.image = 'ategory-placeholder.svg';
-        localItems.value.push(item.value);
         emit('save', item);
         toast.add({ severity: 'success', summary: 'Successful', detail: `${item.value.name} ${props.messages.added}`, life: 3000 });
     }
@@ -91,6 +87,7 @@ const saveItem = () => {
 
 const editItem = (editItem) => {
     item.value = { ...editItem };
+    item.value.id = editItem.id
     itemDialog.value = true;
 };
 
@@ -118,14 +115,6 @@ const findIndexById = (id) => {
     return index;
 };
 
-const createId = () => {
-    let id = '';
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for (let i = 0; i < 5; i++) {
-        id += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return id;
-};
 
 const exportCSV = () => {
     dt.value.exportCSV();
@@ -204,7 +193,7 @@ const onRemoveFile = () => {
                     <Column v-for="header in headers" :key="header.fieldName" :field="header.fieldName" :header="header.headerName" :sortable="header.sortable" :headerStyle="header.headerStyle">
                         <template #body="slotProps">
                             <span class="p-column-title">Nom</span>
-                            <img v-if="header.fieldName === 'image'" :src="slotProps.data.image.src" :alt="slotProps.data.image.alt" class="shadow-2" width="100" />
+                            <img v-if="header.fieldName === 'image'" :src="slotProps.data.imageSrc" :alt="slotProps.data.name" class="shadow-2" width="100" />
                             <Rating v-else-if="header.fieldName === 'rating'" :modelValue="slotProps.data.rating" :readonly="true" :cancel="false" />
                             <span v-else> {{ slotProps.data[header.fieldName] }}</span>
                         </template>
@@ -245,7 +234,7 @@ const onRemoveFile = () => {
                                                 <div class="flex flex-wrap">
                                                     <div class="remove-file-wrapper h-full relative w-12rem h-12rem border-3 border-transparent border-round hover:bg-primary transition-duration-100 cursor-auto" :style="{ padding: '1px' }">
                                                         <img
-                                                            :src="uploadFile && uploadFile.objectURL ? uploadFile.objectURL : item.image.src"
+                                                            :src="uploadFile && uploadFile.objectURL ? uploadFile.objectURL : item.imageSrc"
                                                             :alt="uploadFile && uploadFile ? uploadFile.name : item.name"
                                                             class="w-full h-full border-round shadow-2"
                                                         />

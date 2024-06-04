@@ -1,9 +1,12 @@
 <script setup>
 import ItemWithImageCrud from '../../../components/ItemWithImageCrud.vue';
-import { CollectionService } from '@/service/CollectionService';
-import { ref, onMounted } from 'vue';
-const collections = ref(null);
-const collectionService = new CollectionService();
+import { useFirestore, useCollection } from 'vuefire';
+import { collection, addDoc, updateDoc, doc, deleteDoc } from 'firebase/firestore';
+
+const db = useFirestore();
+const collections = useCollection(collection(db, 'collections'));
+
+
 const headers = [
     {
         fieldName: 'image',
@@ -48,25 +51,25 @@ const name = {
     single: 'Collection',
     plural: 'Collections'
 };
-onMounted(() => {
-    collectionService.getCollections().then((data) => (collections.value = data));
-});
 
-const saveOccasion = (oc) => {
-    console.log('Added : ', oc);
+const saveItem = async (item) => {
+    const docRef = await addDoc(collection(db, 'collections'), { ...item.value });
+    console.log(docRef);
 };
-const updateOccasion = (oc) => {
-    console.log('Updated : ', oc);
+const updateItem = async (item) => {
+    const docRef = doc(db, 'collections', item.value.id);
+    const updateRef = await updateDoc(docRef, { ...item.value });
+    console.log('Updated : ', updateRef);
 };
-const deleteOccasion = (oc) => {
-    console.log('Deleted : ', oc);
+const deleteItem = async (item) => {
+    await deleteDoc(doc(db, 'collections', item.value.id));
 };
 </script>
 
 <template>
-    <div>
-        <ItemWithImageCrud :messages="messages" :name="name" v-if="collections && collections.length" :items="collections" :headers="headers" @save="saveOccasion" @update="updateOccasion" @delete="deleteOccasion" />
-    </div>
+    <Suspense>
+        <ItemWithImageCrud :messages="messages" :name="name" v-if="collections && collections.length" :items="collections" :headers="headers" @save="saveItem" @update="updateItem" @delete="deleteItem" />
+    </Suspense>
 </template>
 <style scoped lang="scss">
 .remove-file-wrapper:hover {

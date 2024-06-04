@@ -1,44 +1,50 @@
 <script setup>
 import AppConfig from '@/layout/AppConfig.vue';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useFirebaseAuth } from 'vuefire';
+import { signInWithEmailAndPassword } from '@firebase/auth';
+import { useToast } from 'primevue/usetoast';
+
+const toast = useToast();
+const router = useRouter();
+
+const auth = useFirebaseAuth();
+
+const currentUser = ref({
+    email: '',
+    password: ''
+});
+
+const singin = async () => {
+    signInWithEmailAndPassword(auth, currentUser.value.email, currentUser.value.password)
+        .then((userCredential) => {
+            const user = userCredential.user;
+            console.log(user);
+            router.push('/')
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            toast.add({ severity: 'error', summary: `Error ${error.code}`, detail: error.message, life: 3000 });
+        });
+};
 </script>
 
 <template>
-    <div class="flex h-screen">
-        <div class="w-full lg:w-4 h-full text-center px-6 py-6 flex flex-column justify-content-between">
-            <img :src="'/layout/images/logo-dark.svg'" class="h-4rem mt-4" alt="diamond-layout" />
-            <div class="flex flex-column align-items-center gap-4">
-                <div class="mb-3">
-                    <h2>Login to your account</h2>
-                    <p>Forgot password? <a class="text-primary hover:underline cursor-pointer font-medium">Click here</a> to reset.</p>
-                </div>
-                <InputText id="email" placeholder="Email" class="w-20rem" />
-                <Password id="password" placeholder="Password" :feedback="true" inputClass="w-20rem"></Password>
-                <Button label="CONTINUE" type="button" class="w-20rem"></Button>
+    <div>
+        <div class="flex flex-column align-items-center gap-4">
+            <div class="mb-3">
+                <h2>Login to your account</h2>
+                <p>
+                    Forgot password? <router-link to="/auth/forgotpassword" class="font-semibold cursor-pointer primary-color">Click here</router-link>
+                    to reset.
+                </p>
             </div>
-
-            <p class="text-color-secondary font-semibold">A problem? <a class="text-primary hover:underline cursor-pointer font-medium">Click here</a> and let us help you.</p>
+            <InputText v-model="currentUser.email" id="email" placeholder="Email" class="w-20rem" />
+            <Password v-model="currentUser.password" id="password" placeholder="Password" :feedback="true" inputClass="w-20rem"></Password>
+            <Button @click="singin" label="CONTINUE" type="button" class="w-20rem"></Button>
         </div>
-        <div
-            class="w-8 hidden lg:flex flex-column justify-content-between align-items-center px-6 py-6 bg-cover bg-norepeat"
-            :style="{
-                backgroundImage: `url('/demo/images/auth/bg-login.jpg') `
-            }"
-        >
-            <div class="mt-auto mb-auto">
-                <span class="block text-white text-7xl font-semibold">Access to your <br />Diamond <br />Account</span>
-                <span class="block text-white text-3xl mt-4"
-                    >Lorem ipsum dolor sit amet, consectetur<br />
-                    adipiscing elit. Donec posuere velit nec enim<br />
-                    sodales, nec placerat erat tincidunt.
-                </span>
-            </div>
-            <div class="flex align-items-center gap-5">
-                <span class="text-white font-semibold">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
-                <i class="pi pi-github text-3xl p-1 surface-overlay border-circle cursor-pointer"></i>
-                <i class="pi pi-twitter text-3xl p-1 surface-overlay border-circle cursor-pointer"></i>
-            </div>
-        </div>
+        <AppConfig simple />
     </div>
-
-    <AppConfig simple />
 </template>
