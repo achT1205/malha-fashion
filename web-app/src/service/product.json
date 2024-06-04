@@ -107,14 +107,58 @@
   ],
   "category": {
     "id": 1,
-    "name": "woman",
-    "label": "Femme"
+    "name": "Berbère Éclat ",
+    "image": {
+      "src": "/images/collections/dresses/1.png",
+      "alt": "BRobe de Fête "
+    }
   },
-  "subcategory": {
-    "id": 5,
-    "name": "dress",
-    "label": "Robe de fete"
+  "material": {
+    "id": 1,
+    "name": "Coton ",
+    "value": "coton",
+    "description": "Coton"
   },
+  "tags": [
+    {
+      "id": 1,
+      "name": "Traditionnel ",
+      "value": "traditional",
+      "description": "Traditionnel"
+    },
+    {
+      "id": 2,
+      "name": "Moderne",
+      "value": "modern",
+      "description": "Moderne "
+    },
+    {
+      "id": 3,
+      "name": "Tissé à la main",
+      "value": "hand-woven",
+      "description": "Tissé à la main"
+    }
+  ],
+  "model": {
+    "id": 1,
+    "name": "Modèle classique ",
+    "value": "classic-model",
+    "description": "Modèle classique"
+  },
+  "occasions": [
+    {
+      "id": 1,
+      "name": "Mariages ",
+      "value": "mariages",
+      "description": "Mariages"
+    },
+    {
+      "id": 2,
+      "name": "Fêtes religieuses",
+      "value": "religious-celebrations",
+      "description": "Fêtes religieuses (ex. : Aïd) "
+    }
+  ],
   "collection": {
     "id": 1,
     "name": "Berbère Éclat ",
@@ -124,8 +168,7 @@
     },
     "description": "Mettant en avant le rayonnement et la modernité des designs tout en restant fidèle aux racines berbères traditionnelles."
   },
-  "description":
-    "The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway",
+  "description": "The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway",
   "details": [
     {
       "name": "Highlights",

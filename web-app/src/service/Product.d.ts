@@ -6,8 +6,11 @@
   quantity: number;
   image: ImagesEntityOrImage;
   colors?: (ColorsEntity)[] | null;
-  category: CategoryOrSubcategory;
-  subcategory: CategoryOrSubcategory;
+  category: Category;
+  material: TagsEntityOrOccasionsEntityOrMaterialOrModel;
+  tags?: (TagsEntityOrOccasionsEntityOrMaterialOrModel)[] | null;
+  model: TagsEntityOrOccasionsEntityOrMaterialOrModel;
+  occasions?: (TagsEntityOrOccasionsEntityOrMaterialOrModel)[] | null;
   collection: Collection;
   description: string;
   details?: (DetailsEntity)[] | null;
@@ -34,10 +37,16 @@ export interface SizesEntity {
   name: string;
   quantity: number;
 }
-export interface CategoryOrSubcategory {
+export interface Category {
   id: number;
   name: string;
-  label: string;
+  image: ImagesEntityOrImage;
+}
+export interface TagsEntityOrOccasionsEntityOrMaterialOrModel {
+  id: number;
+  name: string;
+  value: string;
+  description: string;
 }
 export interface Collection {
   id: number;

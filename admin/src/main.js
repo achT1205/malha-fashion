@@ -110,6 +110,8 @@ import VirtualScroller from 'primevue/virtualscroller';
 import BlockViewer from '@/components/BlockViewer.vue';
 
 import '@/assets/styles.scss';
+import { VueFire, VueFireAuth } from 'vuefire'
+import { firebaseApp } from './firebase'
 
 const app = createApp(App);
 
@@ -118,6 +120,12 @@ app.use(PrimeVue, { ripple: true });
 app.use(ToastService);
 app.use(DialogService);
 app.use(ConfirmationService);
+app.use(VueFire, {
+    firebaseApp,
+    modules: [
+      VueFireAuth(),
+    ],
+  })
 
 app.directive('tooltip', Tooltip);
 app.directive('badge', BadgeDirective);
