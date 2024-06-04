@@ -183,7 +183,7 @@ const isOutsideClicked = (event) => {
                     </ul>
                 </li>
                 <li v-else>
-                    <Button label="Login" severity="secondary" outlined />
+                    <Button @click="router.push('/auth/login')" label="Login" severity="secondary" outlined />
                 </li>
 
                 <li class="right-sidebar-item">
