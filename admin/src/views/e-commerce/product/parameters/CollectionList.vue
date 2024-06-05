@@ -3,7 +3,7 @@ import ItemWithImageCrud from '../../../../components/ItemWithImageCrud.vue';
 import { useFormEditWithFileUpload } from '../../../../composables/useFormEditWithFileUpload';
 
 const collectionName = 'collections';
-const { items, saveItem, updateItem, deleteItem } = useFormEditWithFileUpload(collectionName);
+const { items, saveItemWithFile, updateItemWithFile, deleteItemWithFile } = useFormEditWithFileUpload(collectionName);
 
 const headers = [
     {
@@ -53,7 +53,7 @@ const messages = {
 
 <template>
     <Suspense>
-        <ItemWithImageCrud :messages="messages" :items="items" :headers="headers" @save="saveItem" @update="updateItem" @delete="deleteItem" />
+        <ItemWithImageCrud :messages="messages" :items="items" :headers="headers" @save="saveItemWithFile" @update="updateItemWithFile" @delete="deleteItemWithFile" />
     </Suspense>
 </template>
 <style scoped lang="scss">

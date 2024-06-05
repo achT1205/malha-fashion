@@ -1,9 +1,9 @@
 <script setup>
 import ItemCrud from '../../../../components/ItemCrud.vue';
-import { useFormEdit } from '../../../../composables/useFormEdit';
+import { useFormEditWithFileUpload } from '../../../../composables/useFormEditWithFileUpload';
 
 const collectionName = 'sizes';
-const { items, saveItem, updateItem, deleteItem } = useFormEdit(collectionName);
+const { items, saveItem, updateItem, deleteItem } = useFormEditWithFileUpload(collectionName);
 
 const headers = [
     {

@@ -9,7 +9,7 @@ export function useFormEditWithFileUpload(collectionName) {
     const items = useCollection(collection(db, collectionName));
     const currentItem = ref(null);
     
-    const saveItem = async (item, file) => {
+    const saveItemWithFile = async (item, file) => {
         currentItem.value = { ...item.value };
         if (file) {
             currentItem.value.imagePath = `${collectionName}/${Date.now()}_${file.name}`;
@@ -54,7 +54,7 @@ export function useFormEditWithFileUpload(collectionName) {
         console.log('Updated : ', updateRef);
     };
     
-    const updateItem = async (item, file) => {
+    const updateItemWithFile = async (item, file) => {
         currentItem.value = { ...item.value };
         if (file) {
             await removeItemFile('update');
@@ -63,7 +63,7 @@ export function useFormEditWithFileUpload(collectionName) {
             await uploadItemFile(file, 'update');
         } else putDoc(null);
     };
-    const deleteItem = async (item) => {
+    const deleteItemWithFile = async (item) => {
         currentItem.value = { ...item.value };
         currentItem.value.id = item.value.id;
         await removeItemFile('delete');
@@ -82,8 +82,32 @@ export function useFormEditWithFileUpload(collectionName) {
             .catch((error) => {});
     };
 
+
+    const saveItem = async (item) => {
+        currentItem.value = { ...item.value };
+        const addRef = await addDoc(collection(db, collectionName), { ...currentItem.value });
+        console.log('added : ', addRef);
+    };    
+    const updateItem = async (item) => {
+        currentItem.value = { ...item.value };
+        currentItem.value.id = item.value.id;
+        const docRef = doc(db, collectionName, currentItem.value.id);
+        const updateRef = await updateDoc(docRef, { ...currentItem.value });
+        console.log('Updated : ', updateRef);
+    };
+    const deleteItem = async (item) => {
+        currentItem.value = { ...item.value };
+        currentItem.value.id = item.value.id;
+        await deleteDoc(doc(db, collectionName, currentItem.value.id));
+    };
+
+
+
   return {
     items,
+    saveItemWithFile,
+    updateItemWithFile,
+    deleteItemWithFile,
     saveItem,
     updateItem,
     deleteItem
