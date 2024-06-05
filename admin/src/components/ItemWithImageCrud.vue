@@ -1,7 +1,8 @@
 <script setup>
 import { FilterMatchMode } from 'primevue/api';
-import { ref, onBeforeMount, watch, nextTick } from 'vue';
+import { ref, onBeforeMount, watch, nextTick , watchEffect , watchPostEffect} from 'vue';
 import { useToast } from 'primevue/usetoast';
+
 const toast = useToast();
 const fileUploaderRef = ref(null);
 const uploadFile = ref();
@@ -23,7 +24,8 @@ const props = defineProps({
     },
     items: {
         type: [Array, null],
-        required: true
+        required: true,
+        default: () => []
     },
     headers: {
         type: Array,
@@ -31,7 +33,7 @@ const props = defineProps({
     }
 });
 const emit = defineEmits(['save', 'update', 'delete']);
-const localItems = ref(props.items);
+
 
 onBeforeMount(() => {
     initFilters();
@@ -39,12 +41,12 @@ onBeforeMount(() => {
 
 watch(itemDialog, (newVal) => {
     if (newVal) {
-        // Assurez-vous que le DOM est mis à jour
         nextTick(() => {
             console.log(fileUploaderRef.value);
         });
     }
 });
+
 
 const openNew = () => {
     item.value = {};
@@ -66,28 +68,28 @@ const saveItem = () => {
         return;
     }
     if (item.value.id) {
-        if ((!item.value.image || !item.value.imageSrc) && !uploadFile.value) {
+        if (!item.value.imageSrc && !uploadFile.value) {
             toast.add({ severity: 'error', summary: 'Image obligatoire !', detail: `L'image de couverture est obligatoire`, life: 3000 });
             return;
         }
-        localItems.value[findIndexById(item.value.id)] = item.value;
-        emit('update', item);
+        emit('update', item, uploadFile.value);
         toast.add({ severity: 'success', summary: 'Successful', detail: `${item.value.name} ${props.messages.updated}`, life: 3000 });
     } else {
         if (!uploadFile.value) {
             toast.add({ severity: 'error', summary: 'Image obligatoire !', detail: `L'image de couverture est obligatoire`, life: 3000 });
             return;
         }
-        emit('save', item);
+        emit('save', item, uploadFile.value);
         toast.add({ severity: 'success', summary: 'Successful', detail: `${item.value.name} ${props.messages.added}`, life: 3000 });
     }
     itemDialog.value = false;
     item.value = {};
+    uploadFile.value = null;
 };
 
 const editItem = (editItem) => {
     item.value = { ...editItem };
-    item.value.id = editItem.id
+    item.value.id = editItem.id;
     itemDialog.value = true;
 };
 
@@ -97,24 +99,11 @@ const confirmDeleteItem = (editItem) => {
 };
 
 const deleteItem = () => {
-    localItems.value = localItems.value.filter((val) => val.id !== item.value.id);
     emit('delete', item);
     deleteItemDialog.value = false;
     item.value = {};
     toast.add({ severity: 'success', summary: 'Successful', detail: `${item.value.name} ${props.messages.deleted}`, life: 3000 });
 };
-
-const findIndexById = (id) => {
-    let index = -1;
-    for (let i = 0; i < localItems.value.length; i++) {
-        if (localItems.value[i].id === id) {
-            index = i;
-            break;
-        }
-    }
-    return index;
-};
-
 
 const exportCSV = () => {
     dt.value.exportCSV();
@@ -124,7 +113,6 @@ const confirmDeleteSelected = () => {
     deleteItemsDialog.value = true;
 };
 const deleteSelectedLocalItems = () => {
-    localItems.value = localItems.value.filter((val) => !selectedLocalItems.value.includes(val));
     deleteItemsDialog.value = false;
     selectedLocalItems.value = null;
     toast.add({ severity: 'success', summary: 'Successful', detail: ` ${props.messages.deleteds}`, life: 3000 });
@@ -143,9 +131,12 @@ const onSelectedFiles = (event) => {
     uploadFile.value = event.files[0];
 };
 const onRemoveFile = () => {
-    item.value.image = null;
+    item.value.imageSrc = null;
     uploadFile.value = null;
 };
+
+watchPostEffect(() => { nextTick()
+});
 </script>
 
 <template>
@@ -168,7 +159,7 @@ const onRemoveFile = () => {
 
                 <DataTable
                     ref="dt"
-                    :value="localItems"
+                    :value="items"
                     v-model:selection="selectedLocalItems"
                     dataKey="id"
                     :paginator="true"
@@ -230,14 +221,10 @@ const onRemoveFile = () => {
                                         }"
                                     >
                                         <template #content>
-                                            <div v-if="uploadFile || (item && item.image)" class="w-full py-3" :style="{ cursor: '' }">
+                                            <div v-if="uploadFile || (item && item.imageSrc)" class="w-full py-3" :style="{ cursor: '' }">
                                                 <div class="flex flex-wrap">
                                                     <div class="remove-file-wrapper h-full relative w-12rem h-12rem border-3 border-transparent border-round hover:bg-primary transition-duration-100 cursor-auto" :style="{ padding: '1px' }">
-                                                        <img
-                                                            :src="uploadFile && uploadFile.objectURL ? uploadFile.objectURL : item.imageSrc"
-                                                            :alt="uploadFile && uploadFile ? uploadFile.name : item.name"
-                                                            class="w-full h-full border-round shadow-2"
-                                                        />
+                                                        <img :src="uploadFile && uploadFile.objectURL ? uploadFile.objectURL : item.imageSrc" :alt="uploadFile && uploadFile ? uploadFile.name : item.name" class="w-full h-full border-round shadow-2" />
 
                                                         <Button
                                                             icon="pi pi-times"
@@ -251,7 +238,7 @@ const onRemoveFile = () => {
                                             </div>
                                         </template>
                                         <template #empty>
-                                            <div v-if="!uploadFile && (!item || !item.image)" @click="onChooseUploadFiles" class="w-full py-3" :style="{ cursor: 'copy' }">
+                                            <div v-if="!uploadFile && (!item || !item.imageSrc)" @click="onChooseUploadFiles" class="w-full py-3" :style="{ cursor: 'copy' }">
                                                 <div class="h-full flex flex-column justify-content-center align-items-center">
                                                     <i class="pi pi-upload text-900 text-2xl mb-3"></i>
                                                     <span class="font-bold text-900 text-xl mb-3">Charger une image</span>

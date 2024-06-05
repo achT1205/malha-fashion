@@ -2,10 +2,13 @@
 import ItemWithImageCrud from '../../../components/ItemWithImageCrud.vue';
 import { useFirestore, useCollection } from 'vuefire';
 import { collection, addDoc, updateDoc, doc, deleteDoc } from 'firebase/firestore';
+import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage';
+import { useFirebaseStorage } from 'vuefire';
+import { ref } from 'vue';
 
+const storage = useFirebaseStorage();
 const db = useFirestore();
 const collections = useCollection(collection(db, 'collections'));
-
 
 const headers = [
     {
@@ -51,24 +54,88 @@ const name = {
     single: 'Collection',
     plural: 'Collections'
 };
+const currentItem = ref(null);
 
-const saveItem = async (item) => {
-    const docRef = await addDoc(collection(db, 'collections'), { ...item.value });
-    console.log(docRef);
+const saveItem = async (item, file) => {
+    currentItem.value = { ...item.value };
+    if (file) {
+        currentItem.value.imagePath = `collections/${Date.now()}_${file.name}`;
+        await uploadCollectionFile(file, 'add');
+    } else await createDoc(null);
 };
-const updateItem = async (item) => {
-    const docRef = doc(db, 'collections', item.value.id);
-    const updateRef = await updateDoc(docRef, { ...item.value });
+
+const uploadCollectionFile = async (file, action) => {
+    const collectionFileRef = storageRef(storage, currentItem.value.imagePath);
+    const uploadTask = uploadBytesResumable(collectionFileRef, file);
+    uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log('progress ', progress);
+        },
+        (error) => {
+            console.error('Upload failed', error);
+        },
+        async () => {
+            try {
+                const url = await getDownloadURL(uploadTask.snapshot.ref);
+                if (action === 'add') await createDoc(url);
+                else await putDoc(url);
+            } catch (error) {
+                console.error('Error getting download URL or saving product: ', error);
+            }
+        }
+    );
+};
+
+const createDoc = async (url) => {
+    if (url) currentItem.value.imageSrc = url;
+    const addRef = await addDoc(collection(db, 'collections'), { ...currentItem.value });
+    console.log('added : ', addRef);
+};
+
+const putDoc = async (url) => {
+    if (url) currentItem.value.imageSrc = url;
+    const docRef = doc(db, 'collections', currentItem.value.id);
+    const updateRef = await updateDoc(docRef, { ...currentItem.value });
     console.log('Updated : ', updateRef);
 };
+
+const updateItem = async (item, file) => {
+    currentItem.value = { ...item.value };
+    if (file) {
+        await removeCollectionFile('update');
+
+        currentItem.value.imagePath = `collections/${Date.now()}_${file.name}`;
+        await uploadCollectionFile(file, 'update');
+    } else putDoc(null);
+};
 const deleteItem = async (item) => {
-    await deleteDoc(doc(db, 'collections', item.value.id));
+    currentItem.value = { ...item.value };
+    currentItem.value.id = item.value.id;
+    await removeCollectionFile('delete');
+};
+
+const removeDoc = async () => {
+    await deleteDoc(doc(db, 'collections', currentItem.value.id));
+};
+
+const removeCollectionFile = async (action) => {
+    const desertRef = storageRef(storage, currentItem.value.imagePath);
+    // Delete the file
+    deleteObject(desertRef)
+        .then(async () => {
+            if (action === 'delete') await removeDoc();
+        })
+        .catch((error) => {
+            // Uh-oh, an error occurred!
+        });
 };
 </script>
 
 <template>
     <Suspense>
-        <ItemWithImageCrud :messages="messages" :name="name" v-if="collections && collections.length" :items="collections" :headers="headers" @save="saveItem" @update="updateItem" @delete="deleteItem" />
+        <ItemWithImageCrud :messages="messages" :name="name" :items="collections" :headers="headers" @save="saveItem" @update="updateItem" @delete="deleteItem" />
     </Suspense>
 </template>
 <style scoped lang="scss">
