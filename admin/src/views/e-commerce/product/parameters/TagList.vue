@@ -1,9 +1,10 @@
 <script setup>
-import ItemCrud from '../../../components/ItemCrud.vue';
-import { TagService } from '@/service/TagService';
-import { ref, onMounted } from 'vue';
-const tags = ref(null);
-const tagService = new TagService();
+import ItemCrud from '../../../../components/ItemCrud.vue';
+import { useFormEdit } from '../../../../composables/useFormEdit';
+
+const collectionName = 'tags';
+const { items, saveItem, updateItem, deleteItem } = useFormEdit(collectionName);
+
 const headers = [
     {
         fieldName: 'name',
@@ -35,29 +36,18 @@ const messages = {
     updated: 'a été modifié',
     added: 'a été ajouté',
     deleted: 'a été supprimé',
-    deleteds: 'Les occations selectionnées ont été supprimés'
-};
-const name = {
-    single: 'Taiile',
-    plural: 'Taiiles'
-};
-onMounted(() => {
-    tagService.getTags().then((data) => (tags.value = data));
-});
-
-const saveOccasion = (oc) => {
-    console.log('Added : ', oc);
-};
-const updateOccasion = (oc) => {
-    console.log('Updated : ', oc);
-};
-const deleteOccasion = (oc) => {
-    console.log('Deleted : ', oc);
+    deleteds: 'Les occations selectionnées ont été supprimés',
+    name: {
+        single: 'Taiile',
+        plural: 'Taiiles'
+    }
 };
 </script>
 
 <template>
-    <ItemCrud :messages="messages" :name="name" v-if="tags && tags.length" :items="tags" :headers="headers" @save="saveOccasion" @update="updateOccasion" @delete="deleteOccasion" />
+    <Suspense>
+        <ItemCrud :messages="messages" :items="items" :headers="headers" @save="saveItem" @update="updateItem" @delete="deleteItem" />
+    </Suspense>
 </template>
 <style scoped lang="scss">
 .remove-file-wrapper:hover {

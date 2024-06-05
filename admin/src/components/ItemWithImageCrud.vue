@@ -1,6 +1,6 @@
 <script setup>
 import { FilterMatchMode } from 'primevue/api';
-import { ref, onBeforeMount, watch, nextTick , watchEffect , watchPostEffect} from 'vue';
+import { ref, onBeforeMount, watch, nextTick } from 'vue';
 import { useToast } from 'primevue/usetoast';
 
 const toast = useToast();
@@ -18,10 +18,6 @@ const valid = ref(true);
 
 const props = defineProps({
     messages: { type: Object, required: true },
-    name: {
-        type: Object,
-        required: true
-    },
     items: {
         type: [Array, null],
         required: true,
@@ -34,7 +30,6 @@ const props = defineProps({
 });
 const emit = defineEmits(['save', 'update', 'delete']);
 
-
 onBeforeMount(() => {
     initFilters();
 });
@@ -46,7 +41,6 @@ watch(itemDialog, (newVal) => {
         });
     }
 });
-
 
 const openNew = () => {
     item.value = {};
@@ -134,9 +128,6 @@ const onRemoveFile = () => {
     item.value.imageSrc = null;
     uploadFile.value = null;
 };
-
-watchPostEffect(() => { nextTick()
-});
 </script>
 
 <template>
@@ -167,7 +158,7 @@ watchPostEffect(() => { nextTick()
                     :filters="filters"
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                     :rowsPerPageOptions="[5, 10, 25]"
-                    :currentPageReportTemplate="`${props.name.plural}` + ' {first} à {last} sur {totalRecords} '"
+                    :currentPageReportTemplate="`${props.messages.name.plural}` + ' {first} à {last} sur {totalRecords} '"
                 >
                     <template #header>
                         <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
@@ -197,7 +188,7 @@ watchPostEffect(() => { nextTick()
                     </Column>
                 </DataTable>
 
-                <Dialog v-model:visible="itemDialog" :style="{ width: '450px' }" :header="props.name.single" :modal="true" class="p-fluid">
+                <Dialog v-model:visible="itemDialog" :style="{ width: '450px' }" :header="props.messages.name.single" :modal="true" class="p-fluid">
                     <div class="field" v-for="header in headers" :key="header.fieldName">
                         <template v-if="header.fieldName === 'image'">
                             <div class="card p-0">

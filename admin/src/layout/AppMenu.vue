@@ -29,44 +29,55 @@ const navigation = ref([
                 icon: '',
                 items: [
                     {
-                        label: 'Liste des collections',
-                        icon: 'pi pi-fw pi-list',
-                        to: '/ecommerce/product/collection-list'
+                        label: 'Paramètres',
+                        icon: '',
+                        items: [
+                            {
+                                label: 'Liste des collections',
+                                icon: 'pi pi-fw pi-list',
+                                to: '/ecommerce/product/collection-list'
+                            },
+                            {
+                                label: 'Liste des catégories',
+                                icon: 'pi pi-fw pi-list',
+                                to: '/ecommerce/product/category-list'
+                            },
+                            {
+                                label: 'Liste des occasions',
+                                icon: 'pi pi-fw pi-list',
+                                to: '/ecommerce/product/occasion-list'
+                            },
+                            {
+                                label: 'Liste des tailles',
+                                icon: 'pi pi-fw pi-list',
+                                to: '/ecommerce/product/size-list'
+                            },
+                            {
+                                label: 'Liste des Matières',
+                                icon: 'pi pi-fw pi-list',
+                                to: '/ecommerce/product/material-list'
+                            },
+                            {
+                                label: 'Liste des Modèles',
+                                icon: 'pi pi-fw pi-list',
+                                to: '/ecommerce/product/model-list'
+                            },
+                            {
+                                label: 'Listes des Mots-Clés',
+                                icon: 'pi pi-fw pi-list',
+                                to: '/ecommerce/product/tag-list'
+                            },
+                            {
+                                label: 'Liste des Couleurs',
+                                icon: 'pi pi-fw pi-list',
+                                to: '/ecommerce/product/color-list'
+                            }
+                        ]
                     },
                     {
-                        label: 'Liste des catégories',
-                        icon: 'pi pi-fw pi-list',
-                        to: '/ecommerce/product/category-list'
-                    },
-                    {
-                        label: 'Liste des occasions',
-                        icon: 'pi pi-fw pi-list',
-                        to: '/ecommerce/product/occasion-list'
-                    },
-                    {
-                        label: 'Liste des tailles',
-                        icon: 'pi pi-fw pi-list',
-                        to: '/ecommerce/product/size-list'
-                    },
-                    {
-                        label: 'Liste des Matières',
-                        icon: 'pi pi-fw pi-list',
-                        to: '/ecommerce/product/material-list'
-                    },
-                    {
-                        label: 'Liste des Modèles',
-                        icon: 'pi pi-fw pi-list',
-                        to: '/ecommerce/product/model-list'
-                    },
-                    {
-                        label: 'Listes des Mots-Clés',
-                        icon: 'pi pi-fw pi-list',
-                        to: '/ecommerce/product/tag-list'
-                    },
-                    {
-                        label: 'Liste des Couleurs',
-                        icon: 'pi pi-fw pi-list',
-                        to: '/ecommerce/product/color-list'
+                        label: 'Nouveau produit',
+                        icon: 'pi pi-fw pi-plus',
+                        to: '/ecommerce/product/create'
                     },
                     {
                         label: 'Product List',

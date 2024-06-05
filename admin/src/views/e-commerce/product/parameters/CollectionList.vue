@@ -1,8 +1,8 @@
 <script setup>
-import ItemWithImageCrud from '../../../components/ItemWithImageCrud.vue';
-import { useFormEditWithFileUpload } from '../../../composables/useFormEditWithFileUpload';
+import ItemWithImageCrud from '../../../../components/ItemWithImageCrud.vue';
+import { useFormEditWithFileUpload } from '../../../../composables/useFormEditWithFileUpload';
 
-const collectionName = 'products';
+const collectionName = 'collections';
 const { items, saveItem, updateItem, deleteItem } = useFormEditWithFileUpload(collectionName);
 
 const headers = [
@@ -39,14 +39,14 @@ const headers = [
     }
 ];
 const messages = {
-    title: 'Gestion des produits',
+    title: 'Gestion des collections',
     updated: 'a été modifiée',
     added: 'a été ajoutée',
     deleted: 'a été supprimée',
     deleteds: 'Les occations selectionnées ont été supprimées',
     name: {
-        single: 'Produits',
-        plural: 'Produits'
+        single: 'Collection',
+        plural: 'Collections'
     }
 };
 </script>

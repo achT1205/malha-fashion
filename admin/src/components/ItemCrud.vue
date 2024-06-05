@@ -2,8 +2,8 @@
 import { FilterMatchMode } from 'primevue/api';
 import { ref, onBeforeMount } from 'vue';
 import { useToast } from 'primevue/usetoast';
-const toast = useToast();
 
+const toast = useToast();
 const itemDialog = ref(false);
 const deleteItemDialog = ref(false);
 const deleteItemsDialog = ref(false);
@@ -16,13 +16,10 @@ const valid = ref(true);
 
 const props = defineProps({
     messages: { type: Object, required: true },
-    name: {
-        type: Object,
-        required: true
-    },
     items: {
         type: [Array, null],
-        required: true
+        required: true,
+        default: () => []
     },
     headers: {
         type: Array,
@@ -30,7 +27,6 @@ const props = defineProps({
     }
 });
 const emit = defineEmits(['save', 'update', 'delete']);
-const localItems = ref(props.items);
 
 onBeforeMount(() => {
     initFilters();
@@ -49,20 +45,15 @@ const hideDialog = () => {
 
 const saveItem = () => {
     submitted.value = true;
-
     valid.value = props.headers.some((header) => header.required && (!item.value || !item.value[header.fieldName]));
-
-    if (valid.value) return;
-
+    if (valid.value) {
+        toast.add({ severity: 'error', summary: 'Saisie incorrecte !', detail: `Les champs saisis sont incorrects`, life: 3000 });
+        return;
+    }
     if (item.value.id) {
-        localItems.value[findIndexById(item.value.id)] = item.value;
         emit('update', item);
         toast.add({ severity: 'success', summary: 'Successful', detail: `${item.value.name} ${props.messages.updated}`, life: 3000 });
     } else {
-        item.value.id = createId();
-        item.value.code = createId();
-        item.value.image = 'ategory-placeholder.svg';
-        localItems.value.push(item.value);
         emit('save', item);
         toast.add({ severity: 'success', summary: 'Successful', detail: `${item.value.name} ${props.messages.added}`, life: 3000 });
     }
@@ -72,6 +63,7 @@ const saveItem = () => {
 
 const editItem = (editItem) => {
     item.value = { ...editItem };
+    item.value.id = editItem.id;
     itemDialog.value = true;
 };
 
@@ -81,31 +73,10 @@ const confirmDeleteItem = (editItem) => {
 };
 
 const deleteItem = () => {
-    localItems.value = localItems.value.filter((val) => val.id !== item.value.id);
     emit('delete', item);
     deleteItemDialog.value = false;
     item.value = {};
     toast.add({ severity: 'success', summary: 'Successful', detail: `${item.value.name} ${props.messages.deleted}`, life: 3000 });
-};
-
-const findIndexById = (id) => {
-    let index = -1;
-    for (let i = 0; i < localItems.value.length; i++) {
-        if (localItems.value[i].id === id) {
-            index = i;
-            break;
-        }
-    }
-    return index;
-};
-
-const createId = () => {
-    let id = '';
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for (let i = 0; i < 5; i++) {
-        id += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return id;
 };
 
 const exportCSV = () => {
@@ -116,7 +87,6 @@ const confirmDeleteSelected = () => {
     deleteItemsDialog.value = true;
 };
 const deleteSelectedLocalItems = () => {
-    localItems.value = localItems.value.filter((val) => !selectedLocalItems.value.includes(val));
     deleteItemsDialog.value = false;
     selectedLocalItems.value = null;
     toast.add({ severity: 'success', summary: 'Successful', detail: ` ${props.messages.deleteds}`, life: 3000 });
@@ -149,7 +119,7 @@ const initFilters = () => {
 
                 <DataTable
                     ref="dt"
-                    :value="localItems"
+                    :value="items"
                     v-model:selection="selectedLocalItems"
                     dataKey="id"
                     :paginator="true"
@@ -157,7 +127,7 @@ const initFilters = () => {
                     :filters="filters"
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                     :rowsPerPageOptions="[5, 10, 25]"
-                    :currentPageReportTemplate="`${props.name.plural}` + ' {first} à {last} sur {totalRecords} '"
+                    :currentPageReportTemplate="`${props.messages.name.plural}` + ' {first} à {last} sur {totalRecords} '"
                 >
                     <template #header>
                         <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
@@ -174,7 +144,8 @@ const initFilters = () => {
                     <Column v-for="header in headers" :key="header.fieldName" :field="header.fieldName" :header="header.headerName" :sortable="header.sortable" :headerStyle="header.headerStyle">
                         <template #body="slotProps">
                             <span class="p-column-title">Nom</span>
-                            {{ slotProps.data[header.fieldName] }}
+                            <Rating v-if="header.fieldName === 'rating'" :modelValue="slotProps.data.rating" :readonly="true" :cancel="false" />
+                            <span v-else> {{ slotProps.data[header.fieldName] }}</span>
                         </template>
                     </Column>
                     <Column headerStyle="min-width:10rem;">
@@ -185,12 +156,14 @@ const initFilters = () => {
                     </Column>
                 </DataTable>
 
-                <Dialog v-model:visible="itemDialog" :style="{ width: '450px' }" :header="props.name.single" :modal="true" class="p-fluid">
+                <Dialog v-model:visible="itemDialog" :style="{ width: '450px' }" :header="props.messages.name.single" :modal="true" class="p-fluid">
                     <div class="field" v-for="header in headers" :key="header.fieldName">
-                        <label :for="header.fieldName">{{ header.headerName }}</label>
-                        <InputText v-if="!header.extarea" :id="header.fieldName" v-model.trim="item[header.fieldName]" :required="item.required" autofocus :invalid="submitted && !item.name" />
-                        <Textarea v-else :id="header.fieldName" v-model="item[header.fieldName]" :required="item.required" rows="3" cols="20" />
-                        <small class="p-invalid" v-if="submitted && (!tem || !tem[header.fieldName]) && header.required">Le champs "{{ header.headerName }}" est requis.</small>
+                        <template v-if="header.fieldName !== 'rating'">
+                            <label :for="header.fieldName">{{ header.headerName }}</label>
+                            <InputText v-if="!header.extarea" :id="header.fieldName" v-model.trim="item[header.fieldName]" :required="item.required" autofocus :invalid="submitted && !item.name" />
+                            <Textarea v-else :id="header.fieldName" v-model="item[header.fieldName]" :required="item.required" rows="3" cols="20" />
+                            <small class="p-invalid" v-if="submitted && (!item || !item[header.fieldName]) && header.required">Le champs "{{ header.headerName }}" est requis.</small>
+                        </template>
                     </div>
 
                     <template #footer>

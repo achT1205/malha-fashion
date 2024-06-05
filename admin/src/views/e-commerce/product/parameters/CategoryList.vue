@@ -1,9 +1,10 @@
 <script setup>
-import ItemWithImageCrud from '../../../components/ItemWithImageCrud.vue';
-import { CategoryService } from '@/service/CategoryService';
-import { ref, onMounted } from 'vue';
-const categories = ref(null);
-const categoryService = new CategoryService();
+import ItemWithImageCrud from '../../../../components/ItemWithImageCrud.vue';
+import { useFormEditWithFileUpload } from '../../../../composables/useFormEditWithFileUpload';
+
+const collectionName = 'categories';
+const { items, saveItem, updateItem, deleteItem } = useFormEditWithFileUpload(collectionName);
+
 const headers = [
     {
         fieldName: 'image',
@@ -38,35 +39,22 @@ const headers = [
     }
 ];
 const messages = {
-    title: 'Gestion des catégories',
+    title: 'Gestion des categories',
     updated: 'a été modifiée',
     added: 'a été ajoutée',
     deleted: 'a été supprimée',
-    deleteds: 'Les occations selectionnées ont été supprimées'
-};
-const name = {
-    single: 'Catégorie',
-    plural: 'Catégories'
-};
-onMounted(() => {
-    categoryService.getCategories().then((data) => (categories.value = data));
-});
-
-const saveOccasion = (oc) => {
-    console.log('Added : ', oc);
-};
-const updateOccasion = (oc) => {
-    console.log('Updated : ', oc);
-};
-const deleteOccasion = (oc) => {
-    console.log('Deleted : ', oc);
+    deleteds: 'Les occations selectionnées ont été supprimées',
+    name: {
+        single: 'Categorie',
+        plural: 'Categories'
+    }
 };
 </script>
 
 <template>
-    <div>
-        <ItemWithImageCrud :messages="messages" :name="name" v-if="categories && categories.length" :items="categories" :headers="headers" @save="saveOccasion" @update="updateOccasion" @delete="deleteOccasion" />
-    </div>
+    <Suspense>
+        <ItemWithImageCrud :messages="messages" :items="items" :headers="headers" @save="saveItem" @update="updateItem" @delete="deleteItem" />
+    </Suspense>
 </template>
 <style scoped lang="scss">
 .remove-file-wrapper:hover {

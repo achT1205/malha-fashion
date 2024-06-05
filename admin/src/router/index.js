@@ -23,6 +23,22 @@ const routes = [
                 component: () => import('@/views/dashboards/Banking.vue')
             },
             {
+                path: '/ecommerce/product/create',
+                name: 'product-create',
+                meta: {
+                    breadcrumb: ['E-Commerce', 'Product Create']
+                },
+                component: () => import('@/views/e-commerce/product/Create.vue')
+            },
+            {
+                path: '/ecommerce/products/:id',
+                name: 'product-details',
+                meta: {
+                    breadcrumb: ['E-Commerce', 'Product Details']
+                },
+                component: () => import('@/views/e-commerce/product/ProductOverview.vue')
+            },
+            {
                 path: '/ecommerce/product/product-list',
                 name: 'product-list',
                 meta: {
@@ -36,7 +52,7 @@ const routes = [
                 meta: {
                     breadcrumb: ['E-Commerce', 'Collection List']
                 },
-                component: () => import('@/views/e-commerce/product/CollectionList.vue')
+                component: () => import('@/views/e-commerce/product/parameters/CollectionList.vue')
             },
             {
                 path: '/ecommerce/product/category-list',
@@ -44,7 +60,7 @@ const routes = [
                 meta: {
                     breadcrumb: ['E-Commerce', 'Category List']
                 },
-                component: () => import('@/views/e-commerce/product/CategoryList.vue')
+                component: () => import('@/views/e-commerce/product/parameters/CategoryList.vue')
             },
             {
                 path: '/ecommerce/product/occasion-list',
@@ -52,7 +68,7 @@ const routes = [
                 meta: {
                     breadcrumb: ['E-Commerce', 'Occasion List']
                 },
-                component: () => import('@/views/e-commerce/product/OccasionList.vue')
+                component: () => import('@/views/e-commerce/product/parameters/OccasionList.vue')
             },
             {
                 path: '/ecommerce/product/size-list',
@@ -60,7 +76,7 @@ const routes = [
                 meta: {
                     breadcrumb: ['E-Commerce', 'Size List']
                 },
-                component: () => import('@/views/e-commerce/product/SizeList.vue')
+                component: () => import('@/views/e-commerce/product/parameters/SizeList.vue')
             },
             {
                 path: '/ecommerce/product/material-list',
@@ -68,7 +84,7 @@ const routes = [
                 meta: {
                     breadcrumb: ['E-Commerce', 'Material List']
                 },
-                component: () => import('@/views/e-commerce/product/MaterialList.vue')
+                component: () => import('@/views/e-commerce/product/parameters/MaterialList.vue')
             },
             {
                 path: '/ecommerce/product/model-list',
@@ -76,7 +92,7 @@ const routes = [
                 meta: {
                     breadcrumb: ['E-Commerce', 'Model List']
                 },
-                component: () => import('@/views/e-commerce/product/ModelList.vue')
+                component: () => import('@/views/e-commerce/product/parameters/ModelList.vue')
             },
             {
                 path: '/ecommerce/product/color-list',
@@ -84,7 +100,7 @@ const routes = [
                 meta: {
                     breadcrumb: ['E-Commerce', 'Color List']
                 },
-                component: () => import('@/views/e-commerce/product/ColorList.vue')
+                component: () => import('@/views/e-commerce/product/parameters/ColorList.vue')
             },
             {
                 path: '/ecommerce/product/tag-list',
@@ -92,7 +108,7 @@ const routes = [
                 meta: {
                     breadcrumb: ['E-Commerce', 'Tag List']
                 },
-                component: () => import('@/views/e-commerce/product/TagList.vue')
+                component: () => import('@/views/e-commerce/product/parameters/TagList.vue')
             },
             {
                 path: '/profile/create',

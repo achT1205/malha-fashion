@@ -1,9 +1,10 @@
 <script setup>
-import ItemCrud from '../../../components/ItemCrud.vue';
-import { SizeService } from '@/service/SizeService';
-import { ref, onMounted } from 'vue';
-const sizes = ref(null);
-const sizeService = new SizeService();
+import ItemCrud from '../../../../components/ItemCrud.vue';
+import { useFormEdit } from '../../../../composables/useFormEdit';
+
+const collectionName = 'models';
+const { items, saveItem, updateItem, deleteItem } = useFormEdit(collectionName);
+
 const headers = [
     {
         fieldName: 'name',
@@ -31,33 +32,22 @@ const headers = [
     }
 ];
 const messages = {
-    title: 'Gestion des tailles',
+    title: 'Gestion des modèles',
     updated: 'a été modifiée',
     added: 'a été ajoutée',
     deleted: 'a été supprimée',
-    deleteds: 'Les occations selectionnées ont été supprimées'
-};
-const name = {
-    single: 'Taiile',
-    plural: 'Taiiles'
-};
-onMounted(() => {
-    sizeService.getSizes().then((data) => (sizes.value = data));
-});
-
-const saveOccasion = (oc) => {
-    console.log('Added : ', oc);
-};
-const updateOccasion = (oc) => {
-    console.log('Updated : ', oc);
-};
-const deleteOccasion = (oc) => {
-    console.log('Deleted : ', oc);
+    deleteds: 'Les occations selectionnées ont été supprimées',
+    name: {
+        single: 'Modèles',
+        plural: 'Modèles'
+    }
 };
 </script>
 
 <template>
-    <ItemCrud :messages="messages" :name="name" v-if="sizes && sizes.length" :items="sizes" :headers="headers" @save="saveOccasion" @update="updateOccasion" @delete="deleteOccasion" />
+    <Suspense>
+        <ItemCrud :messages="messages" :items="items" :headers="headers" @save="saveItem" @update="updateItem" @delete="deleteItem" />
+    </Suspense>
 </template>
 <style scoped lang="scss">
 .remove-file-wrapper:hover {
