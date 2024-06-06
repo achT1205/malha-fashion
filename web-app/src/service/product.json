@@ -2,12 +2,8 @@
   "id": 1,
   "name": "Aline",
   "price": "75",
-  "code": "f230fh0g3",
   "quantity": 24,
-  "image": {
-    "alt": "Thalssa",
-    "src": "/images/collections/dresses/1.png"
-  },
+  "imageSrc": "",
   "colors": [
     {
       "name": "Red",
@@ -113,6 +109,8 @@
       "alt": "BRobe de Fête "
     }
   },
+
+
   "material": {
     "id": 1,
     "name": "Coton ",
@@ -168,6 +166,9 @@
     },
     "description": "Mettant en avant le rayonnement et la modernité des designs tout en restant fidèle aux racines berbères traditionnelles."
   },
+
+
+  
   "description": "The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway",
   "details": [
     {
