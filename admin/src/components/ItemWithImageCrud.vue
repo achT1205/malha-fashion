@@ -187,8 +187,8 @@ const onRemoveFile = () => {
                         </template>
                     </Column>
                 </DataTable>
-
-                <Dialog v-model:visible="itemDialog" :style="{ width: '450px' }" :header="props.messages.name.single" :modal="true" class="p-fluid">
+                
+                <Dialog v-model:visible="itemDialog" maximizable  :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" :header="props.messages.name.single" :modal="true" class="p-fluid">
                     <div class="field" v-for="header in headers" :key="header.fieldName">
                         <template v-if="header.fieldName === 'image'">
                             <div class="card p-0">
