@@ -5,27 +5,45 @@ import { useRouter } from 'vue-router';
 import { useFirebaseAuth } from 'vuefire';
 import { signInWithEmailAndPassword } from '@firebase/auth';
 import { useToast } from 'primevue/usetoast';
+import { useForm } from 'vee-validate';
+import { object, string } from 'yup';
 
 const toast = useToast();
 const router = useRouter();
-
 const auth = useFirebaseAuth();
 
-const currentUser = ref({
-    email: '',
-    password: ''
+const { errors, defineField, handleSubmit } = useForm({
+    validationSchema: object({
+        email: string().email('Le format du email est incorrect').required('Le email est requis'),
+        password: string().min(8, 'Le mot de passe doit être au moins de 8 caractères').required('Le mot de passe est requis')
+    })
 });
 
-const singin = async () => {
-    signInWithEmailAndPassword(auth, currentUser.value.email, currentUser.value.password)
+const [email, emailAttrs] = defineField('email', {
+    validateOnModelUpdate: false
+});
+const [password, passwordAttrs] = defineField('password', {
+    validateOnModelUpdate: false
+});
+
+const onSubmit = handleSubmit((values) => {
+    singin(values.email, values.password);
+});
+
+const currentUser = ref({
+    email: email,
+    password: password
+});
+
+const singin = async (email, password) => {
+    signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             const user = userCredential.user;
             console.log(user);
-            router.push('/')
+            router.push('/');
         })
         .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
+            console.log(JSON.stringify(error));
             toast.add({ severity: 'error', summary: `Error ${error.code}`, detail: error.message, life: 3000 });
         });
 };
@@ -41,10 +59,38 @@ const singin = async () => {
                     to reset.
                 </p>
             </div>
-            <InputText v-model="currentUser.email" id="email" placeholder="Email" class="w-20rem" />
-            <Password v-model="currentUser.password" id="password" placeholder="Password" :feedback="true" inputClass="w-20rem"></Password>
-            <Button @click="singin" label="CONTINUE" type="button" class="w-20rem"></Button>
+            <form @submit.prevent="onSubmit">
+                <div class="flex flex-column gap-4">
+                    <div class="flex flex-column gap-2">
+                        <IconField iconPosition="left" class="w-full">
+                            <InputIcon class="pi pi-envelope" />
+                            <InputText v-bind="emailAttrs" :invalid="errors.email ? true : false" id="email" type="text" class="w-full md:w-25rem" v-model="currentUser.email" placeholder="Email" />
+                        </IconField>
+                        <small class="text-red-700" v-show="errors.email">{{ errors.email }}.</small>
+                    </div>
+
+                    <div class="flex flex-column gap-2">
+                        <IconField iconPosition="left" class="w-full">
+                            <InputIcon class="pi pi-lock z-2" />
+                            <Password
+                                v-bind="passwordAttrs"
+                                :invalid="errors.password ? true : false"
+                                id="password"
+                                v-model="currentUser.password"
+                                placeholder="Password"
+                                class="w-full"
+                                :inputStyle="{ paddingLeft: '2.0rem' }"
+                                inputClass="w-full md:w-25rem"
+                                toggleMask
+                                showIcon="pi pi-eye"
+                            />
+                        </IconField>
+                        <small class="text-red-700" v-show="errors.password">{{ errors.password }}</small>
+                    </div>
+                    <Button type="submit" label="Login" class="w-full mb-4"></Button>
+                </div>
+            </form>
         </div>
-        <AppConfig simple />
+        <AppConfig simple></AppConfig>
     </div>
 </template>
