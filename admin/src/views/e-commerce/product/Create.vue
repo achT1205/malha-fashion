@@ -1,22 +1,44 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useConfirm } from 'primevue/useconfirm';
 import { useToast } from 'primevue/usetoast';
+import { useForm } from 'vee-validate';
+import { object, string } from 'yup';
+const { errors, defineField, handleSubmit } = useForm({
+    validationSchema: object({
+        name: string().required('Le nom du produit est requis'),
+        price: string().required('Le le prix du produit est requis'),
+        quantity: string().required('La quantité du produit est requise'),
+        description: string().required('Une description est requise')
+    })
+});
+
+const [name, nameAttrs] = defineField('name', {
+    validateOnModelUpdate: false
+});
+const [price, priceAttrs] = defineField('price', {
+    validateOnModelUpdate: false
+});
+const [quantity, quantityAttrs] = defineField('quantity', {
+    validateOnModelUpdate: false
+});
+const [description, descriptionAttrs] = defineField('description', {
+    validateOnModelUpdate: false
+});
 
 const confirm = useConfirm();
 const toast = useToast();
 const coverfileUploaderRefs = ref(null);
 const otherFileUploaderRefs = ref(null);
+const isPrevSizeInvalidFomError = ref(false);
 const product = ref({
-    name: '',
-    price: 0,
-    code: '',
+    name: name,
+    price: price,
     status: 'Draft',
     valid: false,
-    description: '',
+    description: description,
     imageSrc: '',
-    images: [],
-    quantity: 0,
+    quantity: quantity,
     colors: [],
     category: null,
     material: {},
@@ -87,8 +109,8 @@ const categories = ref([
     }
 ]);
 const sizes = ref([
-    { id: 1, description: 'La taille Standard ...', value: 'standard', name: 'Standard' },
-    { id: 2, description: 'La taille Grande Taille ...', value: 'big', name: 'Grande Taille' },
+    { id: 1, description: 'La taille Standard ...', value: 'standard', name: 'Standard', disabled: true },
+    { id: 2, description: 'La taille Grande Taille ...', value: 'big', name: 'Grande Taille', disabled: false },
     { id: 3, description: 'La taille S/M ...', value: 's-m', name: 'S/M' },
     { id: 4, description: 'La taille M/L ...', value: 'm-l', name: 'M/L' },
     { id: 5, description: 'La taille L/XL ...', value: 'l-xl', name: 'L/XL' },
@@ -238,7 +260,8 @@ const isCloth = () => {
         return cat.value !== 'accessories' && cat.value !== 'bags' && cat.value !== 'jewelry';
     } else return false;
 };
-const onColorSelect = () => {
+const onColorSelect = (col) => {
+    selectedColor.value = col;
     if (!colorExist(selectedColor.value)) {
         const newColor = {};
         newColor.name = selectedColor.value.name;
@@ -247,6 +270,7 @@ const onColorSelect = () => {
         newColor.reviews = { average: 0, totalCount: 0 };
         newColor.sizes = [];
         newColor.images = [];
+        newColor.price = 0;
         product.value.colors.push(newColor);
     }
 };
@@ -256,17 +280,45 @@ const onCategoryChange = () => {
 };
 
 const onAddSize = (colorIndex) => {
+    isPrevSizeInvalidFomError.value = false;
     const length = product.value.colors[colorIndex].sizes.length;
     let prevSize = null;
     if (length > 0) {
         prevSize = product.value.colors[colorIndex].sizes[length - 1];
     }
-    if (length === 0 || (prevSize && prevSize.name && prevSize.quantity > 0)) {
+    if (length == 0 || (prevSize && prevSize.name && prevSize.quantity > 0)) {
         const newSize = {};
         newSize.name = '';
         newSize.quantity = 0;
         product.value.colors[colorIndex].sizes.push(newSize);
+    } else {
+        if (!prevSize.name || !prevSize.quantity > 0) {
+            isPrevSizeInvalidFomError.value = true;
+            toast.add({ severity: 'error', summary: 'Confirmed', detail: `Vous devez d'abord renplir tous les champs de la taille en cours `, life: 3000 });
+            return;
+        }
     }
+};
+
+const isOptionDisabled = (option) => option.disabled;
+
+const onconfimRemoveSize = (colorIndex, sizeIndex) => {
+    sizes.value;
+    const size = product.value.colors[colorIndex].sizes[sizeIndex];
+    confirm.require({
+        message: `Voulz-vous vraiment supprimer la taille ${size.name} ? `,
+        header: 'Danger Zone',
+        icon: 'pi pi-info-circle',
+        rejectLabel: 'Cancel',
+        acceptLabel: 'Delete',
+        rejectClass: 'p-button-secondary p-button-outlined',
+        acceptClass: 'p-button-danger',
+        accept: () => {
+            product.value.colors[colorIndex].sizes.splice(sizeIndex, 1);
+            toast.add({ severity: 'info', summary: 'Confirmed', detail: `${size.name} est supprimée avec succès`, life: 3000 });
+        },
+        reject: () => {}
+    });
 };
 
 const colorExist = (color) => {
@@ -284,13 +336,32 @@ const confirmDeleteColor = (index, color) => {
         acceptClass: 'p-button-danger',
         accept: () => {
             product.value.colors.splice(index, 1);
-            toast.add({ severity: 'info', summary: 'Confirmed', detail: `${color} was deleted`, life: 3000 });
+            toast.add({ severity: 'info', summary: 'Confirmed', detail: `${color} est supprimée avec succès`, life: 3000 });
         },
         reject: () => {}
     });
 };
 
+const validateProduct = () => {
+    if (!product.value.name) return 'Vous devez choisir un nom pour ce produit.';
+    if (!product.value.category) return 'Vous devez choir une catégorie pour ce produit.';
+    if (!product.value.price && !isCloth()) return 'Vous devez definir un prix pour ce produit.';
+    if (!product.value.quantity && !isCloth()) return 'Vous devez definir une quantité pour ce produit.';
+    if (product.value.colors.length === 0) return 'Vous devez definir une couleur pour ce produit.';
+    if (isCloth() && product.value.colors.some((color) => !color.price || color.price === 0)) return 'Vous devez definir un prix pour chaque couleur définie.';
+    if (isCloth() && product.value.colors.some((color) => !color.sizes.length)) return 'Vous devez definir au moins une taille pour ce produit.';
+    if (isCloth() && product.value.colors.some((color) => color.sizes.some((size) => !size.name || !size.quantity))) return 'Vous devez definir les tailles et leures quantité pour ce produit.';
+    if (product.value.colors.length && coverUploadFiles.value.length < product.value.colors.length) return 'Vous devez ajouter une image de couverture pour chaque couelr définie.';
+    if (!product.value.description) return 'Vous devez definir une description pour ce produit.';
+};
+
 const onConfirmPublish = () => {
+    const message = validateProduct();
+    if (message) {
+        toast.add({ severity: 'error', summary: 'Saisie invalide', detail: message, life: 3000 });
+        return;
+    }
+
     confirm.require({
         message: 'Etes-vous sur de vouloir publier ce produit ?',
         header: 'Confirmation',
@@ -299,6 +370,7 @@ const onConfirmPublish = () => {
         rejectLabel: 'Annuler',
         acceptLabel: 'Publier',
         accept: () => {
+            console.log(product.value);
             toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
         },
         reject: () => {}
@@ -330,6 +402,22 @@ const onRemoveOtherFile = (imageIndex) => {
 const onSeletTabPanel = (index) => {
     currentPanelColorIndex.value = index;
 };
+
+const onSizeChange = () => {
+    sizes.value.forEach((size) => {
+        if (product.value.colors[currentPanelColorIndex.value].sizes.some((_) => _.name === size.name)) size.disabled = true;
+        else size.disabled = false;
+    });
+};
+
+const computedSizes = computed(() => {
+    const localeSizes = sizes.value;
+    localeSizes.forEach((size) => {
+        if (product.value.colors[currentPanelColorIndex.value].sizes.some((_) => _.name === size.name)) size.disabled = true;
+        else size.disabled = false;
+    });
+    return localeSizes;
+});
 </script>
 
 <template>
@@ -343,8 +431,9 @@ const onSeletTabPanel = (index) => {
                     <div class="col-12 field">
                         <div class="flex-auto">
                             <label for="product-name" class="font-bold block mb-2">Nom du produit</label>
-                            <InputText id="product-name" type="text" v-model="product.name" />
+                            <InputText :invalid="errors.name ? true : false" id="product-name" v-bind="nameAttrs" type="text" v-model="product.name" />
                         </div>
+                        <small class="text-red-700" v-show="errors.name">{{ errors.name }}.</small>
                     </div>
                     <div class="col-12 field" :class="isCloth() === false ? 'lg:col-4' : 'lg:col-6'">
                         <div class="flex-auto">
@@ -355,34 +444,41 @@ const onSeletTabPanel = (index) => {
                     <div class="col-12 lg:col-4 field" v-if="isCloth() === false">
                         <div class="flex-auto">
                             <label for="product-price" class="font-bold block mb-2">Fixer un prix</label>
-                            <InputNumber v-model="product.price" inputId="product-price" mode="currency" currency="EUR" locale="de-DE" />
+                            <InputNumber :invalid="errors.price ? true : false" v-bind="priceAttrs" v-model="product.price" inputId="product-price" mode="currency" currency="EUR" locale="de-DE" />
                         </div>
+                        <small class="text-red-700" v-show="errors.price">{{ errors.price }}.</small>
                     </div>
                     <div class="col-12 lg:col-4 field" v-if="isCloth() === false">
                         <div class="flex-auto">
                             <label for="product-quantity" class="font-bold block mb-2">Mettre la quantité totale</label>
-                            <InputNumber inputId="integeronly" id="product-quantity" type="text" v-model="product.quantity" />
+                            <InputNumber :invalid="errors.quantity ? true : false" v-bind="quantityAttrs" inputId="integeronly" id="product-quantity" type="text" v-model="product.quantity" />
                         </div>
+                        <small class="text-red-700" v-show="errors.quantity">{{ errors.quantity }}.</small>
                     </div>
-
                     <div class="col-12" v-if="product.category">
                         <div class="card">
                             <Toolbar>
                                 <template v-slot:start>
                                     <Button type="button" icon="pi pi-plus" label="Ajouter une couleur" @click="toggle" aria-haspopup="true" aria-controls="overlay_panel" />
                                     <OverlayPanel ref="op" appendTo="body">
-                                        <DataTable v-model:selection="selectedColor" :value="colors" selectionMode="single" :paginator="true" :rows="3" @row-select="onColorSelect">
-                                            <Column field="class" header="Color" style="width: 20px">
-                                                <template #body="slotProps">
-                                                    <div class="w-2rem h-2rem mr-2 border-1 surface-border border-circle cursor-pointer flex justify-content-center align-items-center" :class="slotProps.data.class">
-                                                        <i class="pi pi-check text-sm text-white z-5" v-if="colorExist(slotProps.data)"></i>
+                                        <ul class="m-0 p-0 list-none flex flex-column gap-2 w-full md:w-10rem">
+                                            <li
+                                                v-for="col in colors"
+                                                :key="col.name"
+                                                :class="[
+                                                    'p-2 hover:surface-hover border-round border-1 border-transparent transition-all transition-duration-200 flex align-items-center justify-content-between cursor-pointer',
+                                                    { 'border-primary': selectedColor?.name === col.name }
+                                                ]"
+                                                @click="onColorSelect(col)"
+                                            >
+                                                <div class="flex align-items-center gap-2">
+                                                    <div class="w-2rem h-2rem mr-2 border-1 surface-border border-circle flex justify-content-center align-items-center" :class="col.class">
+                                                        <i class="pi pi-check text-sm text-white z-5" v-if="colorExist(col)"></i>
                                                     </div>
-                                                </template>
-                                            </Column>
-                                            <Column header="Nom" field="name" sortable style="width: 20px">
-                                                <template #body="slotProps"> {{ slotProps.data.name }} </template>
-                                            </Column>
-                                        </DataTable>
+                                                    <span class="font-bold">{{ col.name }}</span>
+                                                </div>
+                                            </li>
+                                        </ul>
                                     </OverlayPanel>
                                 </template>
                                 <template v-slot:end> <Button icon="pi pi-trash" class="mr-2" severity="warning" /> </template>
@@ -392,38 +488,60 @@ const onSeletTabPanel = (index) => {
                                     <template #header>
                                         <div class="flex align-items-center gap-2">
                                             <div class="w-2rem h-2rem mr-2 border-1 surface-border border-circle cursor-pointer flex justify-content-center align-items-center" :class="color.class">
-                                                <i class="pi pi-check text-sm text-white z-5" v-if="currentPanelColorIndex === colorIndex"></i>
+                                                <i class="pi pi-check text-sm text-white z-5" v-show="currentPanelColorIndex === colorIndex"></i>
                                             </div>
                                             <span class="font-bold white-space-nowrap">{{ color.name }}</span>
-                                            <i class="pi pi-times text-sm z-5" style="color: red" @click="confirmDeleteColor(colorIndex, color.name)"></i>
+                                            <i v-show="currentPanelColorIndex === colorIndex" class="pi pi-times text-sm z-5" style="color: red" @click="confirmDeleteColor(colorIndex, color.name)"></i>
                                         </div>
                                     </template>
                                     <div class="m-0" v-if="isCloth() === true">
                                         <div class="flex-auto">
                                             <label :for="`${color.name}-price`" class="font-bold block mb-2">Fixer un prix</label>
-                                            <InputNumber v-model="product.price" :id="`${color.name}-price`" :inputId="`${color.name}-price`" mode="currency" currency="EUR" locale="de-DE" />
+                                            <InputNumber v-model="color.price" :id="`${color.name}-price`" :inputId="`${color.name}-price`" mode="currency" currency="EUR" locale="de-DE" />
                                         </div>
                                         <div class="mt-3"></div>
                                         <Fieldset>
                                             <template #legend>
-                                                <div class="flex align-items-center pl-2">
-                                                    <Button icon="pi pi-plus" @click="onAddSize(colorIndex)" severity="info" rounded outlined aria-label="Ajouter une taille" />
+                                                <div class="flex align-items-center pl-2 cursor-pointer" @click="onAddSize(colorIndex)">
+                                                    <Button icon="pi pi-plus" severity="info" rounded outlined aria-label="Ajouter une taille" />
                                                     <span class="font-bold ml-2">Ajouter une taille</span>
                                                 </div>
                                             </template>
                                             <div v-for="(sizeItem, sizeIndex) in color.sizes" :key="sizeItem.name" class="mt-4">
+                                                <Button icon="pi pi-times" severity="danger" rounded outlined aria-label="Cancel" @click="onconfimRemoveSize(colorIndex, sizeIndex)" />
                                                 <Fieldset :legend="sizeItem.name ? sizeItem.name : 'Nouvelle taille'" :toggleable="true">
                                                     <div class="formgrid grid">
                                                         <div class="field col">
                                                             <div class="flex-auto">
                                                                 <label :for="`${sizeItem.name}-size`" class="font-bold block mb-2">Taille</label>
-                                                                <Dropdown :id="`${sizeItem.name}-size`" :options="sizes" optionLabel="name" v-model="color.sizes[sizeIndex]" placeholder="Choisir une taille"></Dropdown>
+
+                                                                <Dropdown
+                                                                    :invalid="isPrevSizeInvalidFomError && sizeIndex === color.sizes.length - 1 && (!color.sizes[sizeIndex] || !color.sizes[sizeIndex].name)"
+                                                                    :id="`${sizeItem.name}-size`"
+                                                                    :options="sizes"
+                                                                    optionLabel="name"
+                                                                    filter
+                                                                    v-model="color.sizes[sizeIndex]"
+                                                                    placeholder="Choisir une taille"
+                                                                    :optionDisabled="isOptionDisabled"
+                                                                    @update="onSizeChange()"
+                                                                >
+                                                                </Dropdown>
+                                                                <small class="text-red-700" v-show="isPrevSizeInvalidFomError && sizeIndex === color.sizes.length - 1 && (!color.sizes[sizeIndex] || !color.sizes[sizeIndex].name)"
+                                                                    >Vous devez selectionner une taille. onSizeChange</small
+                                                                >
                                                             </div>
                                                         </div>
                                                         <div class="field col">
                                                             <div class="flex-auto">
                                                                 <label :for="`${sizeItem.name}-quantity`" class="font-bold block mb-2">Mettre la quantité totale</label>
-                                                                <InputNumber inputId="integeronly" :id="`${sizeItem.name}-quantity`" v-model="sizeItem.quantity" />
+                                                                <InputNumber
+                                                                    :invalid="isPrevSizeInvalidFomError && sizeIndex === color.sizes.length - 1 && !sizeItem.quantity"
+                                                                    inputId="integeronly"
+                                                                    :id="`${sizeItem.name}-quantity`"
+                                                                    v-model="sizeItem.quantity"
+                                                                />
+                                                                <small class="text-red-700" v-show="isPrevSizeInvalidFomError && sizeIndex === color.sizes.length - 1 && !sizeItem.quantity">Vous devez selectionner une taille.</small>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -551,11 +669,13 @@ const onSeletTabPanel = (index) => {
                         </div>
                         <div class="flex-auto">
                             <label for="product-description" class="font-bold block mb-2">Description</label>
-                            <Editor id="product-description" v-model="product.description" editorStyle="height: 180px"></Editor>
+                            <Editor :invalid="errors.description ? true : false" v-bind="descriptionAttrs" id="product-description" v-model="product.description" editorStyle="height: 180px"></Editor>
+                            <small class="text-red-700" v-show="errors.description">{{ errors.description }}.</small>
                         </div>
                     </div>
                 </div>
             </div>
+
             <div class="flex-1 w-full lg:w-3 xl:w-4 flex flex-column row-gap-3">
                 <div class="border-1 surface-border border-round">
                     <span class="text-900 font-bold block border-bottom-1 surface-border p-3">Publication</span>

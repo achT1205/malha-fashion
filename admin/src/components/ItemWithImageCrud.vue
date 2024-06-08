@@ -187,8 +187,8 @@ const onRemoveFile = () => {
                         </template>
                     </Column>
                 </DataTable>
-                
-                <Dialog v-model:visible="itemDialog" maximizable  :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" :header="props.messages.name.single" :modal="true" class="p-fluid">
+
+                <Dialog v-model:visible="itemDialog" maximizable :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" :header="props.messages.name.single" :modal="true" class="p-fluid">
                     <div class="field" v-for="header in headers" :key="header.fieldName">
                         <template v-if="header.fieldName === 'image'">
                             <div class="card p-0">
@@ -236,6 +236,7 @@ const onRemoveFile = () => {
                                                     <span class="font-medium text-600 text-md text-center">Déposer ou sélectionner une image</span>
                                                 </div>
                                             </div>
+                                            <Message :closable="false" severity="error" v-if="submitted && !uploadFile && (!item || !item.imageSrc)">L'image de couverture est requise.</Message>
                                         </template>
                                     </FileUpload>
                                 </div>
@@ -243,9 +244,9 @@ const onRemoveFile = () => {
                         </template>
                         <template v-else-if="header.fieldName !== 'rating' && header.fieldName !== 'image'">
                             <label :for="header.fieldName">{{ header.headerName }}</label>
-                            <InputText v-if="!header.extarea" :id="header.fieldName" v-model.trim="item[header.fieldName]" :required="item.required" autofocus :invalid="submitted && !item.name" />
-                            <Textarea v-else :id="header.fieldName" v-model="item[header.fieldName]" :required="item.required" rows="3" cols="20" />
-                            <small class="p-invalid" v-if="submitted && (!item || !item[header.fieldName]) && header.required">Le champs "{{ header.headerName }}" est requis.</small>
+                            <InputText v-if="!header.extarea" :id="header.fieldName" v-model.trim="item[header.fieldName]" :required="item.required" :invalid="submitted && !item[header.fieldName]" />
+                            <Textarea v-else :id="header.fieldName" :invalid="submitted && !item[header.fieldName]" v-model="item[header.fieldName]" :required="item.required" rows="3" cols="20" />
+                            <small class="text-red-700" v-if="submitted && (!item || !item[header.fieldName]) && header.required">Le champs "{{ header.headerName }}" est requis.</small>
                         </template>
                     </div>
 

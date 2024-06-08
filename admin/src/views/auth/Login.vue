@@ -94,3 +94,4 @@ const singin = async (email, password) => {
         <AppConfig simple></AppConfig>
     </div>
 </template>
+

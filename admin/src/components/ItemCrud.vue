@@ -161,8 +161,8 @@ const initFilters = () => {
                         <template v-if="header.fieldName !== 'rating'">
                             <label :for="header.fieldName">{{ header.headerName }}</label>
                             <InputText v-if="!header.extarea" :id="header.fieldName" v-model.trim="item[header.fieldName]" :required="item.required" autofocus :invalid="submitted && !item.name" />
-                            <Textarea v-else :id="header.fieldName" v-model="item[header.fieldName]" :required="item.required" rows="3" cols="20" />
-                            <small class="p-invalid" v-if="submitted && (!item || !item[header.fieldName]) && header.required">Le champs "{{ header.headerName }}" est requis.</small>
+                            <Textarea v-else :id="header.fieldName" :invalid="submitted && !item[header.fieldName]" v-model="item[header.fieldName]" :required="item.required" rows="3" cols="20" />
+                            <small class="text-red-700" v-if="submitted && (!item || !item[header.fieldName]) && header.required">Le champs "{{ header.headerName }}" est requis.</small>
                         </template>
                     </div>
 
