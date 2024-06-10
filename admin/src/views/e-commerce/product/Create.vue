@@ -3,8 +3,15 @@ import { ref, computed } from 'vue';
 import { useConfirm } from 'primevue/useconfirm';
 import { useToast } from 'primevue/usetoast';
 import { useForm } from 'vee-validate';
+
 import { object, string } from 'yup';
-const { errors, defineField, handleSubmit } = useForm({
+import { useLocalStorage } from '@/composables/useLocalStorage';
+import { useFormEditWithFileUpload } from '@/composables/useFormEditWithFileUpload';
+
+const collectionName = 'products';
+const { createProductWithFiles, items , removeFile} = useFormEditWithFileUpload(collectionName);
+
+const { errors, defineField } = useForm({
     validationSchema: object({
         name: string().required('Le nom du produit est requis'),
         price: string().required('Le le prix du produit est requis'),
@@ -26,34 +33,85 @@ const [description, descriptionAttrs] = defineField('description', {
     validateOnModelUpdate: false
 });
 
+const imagesToBeDeletedFromStograge = ref([]);
+
 const confirm = useConfirm();
 const toast = useToast();
-const coverfileUploaderRefs = ref(null);
+const coverfileUploaderRef = ref(null);
 const otherFileUploaderRefs = ref(null);
 const isPrevSizeInvalidFomError = ref(false);
-const product = ref({
-    name: name,
-    price: price,
-    status: 'Draft',
-    valid: false,
-    description: description,
-    imageSrc: '',
-    quantity: quantity,
-    colors: [],
-    category: null,
-    material: {},
-    tags: [],
-    model: {},
-    occasions: [],
-    collection: {},
-    details: [
-        {
-            name: '',
-            items: []
-        }
-    ]
-});
-const coverUploadFiles = ref([]);
+const product = useLocalStorage(
+    {
+        name: 'Thalssa',
+        occasion: { id: 2, value: 'religious-celebrations', name: 'Fêtes religieuses', description: 'Fêtes religieuses (ex. : Aïd) ' },
+        collection: { name: 'Montagnes de Djurdjura', description: 'Évoquant les sommets majestueux et le patrimoine robuste de la Kabylie.', imageSrc: '/images/collections/2.png', id: 2 },
+        details: [{ name: '', items: [] }],
+        valid: true,
+        category: {
+            id: 1,
+            value: 'dress-woman',
+            image: { src: '/images/collections/1.png', alt: 'BRobe de Fête ' },
+            name: 'Robes kabyles pour femme ',
+            description: 'Mettant en avant le rayonnement et la modernité des designs tout en restant fidèle aux racines berbères traditionnelles.'
+        },
+        image: { src: 'https://firebasestorage.googleapis.com/v0/b/halha-fashion.appspot.com/o/products%2Fcovers%2FThalssa_1.png?alt=media&token=fdfb4808-4cc1-4cc1-b90b-0b98da7a29aa', path: 'products/covers/Thalssa_1.png' },
+        tags: ['Recycle ', 'Paper '],
+        description: '<p>desc</p>',
+        material: { id: 2, description: 'Soie ', name: 'Soie', value: 'silk' },
+        model: { name: 'Modèle revisité', description: 'Modèle revisité', id: 3, value: 'revisited-model' },
+        occasions: [],
+        status: 'Draft',
+        colors: [
+            {
+                class: 'bg-green-200',
+                sizes: [{ id: 10, value: 'xl', name: 'XL', description: 'La taille XL ...', quantity: 67 }],
+                selectedClass: 'ring-gray-900',
+                name: 'Green',
+                images: [
+                    { path: 'products/others/green_2.png', src: 'https://firebasestorage.googleapis.com/v0/b/halha-fashion.appspot.com/o/products%2Fothers%2Fgreen_2.png?alt=media&token=3832c4ff-9f98-4a85-9288-57511935637d' },
+                    { src: 'https://firebasestorage.googleapis.com/v0/b/halha-fashion.appspot.com/o/products%2Fothers%2Fgreen_3.png?alt=media&token=983d3aa3-d148-419a-8fb2-840a6b0fe24d', path: 'products/others/green_3.png' }
+                ],
+                reviews: { average: 0, totalCount: 0 },
+                price: 89
+            },
+            {
+                images: [
+                    { src: 'https://firebasestorage.googleapis.com/v0/b/halha-fashion.appspot.com/o/products%2Fothers%2Fpink_3.png?alt=media&token=32c1c508-582f-410b-baab-67132e070d5c', path: 'products/others/pink_3.png' },
+                    { src: 'https://firebasestorage.googleapis.com/v0/b/halha-fashion.appspot.com/o/products%2Fothers%2Fpink_4.png?alt=media&token=49f49755-3cb4-410f-8f1c-0acea1426b7d', path: 'products/others/pink_4.png' }
+                ],
+                sizes: [{ value: 'xl-xxl', quantity: 89, description: 'La taille XL/XXL ...', name: 'XL/XXL', id: 6 }],
+                class: 'bg-pink-200',
+                reviews: { average: 0, totalCount: 0 },
+                name: 'Pink',
+                price: 90,
+                selectedClass: 'ring-gray-400'
+            }
+        ]
+    },
+    /*{
+        name: name,
+        price: price,
+        status: 'Draft',
+        valid: false,
+        description: description,
+        image: {},
+        quantity: quantity,
+        colors: [],
+        category: null,
+        material: {},
+        tags: [],
+        model: {},
+        occasions: [],
+        collection: {},
+        details: [
+            {
+                name: '',
+                items: []
+            }
+        ]
+    }*/ 'newProduct'
+);
+const coverUploadFile = ref(null);
 const otherUploadFiles = ref([]);
 const selectedColor = ref(null);
 const currentPanelColorIndex = ref(0);
@@ -351,17 +409,22 @@ const validateProduct = () => {
     if (isCloth() && product.value.colors.some((color) => !color.price || color.price === 0)) return 'Vous devez definir un prix pour chaque couleur définie.';
     if (isCloth() && product.value.colors.some((color) => !color.sizes.length)) return 'Vous devez definir au moins une taille pour ce produit.';
     if (isCloth() && product.value.colors.some((color) => color.sizes.some((size) => !size.name || !size.quantity))) return 'Vous devez definir les tailles et leures quantité pour ce produit.';
-    if (product.value.colors.length && coverUploadFiles.value.length < product.value.colors.length) return 'Vous devez ajouter une image de couverture pour chaque couelr définie.';
+    //if (!coverUploadFile.value) return 'Vous devez ajouter une image de couverture à ce produit.';
+    for (let index = 0; index < product.value.colors.length; index++) {
+        if (!otherUploadFiles.value[index] || otherUploadFiles.value[index].length === 0) {
+            return 'Vous devez ajouter des images pour chaque couleur créée';
+        }
+    }
+
     if (!product.value.description) return 'Vous devez definir une description pour ce produit.';
 };
 
 const onConfirmPublish = () => {
-    const message = validateProduct();
+    /* const message = validateProduct();
     if (message) {
         toast.add({ severity: 'error', summary: 'Saisie invalide', detail: message, life: 3000 });
         return;
-    }
-
+    }*/
     confirm.require({
         message: 'Etes-vous sur de vouloir publier ce produit ?',
         header: 'Confirmation',
@@ -369,22 +432,26 @@ const onConfirmPublish = () => {
         rejectClass: 'p-button-secondary p-button-outlined',
         rejectLabel: 'Annuler',
         acceptLabel: 'Publier',
-        accept: () => {
-            console.log(product.value);
-            toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
+        accept: async () => {
+            try {
+                await createProductWithFiles(product.value, coverUploadFile.value, otherUploadFiles.value);
+                toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
+            } catch (error) {
+                console.log(error);
+            }
         },
         reject: () => {}
     });
 };
-const onCoverSelectedFiles = (event) => {
-    coverUploadFiles.value[currentPanelColorIndex.value] = event.files[0];
+const onCoverSelectedFile = (event) => {
+    coverUploadFile.value = event.files[0];
 };
 const onOtherSelectedFiles = (event) => {
     otherUploadFiles.value[currentPanelColorIndex.value] = event.files;
 };
 
-const onChooseCoverUploadFiles = () => {
-    coverfileUploaderRefs.value[currentPanelColorIndex.value].choose();
+const onChooseCoverUploadFile = () => {
+    coverfileUploaderRef.value.choose();
 };
 
 const onChooseOtherUploadFiles = () => {
@@ -392,11 +459,16 @@ const onChooseOtherUploadFiles = () => {
 };
 
 const onRemoveCoverFile = () => {
-    coverUploadFiles.value[currentPanelColorIndex.value] = null;
+    coverUploadFile.value = null;
 };
 
 const onRemoveOtherFile = (imageIndex) => {
     otherUploadFiles.value[currentPanelColorIndex.value].splice(imageIndex, 1);
+};
+
+const onRemoveOtherFileFromStorage = (image, colorIndex, index) => {
+    imagesToBeDeletedFromStograge.value.push(image);
+    product.value.colors[colorIndex].images.splice(index, 1);
 };
 
 const onSeletTabPanel = (index) => {
@@ -409,6 +481,10 @@ const onSizeChange = () => {
         else size.disabled = false;
     });
 };
+/*
+watch(product.value, (newProduct) => {
+    onOpdateProduct(newProduct);
+});*/
 
 const computedSizes = computed(() => {
     const localeSizes = sizes.value;
@@ -428,6 +504,56 @@ const computedSizes = computed(() => {
         <div class="grid grid-nogutter flex-wrap gap-3 p-fluid">
             <div class="col-12 lg:col-8">
                 <div class="grid formgrid">
+                    <div class="field col">
+                        <div class="card">
+                            <FileUpload
+                                ref="coverfileUploaderRef"
+                                :id="`cover-fileupload`"
+                                name="demo[]"
+                                url="./upload.php"
+                                accept="image/*"
+                                customUpload
+                                auto
+                                class="upload-button-hidden w-full"
+                                invalidFileSizeMessage="Invalid File Size"
+                                invalidFileTypeMessage="Invalid File Type"
+                                :maxFileSize="5000000"
+                                @select="onCoverSelectedFile"
+                                :pt="{
+                                    buttonbar: { class: 'hidden' },
+                                    content: { class: 'border-none' }
+                                }"
+                            >
+                                <template #content>
+                                    <div v-if="coverUploadFile || (product.image && product.image.src)" class="w-full py-3" :style="{ cursor: '' }">
+                                        <div class="flex flex-wrap">
+                                            <div class="remove-file-wrapper h-full relative w-12rem h-12rem border-3 border-transparent border-round hover:bg-primary transition-duration-100 cursor-auto" :style="{ padding: '1px' }">
+                                                <img :src="coverUploadFile && coverUploadFile.objectURL ? coverUploadFile.objectURL : product.image.src" :alt="product.name" class="w-full h-full border-round shadow-2" />
+
+                                                <Button
+                                                    icon="pi pi-times"
+                                                    :style="{ top: '-10px', right: '-10px', display: 'none' }"
+                                                    class="remove-button text-sm absolute justify-content-center align-items-center cursor-pointer"
+                                                    rounded
+                                                    @click="onRemoveCoverFile()"
+                                                ></Button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+                                <template #empty>
+                                    <div v-if="!coverUploadFile && !product.image.src" @click="onChooseCoverUploadFile()" class="w-full py-3" :style="{ cursor: 'copy' }">
+                                        <div class="h-full flex flex-column justify-content-center align-items-center">
+                                            <i class="pi pi-upload text-900 text-2xl mb-3"></i>
+                                            <span class="font-bold text-900 text-xl mb-3">Image de couverture</span>
+                                            <span class="font-medium text-600 text-md text-center">Déposer ou sélectionner une image</span>
+                                        </div>
+                                    </div>
+                                </template>
+                            </FileUpload>
+                        </div>
+                    </div>
+
                     <div class="col-12 field">
                         <div class="flex-auto">
                             <label for="product-name" class="font-bold block mb-2">Nom du produit</label>
@@ -514,13 +640,13 @@ const computedSizes = computed(() => {
                                                         <div class="field col">
                                                             <div class="flex-auto">
                                                                 <label :for="`${sizeItem.name}-size`" class="font-bold block mb-2">Taille</label>
-
                                                                 <Dropdown
                                                                     :invalid="isPrevSizeInvalidFomError && sizeIndex === color.sizes.length - 1 && (!color.sizes[sizeIndex] || !color.sizes[sizeIndex].name)"
                                                                     :id="`${sizeItem.name}-size`"
                                                                     :options="sizes"
                                                                     optionLabel="name"
                                                                     filter
+                                                                    :value="color.sizes[sizeIndex]"
                                                                     v-model="color.sizes[sizeIndex]"
                                                                     placeholder="Choisir une taille"
                                                                     :optionDisabled="isOptionDisabled"
@@ -554,62 +680,6 @@ const computedSizes = computed(() => {
                                             <div class="field col">
                                                 <div class="card">
                                                     <FileUpload
-                                                        ref="coverfileUploaderRefs"
-                                                        :id="`covers-fileupload-${color.name}`"
-                                                        name="demo[]"
-                                                        url="./upload.php"
-                                                        accept="image/*"
-                                                        customUpload
-                                                        auto
-                                                        class="upload-button-hidden w-full"
-                                                        invalidFileSizeMessage="Invalid File Size"
-                                                        invalidFileTypeMessage="Invalid File Type"
-                                                        :maxFileSize="5000000"
-                                                        @select="onCoverSelectedFiles"
-                                                        :pt="{
-                                                            buttonbar: { class: 'hidden' },
-                                                            content: { class: 'border-none' }
-                                                        }"
-                                                    >
-                                                        <template #content>
-                                                            <div v-if="coverUploadFiles[colorIndex] || product.imageSrc" class="w-full py-3" :style="{ cursor: '' }">
-                                                                <div class="flex flex-wrap">
-                                                                    <div
-                                                                        class="remove-file-wrapper h-full relative w-12rem h-12rem border-3 border-transparent border-round hover:bg-primary transition-duration-100 cursor-auto"
-                                                                        :style="{ padding: '1px' }"
-                                                                    >
-                                                                        <img
-                                                                            :src="coverUploadFiles[colorIndex] && coverUploadFiles[colorIndex].objectURL ? coverUploadFiles[colorIndex].objectURL : product.imageSrc"
-                                                                            :alt="`${product.name}_${color.name}`"
-                                                                            class="w-full h-full border-round shadow-2"
-                                                                        />
-
-                                                                        <Button
-                                                                            icon="pi pi-times"
-                                                                            :style="{ top: '-10px', right: '-10px', display: 'none' }"
-                                                                            class="remove-button text-sm absolute justify-content-center align-items-center cursor-pointer"
-                                                                            rounded
-                                                                            @click="onRemoveCoverFile()"
-                                                                        ></Button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </template>
-                                                        <template #empty>
-                                                            <div v-if="!coverUploadFiles[colorIndex] && !product.imageSrc" @click="onChooseCoverUploadFiles()" class="w-full py-3" :style="{ cursor: 'copy' }">
-                                                                <div class="h-full flex flex-column justify-content-center align-items-center">
-                                                                    <i class="pi pi-upload text-900 text-2xl mb-3"></i>
-                                                                    <span class="font-bold text-900 text-xl mb-3">Image de couverture</span>
-                                                                    <span class="font-medium text-600 text-md text-center">Déposer ou sélectionner une image</span>
-                                                                </div>
-                                                            </div>
-                                                        </template>
-                                                    </FileUpload>
-                                                </div>
-                                            </div>
-                                            <div class="field col">
-                                                <div class="card">
-                                                    <FileUpload
                                                         ref="otherFileUploaderRefs"
                                                         :id="`others-fileupload-${color.name}`"
                                                         name="demo[]"
@@ -629,32 +699,52 @@ const computedSizes = computed(() => {
                                                         }"
                                                     >
                                                         <template #content>
-                                                            <div v-if="otherUploadFiles[colorIndex] && otherUploadFiles[colorIndex].length" class="w-full py-3" :style="{ cursor: '' }">
+                                                            <div v-if="(otherUploadFiles[colorIndex] && otherUploadFiles[colorIndex].length) || color.images.length > 0" class="w-full py-3" :style="{ cursor: '' }">
                                                                 <div class="flex flex-wrap">
-                                                                    <div
-                                                                        class="remove-file-wrapper h-full relative w-12rem h-12rem border-3 border-transparent border-round hover:bg-primary transition-duration-100 cursor-auto"
-                                                                        :style="{ padding: '1px' }"
-                                                                        v-for="(item, index) in otherUploadFiles[colorIndex]"
-                                                                        :key="index"
-                                                                    >
-                                                                        <img :src="item.objectURL" :alt="`${product.name}_${color.name}_other_${index}`" class="w-full h-full border-round shadow-2" />
+                                                                    <template v-if="color.images.length">
+                                                                        <div
+                                                                            class="remove-file-wrapper h-full relative w-12rem h-12rem border-3 border-transparent border-round hover:bg-primary transition-duration-100 cursor-auto"
+                                                                            :style="{ padding: '1px' }"
+                                                                            v-for="(image, index) in color.images"
+                                                                            :key="index"
+                                                                        >
+                                                                            <img :src="image.src" :alt="`${product.name}_${color.name}_other_${index}`" class="w-full h-full border-round shadow-2" />
 
-                                                                        <Button
-                                                                            icon="pi pi-times"
-                                                                            :style="{ top: '-10px', right: '-10px', display: 'none' }"
-                                                                            class="remove-button text-sm absolute justify-content-center align-items-center cursor-pointer"
-                                                                            rounded
-                                                                            @click="onRemoveOtherFile(index)"
-                                                                        ></Button>
-                                                                    </div>
+                                                                            <Button
+                                                                                icon="pi pi-times"
+                                                                                :style="{ top: '-10px', right: '-10px', display: 'none' }"
+                                                                                class="remove-button text-sm absolute justify-content-center align-items-center cursor-pointer"
+                                                                                rounded
+                                                                                @click="onRemoveOtherFileFromStorage(image, colorIndex, index)"
+                                                                            ></Button>
+                                                                        </div>
+                                                                    </template>
+                                                                    <template v-if="otherUploadFiles[colorIndex] && otherUploadFiles[colorIndex].length">
+                                                                        <div
+                                                                            class="remove-file-wrapper h-full relative w-12rem h-12rem border-3 border-transparent border-round hover:bg-primary transition-duration-100 cursor-auto"
+                                                                            :style="{ padding: '1px' }"
+                                                                            v-for="(item, index) in otherUploadFiles[colorIndex]"
+                                                                            :key="index"
+                                                                        >
+                                                                            <img :src="item.objectURL" :alt="`${product.name}_${color.name}_other_${index}`" class="w-full h-full border-round shadow-2" />
+
+                                                                            <Button
+                                                                                icon="pi pi-times"
+                                                                                :style="{ top: '-10px', right: '-10px', display: 'none' }"
+                                                                                class="remove-button text-sm absolute justify-content-center align-items-center cursor-pointer"
+                                                                                rounded
+                                                                                @click="onRemoveOtherFile(index)"
+                                                                            ></Button>
+                                                                        </div>
+                                                                    </template>
                                                                 </div>
                                                             </div>
                                                         </template>
                                                         <template #empty>
-                                                            <div v-if="!otherUploadFiles[colorIndex]" @click="onChooseOtherUploadFiles()" class="w-full py-3" :style="{ cursor: 'copy' }">
+                                                            <div v-if="!otherUploadFiles[colorIndex] && color.images.length === 0" @click="onChooseOtherUploadFiles()" class="w-full py-3" :style="{ cursor: 'copy' }">
                                                                 <div class="h-full flex flex-column justify-content-center align-items-center">
                                                                     <i class="pi pi-upload text-900 text-2xl mb-3"></i>
-                                                                    <span class="font-bold text-900 text-xl mb-3">Images suplémentaires</span>
+                                                                    <span class="font-bold text-900 text-xl mb-3">Images pour la couleure: {{ color.name }}</span>
                                                                     <span class="font-medium text-600 text-md text-center">Déposer ou sélectionner des images</span>
                                                                 </div>
                                                             </div>

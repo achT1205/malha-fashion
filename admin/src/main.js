@@ -1,6 +1,7 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
+import { createPinia } from 'pinia'
 
 import PrimeVue from 'primevue/config';
 import AutoComplete from 'primevue/autocomplete';
@@ -112,9 +113,9 @@ import BlockViewer from '@/components/BlockViewer.vue';
 import '@/assets/styles.scss';
 import { VueFire, VueFireAuth } from 'vuefire'
 import { firebaseApp } from './firebase'
-
+const pinia = createPinia()
 const app = createApp(App);
-
+app.use(pinia)
 app.use(router);
 app.use(PrimeVue, { ripple: true });
 app.use(ToastService);

@@ -8,6 +8,71 @@ export function useFormEditWithFileUpload(collectionName) {
     const db = useFirestore();
     const items = useCollection(collection(db, collectionName));
     const currentItem = ref(null);
+
+    let uploadedURLs =[]
+
+
+    const createProductWithFiles = async (product, coverFile, others) => {
+       const localProduct = JSON.parse(JSON.stringify(product));
+       const otherFiles = others;
+        
+        const uploadFile = async (path, file, colorIndex, fileIndex) => {
+            const itemFileRef = storageRef(storage, path);
+            const uploadTask = uploadBytesResumable(itemFileRef, file);
+            uploadTask.on(
+                'state_changed',
+                (snapshot) => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log('progress ', progress);
+                },
+                (error) => {
+                    console.error('Upload failed', error);
+                },
+                async () => {
+                    try {
+                      const url =  await getDownloadURL(uploadTask.snapshot.ref);
+                      uploadedURLs.push(url)
+                      if(colorIndex !== null)
+                        {
+                            localProduct.colors[colorIndex].images[fileIndex].src = url
+                            if((colorIndex === localProduct.colors.length -1 &&  fileIndex )=== (localProduct.colors[colorIndex].images.length -1)){
+                                await addDoc(collection(db, collectionName), localProduct);
+                            }
+                        }
+                        else {
+                            localProduct.image.src = url
+                        }
+                    } catch (error) {
+                        console.error('Error getting download URL or saving product: ', error);
+                    }
+                }
+            );
+        };
+
+        const uploadOtherPromises = otherFiles.flatMap((fileArray, fileArrayIndex)=>{
+            fileArray.map(async(file, fileIndex)=>{
+                let path =''
+                const color   = localProduct.colors[fileArrayIndex]
+                path = `${collectionName}/others/${color.name.toLowerCase()}_${file.name}`;
+                localProduct.colors[fileArrayIndex].images.push({path: path, src:null})
+                const url = await uploadFile(path, file, fileArrayIndex, fileIndex);
+                return url;
+            })
+        })
+
+        const path = `${collectionName}/covers/${localProduct.name}_${coverFile.name}`;
+        localProduct.image = {path: path, src:null}
+        await uploadFile(path, coverFile, null, null)
+        .then(async()=>{
+            await Promise.all(uploadOtherPromises)
+        }).catch((error)=>{
+            debugger
+        })
+
+        
+    }
+
+
     
     const saveItemWithFile = async (item, file) => {
         currentItem.value = { ...item.value };
@@ -82,6 +147,14 @@ export function useFormEditWithFileUpload(collectionName) {
             .catch((error) => {});
     };
 
+    const removeFile = async () => {
+        const desertRef = storageRef(storage, currentItem.value.imagePath);
+        deleteObject(desertRef)
+            .then(async () => {
+            })
+            .catch((error) => {});
+    };
+
 
     const saveItem = async (item) => {
         currentItem.value = { ...item.value };
@@ -110,6 +183,8 @@ export function useFormEditWithFileUpload(collectionName) {
     deleteItemWithFile,
     saveItem,
     updateItem,
-    deleteItem
+    deleteItem,
+    createProductWithFiles,
+    removeFile
   };
 }

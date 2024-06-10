@@ -1,52 +1,49 @@
-{
-    "data": [
-        {
+[
+    {
+        "name": "Thalssa",
+        "occasion": { "id": 2, "value": "religious-celebrations", "name": "Fêtes religieuses", "description": "Fêtes religieuses (ex. : Aïd) " },
+        "collection": { "name": "Montagnes de Djurdjura", "description": "Évoquant les sommets majestueux et le patrimoine robuste de la Kabylie.", "imageSrc": "/images/collections/2.png", "id": 2 },
+        "details": [{ "name": "", "items": [] }],
+        "valid": true,
+        "category": {
             "id": 1,
-            "name": "Traditionnel ",
-            "value": "traditional",
-            "description": "Traditionnel"
+            "value": "dress-woman",
+            "image": { "src": "/images/collections/1.png", "alt": "BRobe de Fête " },
+            "name": "Robes kabyles pour femme ",
+            "description": "Mettant en avant le rayonnement et la modernité des designs tout en restant fidèle aux racines berbères traditionnelles."
         },
-        {
-            "id": 2,
-            "name": "Moderne",
-            "value": "modern",
-            "description": "Moderne "
-        },
-        {
-            "id": 3,
-            "name": "Tissé à la main",
-            "value": "hand-woven",
-            "description": "Tissé à la main"
-        },
-        {
-            "id": 4,
-            "name": "Brodé",
-            "value": "embroidered",
-            "description": "Brodé"
-        },
-        {
-            "id": 5,
-            "name": "Confort",
-            "value": "confort",
-            "description": "Confort"
-        },
-        {
-            "id": 6,
-            "name": "Élégance",
-            "value": "elegance",
-            "description": "Élégance"
-        },
-        {
-            "id": 7,
-            "name": "Artisanat",
-            "value": "craft",
-            "description": "Artisanat"
-        },
-        {
-            "id": 8,
-            "name": "Local",
-            "value": "local",
-            "description": "Local"
-        }
-    ]
-}
+        "image": { "src": "https://firebasestorage.googleapis.com/v0/b/halha-fashion.appspot.com/o/products%2Fcovers%2FThalssa_1.png?alt=media&token=fdfb4808-4cc1-4cc1-b90b-0b98da7a29aa", "path": "products/covers/Thalssa_1.png" },
+        "tags": ["Recycle ", "Paper "],
+        "description": "<p>desc</p>",
+        "material": { "id": 2, "description": "Soie ", "name": "Soie", "value": "silk" },
+        "model": { "name": "Modèle revisité", "description": "Modèle revisité", "id": 3, "value": "revisited-model" },
+        "occasions": [],
+        "status": "Draft",
+        "colors": [
+            {
+                "class": "bg-green-200",
+                "sizes": [{ "id": 10, "value": "xl", "name": "XL", "description": "La taille XL ...", "quantity": 67 }],
+                "selectedClass": "ring-gray-900",
+                "name": "Green",
+                "images": [
+                    { "path": "products/others/green_2.png", "src": "https://firebasestorage.googleapis.com/v0/b/halha-fashion.appspot.com/o/products%2Fothers%2Fgreen_2.png?alt=media&token=3832c4ff-9f98-4a85-9288-57511935637d" },
+                    { "src": "https://firebasestorage.googleapis.com/v0/b/halha-fashion.appspot.com/o/products%2Fothers%2Fgreen_3.png?alt=media&token=983d3aa3-d148-419a-8fb2-840a6b0fe24d", "path": "products/others/green_3.png" }
+                ],
+                "reviews": { "average": 0, "totalCount": 0 },
+                "price": 89
+            },
+            {
+                "images": [
+                    { "src": "https://firebasestorage.googleapis.com/v0/b/halha-fashion.appspot.com/o/products%2Fothers%2Fpink_3.png?alt=media&token=32c1c508-582f-410b-baab-67132e070d5c", "path": "products/others/pink_3.png" },
+                    { "src": "https://firebasestorage.googleapis.com/v0/b/halha-fashion.appspot.com/o/products%2Fothers%2Fpink_4.png?alt=media&token=49f49755-3cb4-410f-8f1c-0acea1426b7d", "path": "products/others/pink_4.png" }
+                ],
+                "sizes": [{ "value": "xl-xxl", "quantity": 89, "description": "La taille XL/XXL ...", "name": "XL/XXL", "id": 6 }],
+                "class": "bg-pink-200",
+                "reviews": { "average": 0, "totalCount": 0 },
+                "name": "Pink",
+                "price": 90,
+                "selectedClass": "ring-gray-400"
+            }
+        ]
+    }
+]
