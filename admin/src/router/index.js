@@ -31,6 +31,14 @@ const routes = [
                 component: () => import('@/views/e-commerce/product/Create.vue')
             },
             {
+                path: '/ecommerce/products/:id/edit',
+                name: 'product-edit',
+                meta: {
+                    breadcrumb: ['E-Commerce', 'Product Edit']
+                },
+                component: () => import('@/views/e-commerce/product/Create.vue')
+            },
+            {
                 path: '/ecommerce/products/:id',
                 name: 'product-details',
                 meta: {

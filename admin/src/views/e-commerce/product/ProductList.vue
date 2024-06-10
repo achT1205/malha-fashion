@@ -1,5 +1,5 @@
 <script setup>
-import ItemWithImageCrud from '../../../components/ItemWithImageCrud.vue';
+import ProductCrud from '../../../components/ProductCrud.vue';
 import { useFormEditWithFileUpload } from '../../../composables/useFormEditWithFileUpload';
 
 const collectionName = 'products';
@@ -53,7 +53,7 @@ const messages = {
 
 <template>
     <Suspense>
-        <ItemWithImageCrud :messages="messages" :items="items" :headers="headers" @save="saveItem" @update="updateItem" @delete="deleteItem" />
+        <ProductCrud :messages="messages" :items="items" :headers="headers" @save="saveItem" @update="updateItem" @delete="deleteItem" />
     </Suspense>
 </template>
 <style scoped lang="scss">
