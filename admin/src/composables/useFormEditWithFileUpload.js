@@ -9,17 +9,139 @@ export function useFormEditWithFileUpload(collectionName) {
     const items = useCollection(collection(db, collectionName));
     const currentItem = ref(null);
 
-    let uploadedURLs =[]
-
+    const removeFileByPath = async (path) => {
+        const desertRef = storageRef(storage, path);
+        deleteObject(desertRef)
+            .then(async () => {
+            })
+            .catch((error) => {});
+    };
 
     const createProductWithFiles = async (product, coverFile, others) => {
-       const localProduct = JSON.parse(JSON.stringify(product));
-       const otherFiles = others;
+
+        const localProduct = JSON.parse(JSON.stringify(product));
+        const otherFiles = others;
+         
+        const updateColorFiles = ()=>{
+            let totalImage = otherFiles.flatMap(fileArray=>fileArray).length;
+            let count = 0;
+            otherFiles.flatMap((fileArray , fileArrayIndex)=>{
+                fileArray.map(async(file)=>{
+                    let path =''
+                    const color   = localProduct.colors[fileArrayIndex]
+                    path = `${collectionName}/others/${color.name.toLowerCase()}_${file.name}`;
+                    const itemFileRef = storageRef(storage, path);
+                    const uploadTask = uploadBytesResumable(itemFileRef, file);
+                    uploadTask.on(
+                        'state_changed',
+                        (snapshot) => {
+                            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                            console.log('progress ', progress);
+                        },
+                        (error) => {
+                            console.error('Upload failed', error);
+                        },
+                        async () => {
+                            try {
+                              const url =  await getDownloadURL(uploadTask.snapshot.ref);
+                              const newImage = {path: path, src: url}
+                              localProduct.colors[fileArrayIndex].images.push(newImage)
+                              count++
+                              if(count === totalImage)
+                                {
+                                    await addDoc(collection(db, collectionName), localProduct);
+                                }
+                            } catch (error) {
+                                console.error('Error getting download URL or saving product: ', error);
+                            }
+                        }
+                    );
+                })
+            })
+        }
+
+        const path = `${collectionName}/covers/${localProduct.name}_${coverFile.name}`;
+        const itemFileRef = storageRef(storage, path);
+         const uploadTask = uploadBytesResumable(itemFileRef, coverFile);
+         uploadTask.on(
+            'state_changed',
+            (snapshot) => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('progress ', progress);
+            },
+            (error) => {
+                console.error('Upload failed', error);
+            },
+            async () => {
+                try {
+                  const url =  await getDownloadURL(uploadTask.snapshot.ref);
+                  const newImage = { path: path, src: url }
+                  localProduct.image = newImage
+                  updateColorFiles()
+                } catch (error) {
+                    console.error('Error getting download URL or saving product: ', error);
+                }
+            }
+        );
         
-        const uploadFile = async (path, file, colorIndex, fileIndex) => {
+    }
+
+    const updateProductWithFiles = async (id, product, coverFile, others, imagesToBeDeletedFromStograge) => {
+        const localProduct = JSON.parse(JSON.stringify(product));
+        const otherFiles = others;
+
+        const deleteFilesPromises = imagesToBeDeletedFromStograge.map( async(path)=>{
+            return await removeFileByPath(path)
+        })
+        if(deleteFilesPromises && deleteFilesPromises.length)
+        {
+            await Promise.all(deleteFilesPromises)
+        }
+        const updateColorFiles = ()=>{
+            let totalImage = otherFiles.flatMap(fileArray=>fileArray).length;
+            let count = 0;
+            otherFiles.flatMap((fileArray , fileArrayIndex)=>{
+                fileArray.map(async(file)=>{
+                    let path =''
+                    const color   = localProduct.colors[fileArrayIndex]
+                    path = `${collectionName}/others/${color.name.toLowerCase()}_${file.name}`;
+                    const itemFileRef = storageRef(storage, path);
+                    const uploadTask = uploadBytesResumable(itemFileRef, file);
+                    uploadTask.on(
+                        'state_changed',
+                        (snapshot) => {
+                            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                            console.log('progress ', progress);
+                        },
+                        (error) => {
+                            console.error('Upload failed', error);
+                        },
+                        async () => {
+                            try {
+                              const url =  await getDownloadURL(uploadTask.snapshot.ref);
+                              const newImage = {path: path, src: url}
+                              localProduct.colors[fileArrayIndex].images.push(newImage)
+                              count++
+                              if(count === totalImage)
+                                {
+                                    const docRef = doc(db, collectionName, id);
+                                    await updateDoc(docRef, { ...localProduct});
+                                }
+                            } catch (error) {
+                                console.error('Error getting download URL or saving product: ', error);
+                            }
+                        }
+                    );
+                })
+            })
+    
+        }
+
+        if(coverFile && coverFile.name){
+            const path = `${collectionName}/covers/${localProduct.name}_${coverFile.name}`;
             const itemFileRef = storageRef(storage, path);
-            const uploadTask = uploadBytesResumable(itemFileRef, file);
-            uploadTask.on(
+             const uploadTask = uploadBytesResumable(itemFileRef, coverFile);
+             uploadTask.on(
                 'state_changed',
                 (snapshot) => {
                     const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -31,49 +153,26 @@ export function useFormEditWithFileUpload(collectionName) {
                 async () => {
                     try {
                       const url =  await getDownloadURL(uploadTask.snapshot.ref);
-                      uploadedURLs.push(url)
-                      if(colorIndex !== null)
-                        {
-                            localProduct.colors[colorIndex].images[fileIndex].src = url
-                            if((colorIndex === localProduct.colors.length -1 &&  fileIndex )=== (localProduct.colors[colorIndex].images.length -1)){
-                                await addDoc(collection(db, collectionName), localProduct);
-                            }
-                        }
-                        else {
-                            localProduct.image.src = url
-                        }
+                      const newImage = { path: path, src: url }
+                      localProduct.image = newImage
+                      if(otherFiles && otherFiles.length){
+                        updateColorFiles()
+                      }else{
+                        const docRef = doc(db, collectionName, id);
+                        await updateDoc(docRef, { ...localProduct});
+                      }
+                      
                     } catch (error) {
                         console.error('Error getting download URL or saving product: ', error);
                     }
                 }
             );
-        };
+        }else if(otherFiles && otherFiles.length){
+            updateColorFiles()
+        }
+     }
+ 
 
-        const uploadOtherPromises = otherFiles.flatMap((fileArray, fileArrayIndex)=>{
-            fileArray.map(async(file, fileIndex)=>{
-                let path =''
-                const color   = localProduct.colors[fileArrayIndex]
-                path = `${collectionName}/others/${color.name.toLowerCase()}_${file.name}`;
-                localProduct.colors[fileArrayIndex].images.push({path: path, src:null})
-                const url = await uploadFile(path, file, fileArrayIndex, fileIndex);
-                return url;
-            })
-        })
-
-        const path = `${collectionName}/covers/${localProduct.name}_${coverFile.name}`;
-        localProduct.image = {path: path, src:null}
-        await uploadFile(path, coverFile, null, null)
-        .then(async()=>{
-            await Promise.all(uploadOtherPromises)
-        }).catch((error)=>{
-            debugger
-        })
-
-        
-    }
-
-
-    
     const saveItemWithFile = async (item, file) => {
         currentItem.value = { ...item.value };
         if (file) {
@@ -185,6 +284,7 @@ export function useFormEditWithFileUpload(collectionName) {
     updateItem,
     deleteItem,
     createProductWithFiles,
-    removeFile
+    removeFile,
+    updateProductWithFiles
   };
 }

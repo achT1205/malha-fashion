@@ -1,202 +1,124 @@
 {
-  "id": 1,
-  "name": "Aline",
-  "price": "75",
-  "quantity": 24,
-  "imageSrc": "",
-  "colors": [
-    {
-      "name": "Red",
-      "class": "bg-red-700",
-      "selectedClass": "ring-gray-400",
-      "reviews": { "href": "#", "average": 4, "totalCount": 117 },
-      "price": "78",
-      "sizes": [
-        { "name": "XXS", "quantity": 5 },
-        { "name": "XS", "quantity": 2 },
-        { "name": "S", "quantity": 6 },
-        { "name": "M", "quantity": 0 }
-      ],
-      "images": [
-        {
-          "src": "/images/products/1/red/5.png",
-          "alt": "Thalssa rouge ..."
-        },
-        {
-          "src": "/images/products/1/red/1.png",
-          "alt": "Model wearing plain black basic tee."
-        },
-        {
-          "src": "/images/products/1/red/2.png",
-          "alt": "Model wearing plain gray basic tee."
-        },
-        {
-          "src": "/images/products/1/red/3.png",
-          "alt": "Model wearing plain white basic tee."
-        }
-      ]
-    },
-    {
-      "name": "Pink",
-      "class": "bg-pink-200",
-      "selectedClass": "ring-gray-400",
-      "reviews": { "href": "#", "average": 4, "totalCount": 117 },
-      "price": "81",
-
-      "sizes": [
-        { "name": "XXS", "quantity": 2 },
-        { "name": "S", "quantity": 6 },
-        { "name": "M", "quantity": 0 }
-      ],
-      "images": [
-        {
-          "src": "/images/products/1/pink/4.png",
-          "alt": "Thalssa rouge ..."
-        },
-        {
-          "src": "/images/products/1/pink/1.png",
-          "alt": "Model wearing plain black basic tee."
-        },
-        {
-          "src": "/images/products/1/pink/2.png",
-          "alt": "Model wearing plain gray basic tee."
-        },
-        {
-          "src": "/images/products/1/pink/3.png",
-          "alt": "Model wearing plain white basic tee."
-        }
-      ]
-    },
-    {
-      "name": "Green",
-      "class": "bg-green-200",
-      "selectedClass": "ring-gray-900",
-      "reviews": { "href": "#", "average": 4, "totalCount": 117 },
-      "price": "78",
-
-      "sizes": [
-        { "name": "XXS", "quantity": 2 },
-        { "name": "XS", "quantity": 1 },
-        { "name": "S", "quantity": 2 },
-        { "name": "XXL", "quantity": 2 },
-        { "name": "XXXL", "quantity": 0 }
-      ],
-      "images": [
-        {
-          "src": "/images/products/1/green/4.png",
-          "alt": "Thalssa rouge ..."
-        },
-        {
-          "src": "/images/products/1/green/1.png",
-          "alt": "Model wearing plain black basic tee."
-        },
-        {
-          "src": "/images/products/1/green/2.png",
-          "alt": "Model wearing plain gray basic tee."
-        },
-        {
-          "src": "/images/products/1/green/3.png",
-          "alt": "Model wearing plain white basic tee."
-        }
-      ]
-    }
-  ],
-  "category": {
-    "id": 1,
-    "name": "Berbère Éclat ",
-    "image": {
-      "src": "/images/collections/dresses/1.png",
-      "alt": "BRobe de Fête "
-    }
+  "tags": ["Recycle ", "Paper "],
+  "name": "Thalssa",
+  "valid": true,
+  "details": {
+    "highlights": [
+      { "name": "Hand cut and sewn locally", "icon": "pi-sun" },
+      { "icon": "pi-sun", "name": "Ultra-soft 100% cotton" },
+      { "icon": "pi-sun", "name": "Dyed with our proprietary colors" }
+    ],
+    "materialAndCares": [
+      { "icon": "pi-sun", "name": "Hand cut and sewn locally" },
+      { "name": "Ultra-soft 100% cotton", "icon": "pi-sun" },
+      { "icon": "pi-sun", "name": "Dyed with our proprietary colors" }
+    ],
+    "shippings": [
+      { "name": "Hand cut and sewn locally", "icon": "pi-sun" },
+      { "icon": "pi-sun", "name": "Ultra-soft 100% cotton" },
+      { "name": "Dyed with our proprietary colors", "icon": "pi-sun" }
+    ],
+    "returns": [
+      { "icon": "pi-sun", "name": "Hand cut and sewn locally" },
+      { "icon": "pi-sun", "name": "Ultra-soft 100% cotton" },
+      { "icon": "pi-sun", "name": "Dyed with our proprietary colors" }
+    ]
   },
-
-
-  "material": {
-    "id": 1,
-    "name": "Coton ",
-    "value": "coton",
-    "description": "Coton"
+  "occasion": {
+    "value": "religious-celebrations",
+    "id": 2,
+    "name": "Fêtes religieuses",
+    "description": "Fêtes religieuses (ex. : Aïd) "
   },
-  "tags": [
-    {
-      "id": 1,
-      "name": "Traditionnel ",
-      "value": "traditional",
-      "description": "Traditionnel"
-    },
-    {
-      "id": 2,
-      "name": "Moderne",
-      "value": "modern",
-      "description": "Moderne "
-    },
-    {
-      "id": 3,
-      "name": "Tissé à la main",
-      "value": "hand-woven",
-      "description": "Tissé à la main"
-    }
-  ],
+  "updatedAt": 1718140042968,
+  "description": "Volutpat maecenas volutpat blandit aliquam etiam erat velit scelerisque in. Duis ultricies lacus sed turpis tincidunt id. Sed tempus urna et pharetra. Metus vulputate eu scelerisque felis imperdiet proin fermentum. Venenatis urna cursus eget nunc scelerisque viverra mauris in. Viverra justo nec ultrices dui sapien eget mi proin. Laoreet suspendisse interdum consectetur libero id faucibus.",
+  "collection": {
+    "description": "Évoquant les sommets majestueux et le patrimoine robuste de la Kabylie.",
+    "imageSrc": "/images/collections/2.png",
+    "id": 2,
+    "name": "Montagnes de Djurdjura"
+  },
+  "id": "3FJ9yjunOrqZvCV9NaRQ",
   "model": {
-    "id": 1,
-    "name": "Modèle classique ",
-    "value": "classic-model",
-    "description": "Modèle classique"
+    "id": 3,
+    "description": "Modèle revisité",
+    "value": "revisited-model",
+    "name": "Modèle revisité"
   },
   "occasions": [
-    {
-      "id": 1,
-      "name": "Mariages ",
-      "value": "mariages",
-      "description": "Mariages"
-    },
+    { "id": 1, "name": "Mariages ", "value": "mariages", "description": "Mariages" },
     {
       "id": 2,
       "name": "Fêtes religieuses",
       "value": "religious-celebrations",
       "description": "Fêtes religieuses (ex. : Aïd) "
+    },
+    {
+      "id": 3,
+      "name": "Célébrations traditionnelles ",
+      "value": "traditional-celebrations",
+      "description": "Célébrations traditionnelles (fetes culturelles)"
     }
   ],
-  "collection": {
-    "id": 1,
-    "name": "Berbère Éclat ",
-    "image": {
-      "src": "/images/collections/dresses/1.png",
-      "alt": "BRobe de Fête "
-    },
-    "description": "Mettant en avant le rayonnement et la modernité des designs tout en restant fidèle aux racines berbères traditionnelles."
-  },
-
-
-  
-  "description": "The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway",
-  "details": [
+  "colors": [
     {
-      "name": "Highlights",
-      "items": [
-        "Hand cut and sewn locally",
-        "Dyed with our proprietary colors",
-        "Pre-washed & pre-shrunk",
-        "Ultra-soft 100% cotton"
+      "reviews": { "average": 0, "totalCount": 0 },
+      "class": "bg-green-200",
+      "name": "Green",
+      "price": 89,
+      "images": [
+        {
+          "path": "products/others/green_1.png",
+          "src": "https://firebasestorage.googleapis.com/v0/b/halha-fashion.appspot.com/o/products%2Fothers%2Fgreen_1.png?alt=media&token=5580d991-ba64-40b1-b231-51c558e3d252"
+        },
+        {
+          "path": "products/others/green_2.png",
+          "src": "https://firebasestorage.googleapis.com/v0/b/halha-fashion.appspot.com/o/products%2Fothers%2Fgreen_2.png?alt=media&token=76b824db-3108-4ed9-a68c-01f4f55f86c9"
+        }
+      ],
+      "selectedClass": "ring-gray-900",
+      "sizes": [
+        { "quantity": 67, "description": "La taille XL ...", "id": 10, "value": "xl", "name": "XL" }
       ]
     },
     {
-      "name": "Shipping",
-      "items": [
-        "Free shipping on orders over $300",
-        "International shipping available",
-        "Expedited shipping options",
-        "Signature required upon delivery"
-      ]
-    },
-    {
-      "name": "Returns",
-      "items": [
-        "Easy return requests",
-        "Pre-paid shipping label included",
-        "10% restocking fee for returns",
-        "60 day return window"
-      ]
+      "selectedClass": "ring-gray-400",
+      "images": [
+        {
+          "path": "products/others/pink_3.png",
+          "src": "https://firebasestorage.googleapis.com/v0/b/halha-fashion.appspot.com/o/products%2Fothers%2Fpink_3.png?alt=media&token=87ddcbb8-a222-43fb-8cbf-afc2291311d9"
+        },
+        {
+          "path": "products/others/pink_4.png",
+          "src": "https://firebasestorage.googleapis.com/v0/b/halha-fashion.appspot.com/o/products%2Fothers%2Fpink_4.png?alt=media&token=5fa853b3-550e-4f56-8e75-f490243a0f20"
+        }
+      ],
+      "name": "Pink",
+      "price": 90,
+      "reviews": { "average": 0, "totalCount": 0 },
+      "sizes": [
+        {
+          "quantity": 89,
+          "value": "xl-xxl",
+          "id": 6,
+          "name": "XL/XXL",
+          "description": "La taille XL/XXL ..."
+        }
+      ],
+      "class": "bg-pink-200"
     }
-  ]
+  ],
+  "image": {
+    "path": "products/covers/Thalssa_1.png",
+    "src": "https://firebasestorage.googleapis.com/v0/b/halha-fashion.appspot.com/o/products%2Fcovers%2FThalssa_1.png?alt=media&token=f87a4e96-65ed-4594-b8b9-02ded58352a2"
+  },
+  "status": "Draft",
+  "material": { "name": "Soie", "value": "silk", "id": 2, "description": "Soie " },
+  "category": {
+    "name": "Robes kabyles pour femme ",
+    "id": 1,
+    "image": { "alt": "BRobe de Fête ", "src": "/images/collections/1.png" },
+    "description": "Mettant en avant le rayonnement et la modernité des designs tout en restant fidèle aux racines berbères traditionnelles.",
+    "value": "dress-woman"
+  }
 }

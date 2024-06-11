@@ -1,11 +1,19 @@
 <script setup>
-import ProductCrud from '../../../components/ProductCrud.vue';
+import ProductList from '../../../components/ProductList.vue';
 import { useFormEditWithFileUpload } from '../../../composables/useFormEditWithFileUpload';
 
 const collectionName = 'products';
 const { items, saveItem, updateItem, deleteItem } = useFormEditWithFileUpload(collectionName);
 
 const headers = [
+    {
+        fieldName: 'name',
+        headerName: 'Nom',
+        sortable: true,
+        extarea: false,
+        required: true,
+        headerStyle: 'width:16%; min-width:10rem;'
+    },
     {
         fieldName: 'image',
         headerName: 'Image',
@@ -15,9 +23,17 @@ const headers = [
         headerStyle: 'width:16%; min-width:10rem;'
     },
     {
-        fieldName: 'name',
-        headerName: 'Nom',
-        sortable: true,
+        fieldName: 'price',
+        headerName: 'Prix',
+        sortable: false,
+        extarea: false,
+        required: true,
+        headerStyle: 'width:16%; min-width:10rem;'
+    },
+    {
+        fieldName: 'category',
+        headerName: 'Catégorie',
+        sortable: false,
         extarea: false,
         required: true,
         headerStyle: 'width:16%; min-width:10rem;'
@@ -30,8 +46,15 @@ const headers = [
         headerStyle: 'width:16%; min-width:10rem;'
     },
     {
-        fieldName: 'description',
-        headerName: 'Description',
+        fieldName: 'status',
+        headerName: 'Statu',
+        sortable: false,
+        extarea: false,
+        headerStyle: 'width:16%; min-width:10rem;'
+    },
+    {
+        fieldName: 'stock',
+        headerName: 'Stock',
         sortable: false,
         extarea: true,
         required: true,
@@ -53,7 +76,7 @@ const messages = {
 
 <template>
     <Suspense>
-        <ProductCrud :messages="messages" :items="items" :headers="headers" @save="saveItem" @update="updateItem" @delete="deleteItem" />
+        <ProductList :messages="messages" :items="items" :headers="headers" @save="saveItem" @update="updateItem" @delete="deleteItem" />
     </Suspense>
 </template>
 <style scoped lang="scss">

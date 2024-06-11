@@ -1,15 +1,17 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useConfirm } from 'primevue/useconfirm';
 import { useToast } from 'primevue/usetoast';
 import { useForm } from 'vee-validate';
-
+import { useRoute, useRouter } from 'vue-router';
 import { object, string } from 'yup';
 import { useLocalStorage } from '@/composables/useLocalStorage';
 import { useFormEditWithFileUpload } from '@/composables/useFormEditWithFileUpload';
 
+const route = useRoute();
+const router = useRouter();
 const collectionName = 'products';
-const { createProductWithFiles, items , removeFile} = useFormEditWithFileUpload(collectionName);
+const { createProductWithFiles, updateProductWithFiles, items } = useFormEditWithFileUpload(collectionName);
 
 const { errors, defineField } = useForm({
     validationSchema: object({
@@ -42,53 +44,6 @@ const otherFileUploaderRefs = ref(null);
 const isPrevSizeInvalidFomError = ref(false);
 const product = useLocalStorage(
     {
-        name: 'Thalssa',
-        occasion: { id: 2, value: 'religious-celebrations', name: 'Fêtes religieuses', description: 'Fêtes religieuses (ex. : Aïd) ' },
-        collection: { name: 'Montagnes de Djurdjura', description: 'Évoquant les sommets majestueux et le patrimoine robuste de la Kabylie.', imageSrc: '/images/collections/2.png', id: 2 },
-        details: [{ name: '', items: [] }],
-        valid: true,
-        category: {
-            id: 1,
-            value: 'dress-woman',
-            image: { src: '/images/collections/1.png', alt: 'BRobe de Fête ' },
-            name: 'Robes kabyles pour femme ',
-            description: 'Mettant en avant le rayonnement et la modernité des designs tout en restant fidèle aux racines berbères traditionnelles.'
-        },
-        image: { src: 'https://firebasestorage.googleapis.com/v0/b/halha-fashion.appspot.com/o/products%2Fcovers%2FThalssa_1.png?alt=media&token=fdfb4808-4cc1-4cc1-b90b-0b98da7a29aa', path: 'products/covers/Thalssa_1.png' },
-        tags: ['Recycle ', 'Paper '],
-        description: '<p>desc</p>',
-        material: { id: 2, description: 'Soie ', name: 'Soie', value: 'silk' },
-        model: { name: 'Modèle revisité', description: 'Modèle revisité', id: 3, value: 'revisited-model' },
-        occasions: [],
-        status: 'Draft',
-        colors: [
-            {
-                class: 'bg-green-200',
-                sizes: [{ id: 10, value: 'xl', name: 'XL', description: 'La taille XL ...', quantity: 67 }],
-                selectedClass: 'ring-gray-900',
-                name: 'Green',
-                images: [
-                    { path: 'products/others/green_2.png', src: 'https://firebasestorage.googleapis.com/v0/b/halha-fashion.appspot.com/o/products%2Fothers%2Fgreen_2.png?alt=media&token=3832c4ff-9f98-4a85-9288-57511935637d' },
-                    { src: 'https://firebasestorage.googleapis.com/v0/b/halha-fashion.appspot.com/o/products%2Fothers%2Fgreen_3.png?alt=media&token=983d3aa3-d148-419a-8fb2-840a6b0fe24d', path: 'products/others/green_3.png' }
-                ],
-                reviews: { average: 0, totalCount: 0 },
-                price: 89
-            },
-            {
-                images: [
-                    { src: 'https://firebasestorage.googleapis.com/v0/b/halha-fashion.appspot.com/o/products%2Fothers%2Fpink_3.png?alt=media&token=32c1c508-582f-410b-baab-67132e070d5c', path: 'products/others/pink_3.png' },
-                    { src: 'https://firebasestorage.googleapis.com/v0/b/halha-fashion.appspot.com/o/products%2Fothers%2Fpink_4.png?alt=media&token=49f49755-3cb4-410f-8f1c-0acea1426b7d', path: 'products/others/pink_4.png' }
-                ],
-                sizes: [{ value: 'xl-xxl', quantity: 89, description: 'La taille XL/XXL ...', name: 'XL/XXL', id: 6 }],
-                class: 'bg-pink-200',
-                reviews: { average: 0, totalCount: 0 },
-                name: 'Pink',
-                price: 90,
-                selectedClass: 'ring-gray-400'
-            }
-        ]
-    },
-    /*{
         name: name,
         price: price,
         status: 'Draft',
@@ -103,19 +58,41 @@ const product = useLocalStorage(
         model: {},
         occasions: [],
         collection: {},
-        details: [
-            {
-                name: '',
-                items: []
-            }
-        ]
-    }*/ 'newProduct'
+        details: {
+            highlights: [],
+            shipping: [],
+            returns: [],
+            MaterialAndCare: []
+        }
+    },
+    'newProduct'
 );
 const coverUploadFile = ref(null);
 const otherUploadFiles = ref([]);
 const selectedColor = ref(null);
 const currentPanelColorIndex = ref(0);
 const op = ref();
+
+const highlights = ref([
+    { icon: 'pi-sun', name: 'Hand cut and sewn locally' },
+    { icon: 'pi-sun', name: 'Ultra-soft 100% cotton' },
+    { icon: 'pi-sun', name: 'Dyed with our proprietary colors' }
+]);
+const shippings = [
+    { icon: 'pi-sun', name: 'Hand cut and sewn locally' },
+    { icon: 'pi-sun', name: 'Ultra-soft 100% cotton' },
+    { icon: 'pi-sun', name: 'Dyed with our proprietary colors' }
+];
+const returnModes = [
+    { icon: 'pi-sun', name: 'Hand cut and sewn locally' },
+    { icon: 'pi-sun', name: 'Ultra-soft 100% cotton' },
+    { icon: 'pi-sun', name: 'Dyed with our proprietary colors' }
+];
+const materialAndCares = [
+    { icon: 'pi-sun', name: 'Hand cut and sewn locally' },
+    { icon: 'pi-sun', name: 'Ultra-soft 100% cotton' },
+    { icon: 'pi-sun', name: 'Dyed with our proprietary colors' }
+];
 const colors = ref([
     { id: 1, name: 'Red', class: 'bg-red-700', selectedClass: 'ring-gray-400' },
     { id: 2, name: 'Pink', class: 'bg-pink-200', selectedClass: 'ring-gray-400' },
@@ -307,6 +284,7 @@ const occasions = ref([
         description: 'Événements spéciaux'
     }
 ]);
+
 const toggle = (event) => {
     op.value.toggle(event);
 };
@@ -393,6 +371,10 @@ const confirmDeleteColor = (index, color) => {
         rejectClass: 'p-button-secondary p-button-outlined',
         acceptClass: 'p-button-danger',
         accept: () => {
+            if (product.value.colors[index].images) {
+                imagesToBeDeletedFromStograge.value = product.value.colors[index].images.map((im) => im.path);
+            }
+            debugger;
             product.value.colors.splice(index, 1);
             toast.add({ severity: 'info', summary: 'Confirmed', detail: `${color} est supprimée avec succès`, life: 3000 });
         },
@@ -409,10 +391,12 @@ const validateProduct = () => {
     if (isCloth() && product.value.colors.some((color) => !color.price || color.price === 0)) return 'Vous devez definir un prix pour chaque couleur définie.';
     if (isCloth() && product.value.colors.some((color) => !color.sizes.length)) return 'Vous devez definir au moins une taille pour ce produit.';
     if (isCloth() && product.value.colors.some((color) => color.sizes.some((size) => !size.name || !size.quantity))) return 'Vous devez definir les tailles et leures quantité pour ce produit.';
-    //if (!coverUploadFile.value) return 'Vous devez ajouter une image de couverture à ce produit.';
-    for (let index = 0; index < product.value.colors.length; index++) {
-        if (!otherUploadFiles.value[index] || otherUploadFiles.value[index].length === 0) {
-            return 'Vous devez ajouter des images pour chaque couleur créée';
+    if (!route.params || !route.params.id) {
+        if (!coverUploadFile.value) return 'Vous devez ajouter une image de couverture à ce produit.';
+        for (let index = 0; index < product.value.colors.length; index++) {
+            if (!otherUploadFiles.value[index] || otherUploadFiles.value[index].length === 0) {
+                return 'Vous devez ajouter des images pour chaque couleur créée';
+            }
         }
     }
 
@@ -420,11 +404,11 @@ const validateProduct = () => {
 };
 
 const onConfirmPublish = () => {
-    /* const message = validateProduct();
+    const message = validateProduct();
     if (message) {
         toast.add({ severity: 'error', summary: 'Saisie invalide', detail: message, life: 3000 });
         return;
-    }*/
+    }
     confirm.require({
         message: 'Etes-vous sur de vouloir publier ce produit ?',
         header: 'Confirmation',
@@ -434,8 +418,15 @@ const onConfirmPublish = () => {
         acceptLabel: 'Publier',
         accept: async () => {
             try {
-                await createProductWithFiles(product.value, coverUploadFile.value, otherUploadFiles.value);
+                if (route.params.id) {
+                    product.value.updatedAt = Date.now();
+                    await updateProductWithFiles(route.params.id, product.value, coverUploadFile.value, otherUploadFiles.value, imagesToBeDeletedFromStograge.value);
+                } else {
+                    product.value.createAt = Date.now();
+                    await createProductWithFiles(product.value, coverUploadFile.value, otherUploadFiles.value);
+                }
                 toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
+                router.push('http://localhost:5173/ecommerce/product/product-list');
             } catch (error) {
                 console.log(error);
             }
@@ -466,9 +457,10 @@ const onRemoveOtherFile = (imageIndex) => {
     otherUploadFiles.value[currentPanelColorIndex.value].splice(imageIndex, 1);
 };
 
-const onRemoveOtherFileFromStorage = (image, colorIndex, index) => {
-    imagesToBeDeletedFromStograge.value.push(image);
-    product.value.colors[colorIndex].images.splice(index, 1);
+const onRemoveOtherFileFromStorage = (path, colorIndex, index, isCover) => {
+    imagesToBeDeletedFromStograge.value.push(path);
+    if (!isCover) product.value.colors[colorIndex].images.splice(index, 1);
+    else product.value.image = {};
 };
 
 const onSeletTabPanel = (index) => {
@@ -481,10 +473,6 @@ const onSizeChange = () => {
         else size.disabled = false;
     });
 };
-/*
-watch(product.value, (newProduct) => {
-    onOpdateProduct(newProduct);
-});*/
 
 const computedSizes = computed(() => {
     const localeSizes = sizes.value;
@@ -493,6 +481,86 @@ const computedSizes = computed(() => {
         else size.disabled = false;
     });
     return localeSizes;
+});
+
+onMounted(() => {
+    if (route.params.id) {
+        product.value = {
+            tags: ['Recycle ', 'Paper '],
+            name: 'Thalssa',
+            valid: true,
+            details: {
+                highlights: [
+                    { name: 'Hand cut and sewn locally', icon: 'pi-sun' },
+                    { icon: 'pi-sun', name: 'Ultra-soft 100% cotton' },
+                    { icon: 'pi-sun', name: 'Dyed with our proprietary colors' }
+                ],
+                materialAndCares: [
+                    { icon: 'pi-sun', name: 'Hand cut and sewn locally' },
+                    { name: 'Ultra-soft 100% cotton', icon: 'pi-sun' },
+                    { icon: 'pi-sun', name: 'Dyed with our proprietary colors' }
+                ],
+                shippings: [
+                    { name: 'Hand cut and sewn locally', icon: 'pi-sun' },
+                    { icon: 'pi-sun', name: 'Ultra-soft 100% cotton' },
+                    { name: 'Dyed with our proprietary colors', icon: 'pi-sun' }
+                ],
+                returns: [
+                    { icon: 'pi-sun', name: 'Hand cut and sewn locally' },
+                    { icon: 'pi-sun', name: 'Ultra-soft 100% cotton' },
+                    { icon: 'pi-sun', name: 'Dyed with our proprietary colors' }
+                ]
+            },
+            occasion: { value: 'religious-celebrations', id: 2, name: 'Fêtes religieuses', description: 'Fêtes religieuses (ex. : Aïd) ' },
+            updatedAt: 1718140042968,
+            description:
+                'Volutpat maecenas volutpat blandit aliquam etiam erat velit scelerisque in. Duis ultricies lacus sed turpis tincidunt id. Sed tempus urna et pharetra. Metus vulputate eu scelerisque felis imperdiet proin fermentum. Venenatis urna cursus eget nunc scelerisque viverra mauris in. Viverra justo nec ultrices dui sapien eget mi proin. Laoreet suspendisse interdum consectetur libero id faucibus.',
+            collection: { description: 'Évoquant les sommets majestueux et le patrimoine robuste de la Kabylie.', imageSrc: '/images/collections/2.png', id: 2, name: 'Montagnes de Djurdjura' },
+            id: '3FJ9yjunOrqZvCV9NaRQ',
+            model: { id: 3, description: 'Modèle revisité', value: 'revisited-model', name: 'Modèle revisité' },
+            occasions: [
+                { id: 1, name: 'Mariages ', value: 'mariages', description: 'Mariages' },
+                { id: 2, name: 'Fêtes religieuses', value: 'religious-celebrations', description: 'Fêtes religieuses (ex. : Aïd) ' },
+                { id: 3, name: 'Célébrations traditionnelles ', value: 'traditional-celebrations', description: 'Célébrations traditionnelles (fetes culturelles)' }
+            ],
+            colors: [
+                {
+                    reviews: { average: 0, totalCount: 0 },
+                    class: 'bg-green-200',
+                    name: 'Green',
+                    price: 89,
+                    images: [
+                        { path: 'products/others/green_1.png', src: 'https://firebasestorage.googleapis.com/v0/b/halha-fashion.appspot.com/o/products%2Fothers%2Fgreen_1.png?alt=media&token=5580d991-ba64-40b1-b231-51c558e3d252' },
+                        { path: 'products/others/green_2.png', src: 'https://firebasestorage.googleapis.com/v0/b/halha-fashion.appspot.com/o/products%2Fothers%2Fgreen_2.png?alt=media&token=76b824db-3108-4ed9-a68c-01f4f55f86c9' }
+                    ],
+                    selectedClass: 'ring-gray-900',
+                    sizes: [{ quantity: 67, description: 'La taille XL ...', id: 10, value: 'xl', name: 'XL' }]
+                },
+                {
+                    selectedClass: 'ring-gray-400',
+                    images: [
+                        { path: 'products/others/pink_3.png', src: 'https://firebasestorage.googleapis.com/v0/b/halha-fashion.appspot.com/o/products%2Fothers%2Fpink_3.png?alt=media&token=87ddcbb8-a222-43fb-8cbf-afc2291311d9' },
+                        { path: 'products/others/pink_4.png', src: 'https://firebasestorage.googleapis.com/v0/b/halha-fashion.appspot.com/o/products%2Fothers%2Fpink_4.png?alt=media&token=5fa853b3-550e-4f56-8e75-f490243a0f20' }
+                    ],
+                    name: 'Pink',
+                    price: 90,
+                    reviews: { average: 0, totalCount: 0 },
+                    sizes: [{ quantity: 89, value: 'xl-xxl', id: 6, name: 'XL/XXL', description: 'La taille XL/XXL ...' }],
+                    class: 'bg-pink-200'
+                }
+            ],
+            image: { path: 'products/covers/Thalssa_1.png', src: 'https://firebasestorage.googleapis.com/v0/b/halha-fashion.appspot.com/o/products%2Fcovers%2FThalssa_1.png?alt=media&token=f87a4e96-65ed-4594-b8b9-02ded58352a2' },
+            status: 'Draft',
+            material: { name: 'Soie', value: 'silk', id: 2, description: 'Soie ' },
+            category: {
+                name: 'Robes kabyles pour femme ',
+                id: 1,
+                image: { alt: 'BRobe de Fête ', src: '/images/collections/1.png' },
+                description: 'Mettant en avant le rayonnement et la modernité des designs tout en restant fidèle aux racines berbères traditionnelles.',
+                value: 'dress-woman'
+            }
+        };
+    }
 });
 </script>
 
@@ -529,13 +597,21 @@ const computedSizes = computed(() => {
                                         <div class="flex flex-wrap">
                                             <div class="remove-file-wrapper h-full relative w-12rem h-12rem border-3 border-transparent border-round hover:bg-primary transition-duration-100 cursor-auto" :style="{ padding: '1px' }">
                                                 <img :src="coverUploadFile && coverUploadFile.objectURL ? coverUploadFile.objectURL : product.image.src" :alt="product.name" class="w-full h-full border-round shadow-2" />
-
                                                 <Button
+                                                    v-if="coverUploadFile && coverUploadFile.objectURL"
                                                     icon="pi pi-times"
                                                     :style="{ top: '-10px', right: '-10px', display: 'none' }"
                                                     class="remove-button text-sm absolute justify-content-center align-items-center cursor-pointer"
                                                     rounded
                                                     @click="onRemoveCoverFile()"
+                                                ></Button>
+                                                <Button
+                                                    v-if="product.image.src"
+                                                    icon="pi pi-times"
+                                                    :style="{ top: '-10px', right: '-10px', display: 'none' }"
+                                                    class="remove-button text-sm absolute justify-content-center align-items-center cursor-pointer"
+                                                    rounded
+                                                    @click="onRemoveOtherFileFromStorage(product.image.path, null, null, true)"
                                                 ></Button>
                                             </div>
                                         </div>
@@ -715,7 +791,7 @@ const computedSizes = computed(() => {
                                                                                 :style="{ top: '-10px', right: '-10px', display: 'none' }"
                                                                                 class="remove-button text-sm absolute justify-content-center align-items-center cursor-pointer"
                                                                                 rounded
-                                                                                @click="onRemoveOtherFileFromStorage(image, colorIndex, index)"
+                                                                                @click="onRemoveOtherFileFromStorage(image.path, colorIndex, index, false)"
                                                                             ></Button>
                                                                         </div>
                                                                     </template>
@@ -759,7 +835,7 @@ const computedSizes = computed(() => {
                         </div>
                         <div class="flex-auto">
                             <label for="product-description" class="font-bold block mb-2">Description</label>
-                            <Editor :invalid="errors.description ? true : false" v-bind="descriptionAttrs" id="product-description" v-model="product.description" editorStyle="height: 180px"></Editor>
+                            <Textarea :invalid="errors.description ? true : false" v-model="product.description" v-bind="descriptionAttrs" variant="filled" rows="5" cols="30" />
                             <small class="text-red-700" v-show="errors.description">{{ errors.description }}.</small>
                         </div>
                     </div>
@@ -782,7 +858,7 @@ const computedSizes = computed(() => {
                     <div class="p-3 flex flex-wrap gap-1">
                         <div class="flex-auto">
                             <FloatLabel>
-                                <Chips id="tag-chips" v-model="product.tags" />
+                                <Chips id="tag-chips" v-model="product.tags" class="w-full md:w-30rem" />
                                 <label for="tag-chips">Taper un mot et appuer sur "Entrer" </label>
                             </FloatLabel>
                         </div>
@@ -817,11 +893,37 @@ const computedSizes = computed(() => {
                 </div>
 
                 <div class="border-1 surface-border border-round">
-                    <span class="text-900 font-bold block border-bottom-1 surface-border p-3">Occasion</span>
+                    <span class="text-900 font-bold block border-bottom-1 surface-border p-3">Occasions</span>
                     <div class="p-3">
-                        <Dropdown :options="occasions" optionLabel="name" v-model="product.occasion" placeholder="Selectioner une occasion"> </Dropdown>
+                        <MultiSelect v-model="product.occasions" display="chip" :options="occasions" optionLabel="name" placeholder="Selectionnez plusieurs" :maxSelectedLabels="3" class="w-full md:w-30rem" />
                     </div>
                 </div>
+
+                <div class="border-1 surface-border border-round">
+                    <span class="text-900 font-bold block border-bottom-1 surface-border p-3">Points forts</span>
+                    <div class="p-3">
+                        <MultiSelect v-model="product.details.highlights" display="chip" :options="highlights" optionLabel="name" placeholder="Selectionnez plusieurs" :maxSelectedLabels="3" class="w-full md:w-30rem" />
+                    </div>
+                </div>
+                <div class="border-1 surface-border border-round">
+                    <span class="text-900 font-bold block border-bottom-1 surface-border p-3">Expédition</span>
+                    <div class="p-3">
+                        <MultiSelect v-model="product.details.shippings" display="chip" :options="shippings" optionLabel="name" placeholder="Selectionnez plusieurs" :maxSelectedLabels="3" class="w-full md:w-30rem" />
+                    </div>
+                </div>
+                <div class="border-1 surface-border border-round">
+                    <span class="text-900 font-bold block border-bottom-1 surface-border p-3">Retours</span>
+                    <div class="p-3">
+                        <MultiSelect v-model="product.details.returns" display="chip" :options="returnModes" optionLabel="name" placeholder="Selectionnez plusieurs" :maxSelectedLabels="3" class="w-full md:w-30rem" />
+                    </div>
+                </div>
+                <div class="border-1 surface-border border-round">
+                    <span class="text-900 font-bold block border-bottom-1 surface-border p-3">Matériel et entretien</span>
+                    <div class="p-3">
+                        <MultiSelect v-model="product.details.materialAndCares" display="chip" :options="materialAndCares" optionLabel="name" placeholder="Selectionnez plusieurs" :maxSelectedLabels="3" class="w-full md:w-30rem" />
+                    </div>
+                </div>
+
                 <div class="border-1 surface-border flex justify-content-between align-items-center px-3 border-round">
                     <span class="text-900 font-bold p-3">Modérer</span>
                     <InputSwitch v-model="product.valid"></InputSwitch>
@@ -832,6 +934,7 @@ const computedSizes = computed(() => {
                 </div>
             </div>
         </div>
+        {{ items }}
     </div>
 </template>
 

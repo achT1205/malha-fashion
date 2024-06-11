@@ -3,8 +3,11 @@ import { FilterMatchMode } from 'primevue/api';
 import { ref, onBeforeMount, watch, nextTick } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import { useRouter } from 'vue-router';
+import { useUtils } from '@/composables/useUtils';
 
 const router = useRouter();
+
+const { getProductPrice, getSeverity, getInventoryStatus } = useUtils();
 
 const toast = useToast();
 const fileUploaderRef = ref(null);
@@ -17,7 +20,6 @@ const selectedLocalItems = ref(null);
 const dt = ref(null);
 const filters = ref({});
 const submitted = ref(false);
-const valid = ref(true);
 
 const props = defineProps({
     messages: { type: Object, required: true },
@@ -51,41 +53,12 @@ const openNew = () => {
     itemDialog.value = true;
 };
 
-const hideDialog = () => {
-    itemDialog.value = false;
-    submitted.value = false;
-};
-
-const saveItem = () => {
-    submitted.value = true;
-
-    valid.value = props.headers.some((header) => header.fieldName !== 'image' && header.required && (!item.value || !item.value[header.fieldName]));
-    if (valid.value) {
-        toast.add({ severity: 'error', summary: 'Saisie incorrecte !', detail: `Les champs saisis sont incorrects`, life: 3000 });
-        return;
-    }
-    if (item.value.id) {
-        if (!item.value.imageSrc && !uploadFile.value) {
-            toast.add({ severity: 'error', summary: 'Image obligatoire !', detail: `L'image de couverture est obligatoire`, life: 3000 });
-            return;
-        }
-        emit('update', item, uploadFile.value);
-        toast.add({ severity: 'success', summary: 'Successful', detail: `${item.value.name} ${props.messages.updated}`, life: 3000 });
-    } else {
-        if (!uploadFile.value) {
-            toast.add({ severity: 'error', summary: 'Image obligatoire !', detail: `L'image de couverture est obligatoire`, life: 3000 });
-            return;
-        }
-        emit('save', item, uploadFile.value);
-        toast.add({ severity: 'success', summary: 'Successful', detail: `${item.value.name} ${props.messages.added}`, life: 3000 });
-    }
-    itemDialog.value = false;
-    item.value = {};
-    uploadFile.value = null;
-};
-
 const editItem = (id) => {
     router.push(`/ecommerce/products/${id}/edit`);
+};
+
+const detailsItem = (id) => {
+    router.push(`/ecommerce/products/${id}`);
 };
 
 const confirmDeleteItem = (editItem) => {
@@ -176,19 +149,29 @@ const onRemoveFile = () => {
                     <Column v-for="header in headers" :key="header.fieldName" :field="header.fieldName" :header="header.headerName" :sortable="header.sortable" :headerStyle="header.headerStyle">
                         <template #body="slotProps">
                             <span class="p-column-title">Nom</span>
-                            <img v-if="header.fieldName === 'image'" :src="slotProps.data.image.src" :alt="slotProps.data.name" class="shadow-2" width="100" />
+                            <img v-if="header.fieldName === 'image'" :src="slotProps.data.image.src" :alt="slotProps.data.name" class="shadow-2" width="150" />
                             <Rating v-else-if="header.fieldName === 'rating'" :modelValue="slotProps.data.rating" :readonly="true" :cancel="false" />
+                            <span v-else-if="header.fieldName === 'price'"> {{ getProductPrice(slotProps.data) }}</span>
+                            <span v-else-if="header.fieldName === 'category'"> {{ slotProps.data.category.name }}</span>
+                            <ul class="m-0 p-0 list-none flex flex-column gap-2 w-full md:w-10rem" v-else-if="header.fieldName === 'stock'">
+                                <li v-for="col in slotProps.data.colors" :key="col.name" :class="['p-2 border-round border-1 border-transparent transition-all transition-duration-200 flex align-items-center justify-content-between']">
+                                    <div class="flex align-items-center gap-2">
+                                        <div class="w-2rem h-2rem border-1 surface-border border-circle flex justify-content-center align-items-center" :class="col.class"></div>
+                                        <Tag :value="getInventoryStatus(col)" :severity="getSeverity(col)" style="left: 5px; top: 5px" />
+                                    </div>
+                                </li>
+                            </ul>
                             <span v-else> {{ slotProps.data[header.fieldName] }}</span>
                         </template>
                     </Column>
-                    <Column headerStyle="min-width:10rem;">
+                    <Column headerStyle="min-width:15rem;">
                         <template #body="slotProps">
+                            <Button icon="pi pi-eye" class="mr-2" severity="info" rounded @click="detailsItem(slotProps.data.id)" />
                             <Button icon="pi pi-pencil" class="mr-2" severity="success" rounded @click="editItem(slotProps.data.id)" />
                             <Button icon="pi pi-trash" class="mt-2" severity="warning" rounded @click="confirmDeleteItem(slotProps.data)" />
                         </template>
                     </Column>
                 </DataTable>
-
                 <Dialog v-model:visible="deleteItemDialog" :style="{ width: '450px' }" header="Confirmation" :modal="true">
                     <div class="flex align-items-center justify-content-center">
                         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
