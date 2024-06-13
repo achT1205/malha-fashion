@@ -4,6 +4,7 @@ import { ref, onBeforeMount, watch, nextTick } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import { useRouter } from 'vue-router';
 import { useUtils } from '@/composables/useUtils';
+import Papa from 'papaparse';
 
 const props = defineProps({
     messages: { type: Object, required: true },
@@ -17,7 +18,7 @@ const props = defineProps({
         required: true
     }
 });
-const emit = defineEmits(['save', 'update', 'delete']);
+const emit = defineEmits(['save', 'update', 'delete', 'saveall', 'deleteSelectedItems']);
 
 const router = useRouter();
 const { getProductPrice, getSeverity, getInventoryStatus } = useUtils();
@@ -32,7 +33,6 @@ const selectedLocalItems = ref(null);
 const dt = ref(null);
 const filters = ref({});
 
-
 onBeforeMount(() => {
     initFilters();
 });
@@ -45,6 +45,18 @@ watch(itemDialog, (newVal) => {
     }
 });
 
+const onSelectedCsvFile = (event) => {
+    const file = event.files[0];
+    if (file) {
+        Papa.parse(file, {
+            complete: (results) => {
+                emit('saveall', results.data);
+                toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
+            },
+            header: true
+        });
+    }
+};
 
 const editItem = (id) => {
     router.push(`/ecommerce/products/${id}/edit`);
@@ -94,12 +106,12 @@ const initFilters = () => {
                     <template v-slot:start>
                         <div class="my-2">
                             <Button label="Ajout" icon="pi pi-plus" class="mr-2" severity="success" @click="router.push('/ecommerce/product/create')" />
-                            <Button label="Suppression" icon="pi pi-trash" severity="danger" @click="confirmDeleteSelected" :disabled="!selectedLocalItems || !selectedLocalItems.length" />
+                            <!--<Button label="Suppression" icon="pi pi-trash" severity="danger" @click="confirmDeleteSelected" :disabled="!selectedLocalItems || !selectedLocalItems.length" />-->
                         </div>
                     </template>
 
                     <template v-slot:end>
-                        <FileUpload mode="basic" accept="image/*" :maxFileSize="1000000" label="Import" chooseLabel="Import" class="mr-2 inline-block" />
+                        <FileUpload mode="basic" :auto="true" name="demo[]" accept=".csv" :maxFileSize="1000000" label="Import" customUpload chooseLabel="Import" @select="onSelectedCsvFile" class="mr-2 inline-block" />
                         <Button label="Export" icon="pi pi-upload" severity="help" @click="exportCSV($event)" />
                     </template>
                 </Toolbar>

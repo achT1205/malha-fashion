@@ -1,7 +1,7 @@
 import { useFirestore, useCollection, useFirebaseStorage } from 'vuefire';
 import { collection, addDoc, updateDoc, doc, deleteDoc } from 'firebase/firestore';
 import { ref as storageRef, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 export function useFormEditWithFileUpload(collectionName) {
     const storage = useFirebaseStorage();
@@ -254,24 +254,34 @@ export function useFormEditWithFileUpload(collectionName) {
             .catch((error) => {});
     };
 
-
     const saveItem = async (item) => {
         currentItem.value = { ...item.value };
-        const addRef = await addDoc(collection(db, collectionName), { ...currentItem.value });
-        console.log('added : ', addRef);
+        await addDoc(collection(db, collectionName), { ...currentItem.value });
     };    
     const updateItem = async (item) => {
         currentItem.value = { ...item.value };
         currentItem.value.id = item.value.id;
         const docRef = doc(db, collectionName, currentItem.value.id);
-        const updateRef = await updateDoc(docRef, { ...currentItem.value });
-        console.log('Updated : ', updateRef);
+        await updateDoc(docRef, { ...currentItem.value });
     };
     const deleteItem = async (item) => {
         currentItem.value = { ...item.value };
         currentItem.value.id = item.value.id;
         await deleteDoc(doc(db, collectionName, currentItem.value.id));
     };
+
+    const saveParssedData = async(items) =>{
+        items.forEach(async (item) => {
+            if(item && item.name)
+            await addDoc(collection(db, collectionName), { ...item });
+        });
+    }
+
+    const deleteSelectedItems =(items)=>{
+        items.forEach( async (item) => {
+            await deleteDoc(doc(db, collectionName, item.value.id));
+        });
+    }
 
 
 
@@ -285,6 +295,8 @@ export function useFormEditWithFileUpload(collectionName) {
     deleteItem,
     createProductWithFiles,
     removeFile,
-    updateProductWithFiles
+    updateProductWithFiles,
+    saveParssedData,
+    deleteSelectedItems
   };
 }

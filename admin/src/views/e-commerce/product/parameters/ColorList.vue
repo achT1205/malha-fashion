@@ -3,7 +3,7 @@ import ItemCrud from '../../../../components/ItemCrud.vue';
 import { useFormEditWithFileUpload } from '../../../../composables/useFormEditWithFileUpload';
 
 const collectionName = 'colors';
-const { items, saveItem, updateItem, deleteItem } = useFormEditWithFileUpload(collectionName);
+const { items, saveItem, updateItem, deleteItem, saveParssedData, deleteSelectedItems } = useFormEditWithFileUpload(collectionName);
 const headers = [
     {
         fieldName: 'name',
@@ -44,7 +44,7 @@ const messages = {
 </script>
 
 <template>
-    <ItemCrud :messages="messages" :items="items" :headers="headers" @save="saveItem" @update="updateItem" @delete="deleteItem" />
+    <ItemCrud  :messages="messages" :items="items" :headers="headers" @save="saveItem" @update="updateItem" @delete="deleteItem" @saveall="saveParssedData" @deleteSelectedItems="deleteSelectedItems" />
 </template>
 <style scoped lang="scss">
 .remove-file-wrapper:hover {

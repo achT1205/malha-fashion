@@ -2,6 +2,7 @@
 import { FilterMatchMode } from 'primevue/api';
 import { ref, onBeforeMount } from 'vue';
 import { useToast } from 'primevue/usetoast';
+import Papa from 'papaparse';
 
 const toast = useToast();
 const itemDialog = ref(false);
@@ -26,7 +27,7 @@ const props = defineProps({
         required: true
     }
 });
-const emit = defineEmits(['save', 'update', 'delete']);
+const emit = defineEmits(['save', 'update', 'delete', 'saveall', 'deleteSelectedItems']);
 
 onBeforeMount(() => {
     initFilters();
@@ -83,10 +84,27 @@ const exportCSV = () => {
     dt.value.exportCSV();
 };
 
+const onSelectedCsvFile = (event) => {
+    const file = event.files[0];
+    if (file) {
+        Papa.parse(file, {
+            complete: (results) => {
+                emit('saveall', results.data);
+                toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
+            },
+            header: true
+        });
+    }
+};
+
 const confirmDeleteSelected = () => {
     deleteItemsDialog.value = true;
 };
 const deleteSelectedLocalItems = () => {
+    //emit('deleteSelectedItems', selectedLocalItems.value);
+    selectedLocalItems.value.forEach(item => {
+        emit('delete', item)
+    });
     deleteItemsDialog.value = false;
     selectedLocalItems.value = null;
     toast.add({ severity: 'success', summary: 'Successful', detail: ` ${props.messages.deleteds}`, life: 3000 });
@@ -101,18 +119,19 @@ const initFilters = () => {
 
 <template>
     <div class="grid">
+    {{selectedLocalItems}}
         <div class="col-12">
             <div class="card">
                 <Toolbar class="mb-4">
                     <template v-slot:start>
                         <div class="my-2">
                             <Button label="Ajout" icon="pi pi-plus" class="mr-2" severity="success" @click="openNew" />
-                            <Button label="Suppression" icon="pi pi-trash" severity="danger" @click="confirmDeleteSelected" :disabled="!selectedLocalItems || !selectedLocalItems.length" />
+                           <!-- <Button label="Suppression" icon="pi pi-trash" severity="danger" @click="confirmDeleteSelected" :disabled="!selectedLocalItems || !selectedLocalItems.length" />-->
                         </div>
                     </template>
 
                     <template v-slot:end>
-                        <FileUpload mode="basic" accept="image/*" :maxFileSize="1000000" label="Import" chooseLabel="Import" class="mr-2 inline-block" />
+                        <FileUpload mode="basic" :auto="true" name="demo[]" accept=".csv" :maxFileSize="1000000" label="Import" customUpload chooseLabel="Import" @select="onSelectedCsvFile" class="mr-2 inline-block" />
                         <Button label="Export" icon="pi pi-upload" severity="help" @click="exportCSV($event)" />
                     </template>
                 </Toolbar>
