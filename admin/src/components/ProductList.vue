@@ -5,22 +5,6 @@ import { useToast } from 'primevue/usetoast';
 import { useRouter } from 'vue-router';
 import { useUtils } from '@/composables/useUtils';
 
-const router = useRouter();
-
-const { getProductPrice, getSeverity, getInventoryStatus } = useUtils();
-
-const toast = useToast();
-const fileUploaderRef = ref(null);
-const uploadFile = ref();
-const itemDialog = ref(false);
-const deleteItemDialog = ref(false);
-const deleteItemsDialog = ref(false);
-const item = ref({});
-const selectedLocalItems = ref(null);
-const dt = ref(null);
-const filters = ref({});
-const submitted = ref(false);
-
 const props = defineProps({
     messages: { type: Object, required: true },
     items: {
@@ -35,6 +19,20 @@ const props = defineProps({
 });
 const emit = defineEmits(['save', 'update', 'delete']);
 
+const router = useRouter();
+const { getProductPrice, getSeverity, getInventoryStatus } = useUtils();
+const toast = useToast();
+const fileUploaderRef = ref(null);
+const uploadFile = ref();
+const itemDialog = ref(false);
+const deleteItemDialog = ref(false);
+const deleteItemsDialog = ref(false);
+const item = ref({});
+const selectedLocalItems = ref(null);
+const dt = ref(null);
+const filters = ref({});
+
+
 onBeforeMount(() => {
     initFilters();
 });
@@ -47,11 +45,6 @@ watch(itemDialog, (newVal) => {
     }
 });
 
-const openNew = () => {
-    item.value = {};
-    submitted.value = false;
-    itemDialog.value = true;
-};
 
 const editItem = (id) => {
     router.push(`/ecommerce/products/${id}/edit`);
@@ -91,17 +84,6 @@ const initFilters = () => {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS }
     };
 };
-
-const onChooseUploadFiles = () => {
-    fileUploaderRef.value[0].choose();
-};
-const onSelectedFiles = (event) => {
-    uploadFile.value = event.files[0];
-};
-const onRemoveFile = () => {
-    item.value.imageSrc = null;
-    uploadFile.value = null;
-};
 </script>
 
 <template>
@@ -111,7 +93,7 @@ const onRemoveFile = () => {
                 <Toolbar class="mb-4">
                     <template v-slot:start>
                         <div class="my-2">
-                            <Button label="Ajout" icon="pi pi-plus" class="mr-2" severity="success" @click="openNew" />
+                            <Button label="Ajout" icon="pi pi-plus" class="mr-2" severity="success" @click="router.push('/ecommerce/product/create')" />
                             <Button label="Suppression" icon="pi pi-trash" severity="danger" @click="confirmDeleteSelected" :disabled="!selectedLocalItems || !selectedLocalItems.length" />
                         </div>
                     </template>

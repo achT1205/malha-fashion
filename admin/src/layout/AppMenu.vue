@@ -43,6 +43,21 @@ const navigation = ref([
                                 to: '/ecommerce/product/category-list'
                             },
                             {
+                                label: `Modes d'expédition`,
+                                icon: 'pi pi-fw pi-list',
+                                to: '/ecommerce/product/shipping-list'
+                            },
+                                                        {
+                                label: 'Modes de retour',
+                                icon: 'pi pi-fw pi-list',
+                                to: '/ecommerce/product/return-list'
+                            },
+                                                        {
+                                label: 'Matériels et entretiens',
+                                icon: 'pi pi-fw pi-list',
+                                to: '/ecommerce/product/care-list'
+                            },
+                                                        {
                                 label: 'Liste des occasions',
                                 icon: 'pi pi-fw pi-list',
                                 to: '/ecommerce/product/occasion-list'

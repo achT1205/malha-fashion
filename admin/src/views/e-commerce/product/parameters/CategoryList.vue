@@ -52,9 +52,7 @@ const messages = {
 </script>
 
 <template>
-    <Suspense>
-        <ItemWithImageCrud :messages="messages" :items="items" :headers="headers" @save="saveItemWithFile" @update="updateItemWithFile" @delete="deleteItemWithFile" />
-    </Suspense>
+    <ItemWithImageCrud :messages="messages" :items="items" :headers="headers" @save="saveItemWithFile" @update="updateItemWithFile" @delete="deleteItemWithFile" />
 </template>
 <style scoped lang="scss">
 .remove-file-wrapper:hover {

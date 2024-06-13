@@ -75,9 +75,7 @@ const messages = {
 </script>
 
 <template>
-    <Suspense>
-        <ProductList :messages="messages" :items="items" :headers="headers" @save="saveItem" @update="updateItem" @delete="deleteItem" />
-    </Suspense>
+    <ProductList :messages="messages" :items="items" :headers="headers" @save="saveItem" @update="updateItem" @delete="deleteItem" />
 </template>
 <style scoped lang="scss">
 .remove-file-wrapper:hover {

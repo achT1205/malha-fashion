@@ -40,7 +40,7 @@ export function useUtils() {
     const getInventoryStatus = (color) => {
         let quantity = 0;
         const quantities = color.sizes.map((size) => size.quantity);
-        quantity = quantities.map((q) => quantity + q);
+        quantities.map((q) => quantity = quantity + q);
         if (quantity >= 100) return `INSTOCK (${quantity})`;
         else if (quantity > 0 && quantity < 100) return `LOWSTOCK (${quantity})`;
         else return 'OUTOFSTOCK';

@@ -4,7 +4,6 @@ import { useFormEditWithFileUpload } from '../../../../composables/useFormEditWi
 
 const collectionName = 'colors';
 const { items, saveItem, updateItem, deleteItem } = useFormEditWithFileUpload(collectionName);
-
 const headers = [
     {
         fieldName: 'name',
@@ -15,16 +14,16 @@ const headers = [
         headerStyle: 'width:16%; min-width:10rem;'
     },
     {
-        fieldName: 'value',
-        headerName: 'Valeur',
+        fieldName: 'class',
+        headerName: 'Class',
         sortable: true,
         required: true,
         extarea: false,
         headerStyle: 'width:16%; min-width:10rem;'
     },
     {
-        fieldName: 'description',
-        headerName: 'Description',
+        fieldName: 'selectedClass',
+        headerName: 'SelectedClass',
         sortable: false,
         extarea: true,
         required: true,
@@ -37,17 +36,15 @@ const messages = {
     added: 'a été ajoutée',
     deleted: 'a été supprimée',
     deleteds: 'Les occations selectionnées ont été supprimées',
-    name : {
-    single: 'Taiile',
-    plural: 'Taiiles'
-}
+    name: {
+        single: 'Taiile',
+        plural: 'Taiiles'
+    }
 };
 </script>
 
 <template>
-    <Suspense>
-        <ItemCrud :messages="messages" :items="items" :headers="headers" @save="saveItem" @update="updateItem" @delete="deleteItem" />
-    </Suspense>
+    <ItemCrud :messages="messages" :items="items" :headers="headers" @save="saveItem" @update="updateItem" @delete="deleteItem" />
 </template>
 <style scoped lang="scss">
 .remove-file-wrapper:hover {

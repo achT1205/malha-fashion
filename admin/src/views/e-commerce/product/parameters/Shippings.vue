@@ -2,7 +2,7 @@
 import ItemCrud from '../../../../components/ItemCrud.vue';
 import { useFormEditWithFileUpload } from '../../../../composables/useFormEditWithFileUpload';
 
-const collectionName = 'tags';
+const collectionName = 'shippings';
 const { items, saveItem, updateItem, deleteItem } = useFormEditWithFileUpload(collectionName);
 
 const headers = [
@@ -15,14 +15,6 @@ const headers = [
         headerStyle: 'width:16%; min-width:10rem;'
     },
     {
-        fieldName: 'value',
-        headerName: 'Valeur',
-        sortable: true,
-        required: true,
-        extarea: false,
-        headerStyle: 'width:16%; min-width:10rem;'
-    },
-    {
         fieldName: 'description',
         headerName: 'Description',
         sortable: false,
@@ -32,14 +24,14 @@ const headers = [
     }
 ];
 const messages = {
-    title: 'Gestion des tags',
-    updated: 'a été modifié',
-    added: 'a été ajouté',
-    deleted: 'a été supprimé',
-    deleteds: 'Les occations selectionnées ont été supprimés',
+    title: `Gestion des modes d'expédition`,
+    updated: 'a été modifiée',
+    added: 'a été ajoutée',
+    deleted: 'a été supprimée',
+    deleteds: `Les  modes d'expédition selectionnées ont été supprimées`,
     name: {
-        single: 'Taiile',
-        plural: 'Taiiles'
+        single: `Mode d'expédition`,
+        plural: `Mode d'expédition`
     }
 };
 </script>

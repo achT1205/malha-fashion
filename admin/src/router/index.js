@@ -79,6 +79,30 @@ const routes = [
                 component: () => import('@/views/e-commerce/product/parameters/OccasionList.vue')
             },
             {
+                path: '/ecommerce/product/shipping-list',
+                name: 'shipping-list',
+                meta: {
+                    breadcrumb: ['E-Commerce', 'Shippings List']
+                },
+                component: () => import('@/views/e-commerce/product/parameters/Shippings.vue')
+            },
+            {
+                path: '/ecommerce/product/return-list',
+                name: 'return-list',
+                meta: {
+                    breadcrumb: ['E-Commerce', 'Return List']
+                },
+                component: () => import('@/views/e-commerce/product/parameters/Returns.vue')
+            },
+            {
+                path: '/ecommerce/product/care-list',
+                name: 'care-list',
+                meta: {
+                    breadcrumb: ['E-Commerce', 'Care List']
+                },
+                component: () => import('@/views/e-commerce/product/parameters/MaterialAndCares.vue')
+            },
+            {
                 path: '/ecommerce/product/size-list',
                 name: 'size-list',
                 meta: {

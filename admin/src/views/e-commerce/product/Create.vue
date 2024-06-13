@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watchEffect, watch } from 'vue';
 import { useConfirm } from 'primevue/useconfirm';
 import { useToast } from 'primevue/usetoast';
 import { useForm } from 'vee-validate';
@@ -7,11 +7,26 @@ import { useRoute, useRouter } from 'vue-router';
 import { object, string } from 'yup';
 import { useLocalStorage } from '@/composables/useLocalStorage';
 import { useFormEditWithFileUpload } from '@/composables/useFormEditWithFileUpload';
+import { useCollection, useFirestore, useDocument } from 'vuefire';
+import { collection, doc } from 'firebase/firestore';
 
 const route = useRoute();
 const router = useRouter();
+const db = useFirestore();
 const collectionName = 'products';
-const { createProductWithFiles, updateProductWithFiles, items } = useFormEditWithFileUpload(collectionName);
+const { createProductWithFiles, updateProductWithFiles } = useFormEditWithFileUpload(collectionName);
+
+const shippings = useCollection(collection(db, 'shippings'));
+const returnModes = useCollection(collection(db, 'returns'));
+const materialAndCares = useCollection(collection(db, 'materialAndCares'));
+const colors = useCollection(collection(db, 'colors'));
+const categories = useCollection(collection(db, 'categories'));
+const sizes = useCollection(collection(db, 'sizes'));
+const collections = useCollection(collection(db, 'collections'));
+const materials = useCollection(collection(db, 'materials'));
+const models = useCollection(collection(db, 'models'));
+const occasions = useCollection(collection(db, 'occasions'));
+const sourceProduct = null;
 
 const { errors, defineField } = useForm({
     validationSchema: object({
@@ -36,254 +51,43 @@ const [description, descriptionAttrs] = defineField('description', {
 });
 
 const imagesToBeDeletedFromStograge = ref([]);
-
 const confirm = useConfirm();
 const toast = useToast();
 const coverfileUploaderRef = ref(null);
 const otherFileUploaderRefs = ref(null);
 const isPrevSizeInvalidFomError = ref(false);
-const product = useLocalStorage(
-    {
-        name: name,
-        price: price,
-        status: 'Draft',
-        valid: false,
-        description: description,
-        image: {},
-        quantity: quantity,
-        colors: [],
-        category: null,
-        material: {},
-        tags: [],
-        model: {},
-        occasions: [],
-        collection: {},
-        details: {
-            highlights: [],
-            shipping: [],
-            returns: [],
-            MaterialAndCare: []
-        }
-    },
-    'newProduct'
-);
+const product = route.params.id
+    ? useDocument(doc(db, collectionName, route.params.id))
+    : useLocalStorage(
+          {
+              name: name,
+              price: price,
+              status: 'Draft',
+              valid: false,
+              description: description,
+              image: {},
+              quantity: quantity,
+              colors: [],
+              category: null,
+              material: {},
+              tags: [],
+              model: {},
+              occasions: [],
+              collection: {},
+              details: {
+                  highlights: [],
+                  shippings: [],
+                  returns: [],
+                  materialAndCares: []
+              }
+          },
+          'newProduct'
+      );
 const coverUploadFile = ref(null);
 const otherUploadFiles = ref([]);
 const selectedColor = ref(null);
 const currentPanelColorIndex = ref(0);
 const op = ref();
-
-const highlights = ref([
-    { icon: 'pi-sun', name: 'Hand cut and sewn locally' },
-    { icon: 'pi-sun', name: 'Ultra-soft 100% cotton' },
-    { icon: 'pi-sun', name: 'Dyed with our proprietary colors' }
-]);
-const shippings = [
-    { icon: 'pi-sun', name: 'Hand cut and sewn locally' },
-    { icon: 'pi-sun', name: 'Ultra-soft 100% cotton' },
-    { icon: 'pi-sun', name: 'Dyed with our proprietary colors' }
-];
-const returnModes = [
-    { icon: 'pi-sun', name: 'Hand cut and sewn locally' },
-    { icon: 'pi-sun', name: 'Ultra-soft 100% cotton' },
-    { icon: 'pi-sun', name: 'Dyed with our proprietary colors' }
-];
-const materialAndCares = [
-    { icon: 'pi-sun', name: 'Hand cut and sewn locally' },
-    { icon: 'pi-sun', name: 'Ultra-soft 100% cotton' },
-    { icon: 'pi-sun', name: 'Dyed with our proprietary colors' }
-];
-const colors = ref([
-    { id: 1, name: 'Red', class: 'bg-red-700', selectedClass: 'ring-gray-400' },
-    { id: 2, name: 'Pink', class: 'bg-pink-200', selectedClass: 'ring-gray-400' },
-    { id: 3, name: 'Green', class: 'bg-green-200', selectedClass: 'ring-gray-900' }
-]);
-const categories = ref([
-    {
-        id: 1,
-        name: 'Robes kabyles pour femme ',
-        value: 'dress-woman',
-        image: { src: '/images/collections/1.png', alt: 'BRobe de Fête ' },
-        description: 'Mettant en avant le rayonnement et la modernité des designs tout en restant fidèle aux racines berbères traditionnelles.'
-    },
-    { id: 2, name: 'Robes kabyles pour filles', value: 'dress-girl', image: { src: '/images/collections/2.png', alt: 'BRobe de Fête ' }, description: 'Évoquant les sommets majestueux et le patrimoine robuste de la Kabylie.' },
-    {
-        id: 3,
-        name: 'Burnous pour hommes',
-        value: 'burnous-man',
-        image: { src: '/images/collections/3.png', alt: 'BRobe de Fête ' },
-        description: "Inspirée par les motifs lunaires récurrents dans l'art kabyle, cette collection capture la mystique et l'élégance des bijoux traditionnels."
-    },
-    {
-        id: 4,
-        name: 'Burnous pour garçons',
-        value: 'burnous-boy',
-        image: { src: '/images/collections/4.png', alt: 'BRobe de Fête ' },
-        description: "Soulignant la beauté et la profondeur des couleurs souvent utilisées dans les tenues kabyles, avec un clin d'œil à l'identité amazighe."
-    },
-    {
-        id: 5,
-        name: 'Sacs',
-        value: 'bags',
-        image: { src: '/images/collections/5.png', alt: 'BRobe de Fête ' },
-        description: 'Rendant hommage aux tribus Aït de Kabylie, ce nom reflète la transmission des traditions et des savoir-faire ancestraux.'
-    },
-    {
-        id: 6,
-        name: 'Bijoux',
-        value: 'jewelry',
-        image: { src: '/images/collections/5.png', alt: 'BRobe de Fête ' },
-        description: 'Rendant hommage aux tribus Aït de Kabylie, ce nom reflète la transmission des traditions et des savoir-faire ancestraux.'
-    },
-    {
-        id: 7,
-        name: 'Accessoires',
-        value: 'accessories',
-        image: { src: '/images/collections/5.png', alt: 'BRobe de Fête ' },
-        description: 'Rendant hommage aux tribus Aït de Kabylie, ce nom reflète la transmission des traditions et des savoir-faire ancestraux.'
-    }
-]);
-const sizes = ref([
-    { id: 1, description: 'La taille Standard ...', value: 'standard', name: 'Standard', disabled: true },
-    { id: 2, description: 'La taille Grande Taille ...', value: 'big', name: 'Grande Taille', disabled: false },
-    { id: 3, description: 'La taille S/M ...', value: 's-m', name: 'S/M' },
-    { id: 4, description: 'La taille M/L ...', value: 'm-l', name: 'M/L' },
-    { id: 5, description: 'La taille L/XL ...', value: 'l-xl', name: 'L/XL' },
-    { id: 6, description: 'La taille XL/XXL ...', value: 'xl-xxl', name: 'XL/XXL' },
-    { id: 7, description: 'La taille S ...', value: 's', name: 'S' },
-    { id: 8, description: 'La taille L ...', value: 'm', name: 'M' },
-    { id: 9, description: 'La taille L ...', value: 'l', name: 'L' },
-    { id: 10, description: 'La taille XL ...', value: 'xl', name: 'XL' },
-    { id: 11, description: 'La taille XXL ...', value: 'xxl', name: 'XXL' }
-]);
-const collections = ref([
-    {
-        id: 1,
-        rating: 5,
-        name: 'Berbère Éclat ',
-        imageSrc: '/images/collections/1.png',
-        description: 'Mettant en avant le rayonnement et la modernité des designs tout en restant fidèle aux racines berbères traditionnelles.'
-    },
-    { id: 2, name: 'Montagnes de Djurdjura', imageSrc: '/images/collections/2.png', description: 'Évoquant les sommets majestueux et le patrimoine robuste de la Kabylie.' },
-    {
-        id: 3,
-        rating: 5,
-        name: 'Lune de Kabylie',
-        imageSrc: '/images/collections/3.png',
-        description: "Inspirée par les motifs lunaires récurrents dans l'art kabyle, cette collection capture la mystique et l'élégance des bijoux traditionnels."
-    },
-    {
-        id: 4,
-        rating: 5,
-        name: 'Azur Amazigh ',
-        imageSrc: '/images/collections/4.png',
-        description: "Soulignant la beauté et la profondeur des couleurs souvent utilisées dans les tenues kabyles, avec un clin d'œil à l'identité amazighe."
-    },
-    {
-        id: 5,
-        rating: 5,
-
-        name: 'Echo des Aït',
-        imageSrc: '/images/collections/5.png',
-        description: 'Rendant hommage aux tribus Aït de Kabylie, ce nom reflète la transmission des traditions et des savoir-faire ancestraux.'
-    },
-    {
-        id: 6,
-        rating: 5,
-
-        name: 'Souveraines Berbères',
-        imageSrc: '/images/collections/6.png',
-        description: "Célébrant les figures féminines puissantes de l'histoire kabyle, cette collection allie force et finesse dans chaque pièce."
-    },
-    {
-        id: 7,
-        rating: 5,
-
-        name: 'Jardin de Numidie ',
-        imageSrc: '/images/collections/7.png',
-        description: "Inspirée par l'histoire et la nature de Kabylie, cette collection intègre des motifs floraux et des éléments naturels."
-    },
-    { id: 8, name: 'Voile de Yemma Gouraya', image: { src: '/images/collections/8.png', alt: 'BRobe de Fête ' }, description: 'Inspiré par la légendaire montagne qui surplombe la ville de Béjaïa, symbolisant protection et majesté.' },
-    {
-        id: 9,
-        rating: 5,
-        name: "Jardins d'Agadez",
-        imageSrc: '/images/collections/8.png',
-        description: 'Évoquant les designs floraux et organiques typiques de la bijouterie kabyle, cette collection rend hommage à la nature et à la fertilité des terres berbères.'
-    }
-]);
-const materials = ref([
-    {
-        id: 1,
-        name: 'Coton ',
-        value: 'coton',
-        description: 'Coton'
-    },
-    {
-        id: 2,
-        name: 'Soie',
-        value: 'silk',
-        description: 'Soie '
-    },
-    {
-        id: 3,
-        name: 'Laine',
-        value: 'wool',
-        description: 'Laine'
-    }
-]);
-const models = ref([
-    {
-        id: 1,
-        name: 'Modèle classique ',
-        value: 'classic-model',
-        description: 'Modèle classique'
-    },
-    {
-        id: 2,
-        name: 'Modèle moderne',
-        value: 'modern-model',
-        description: 'Modèle moderne '
-    },
-    {
-        id: 3,
-        name: 'Modèle revisité',
-        value: 'revisited-model',
-        description: 'Modèle revisité'
-    },
-    {
-        id: 3,
-        name: 'Modèle personnalisé',
-        value: 'custum-model',
-        description: 'Modèle personnalisé'
-    }
-]);
-const occasions = ref([
-    {
-        id: 1,
-        name: 'Mariages ',
-        value: 'mariages',
-        description: 'Mariages'
-    },
-    {
-        id: 2,
-        name: 'Fêtes religieuses',
-        value: 'religious-celebrations',
-        description: 'Fêtes religieuses (ex. : Aïd) '
-    },
-    {
-        id: 3,
-        name: 'Célébrations traditionnelles ',
-        value: 'traditional-celebrations',
-        description: 'Célébrations traditionnelles (fetes culturelles)'
-    },
-    {
-        id: 4,
-        name: 'Événements spéciaux ',
-        value: 'special-events',
-        description: 'Événements spéciaux'
-    }
-]);
 
 const toggle = (event) => {
     op.value.toggle(event);
@@ -420,19 +224,23 @@ const onConfirmPublish = () => {
             try {
                 if (route.params.id) {
                     product.value.updatedAt = Date.now();
-                    await updateProductWithFiles(route.params.id, product.value, coverUploadFile.value, otherUploadFiles.value, imagesToBeDeletedFromStograge.value);
+                    await updateProductWithFiles(route.params.id, product.value, coverUploadFile.value, otherUploadFiles.value, imagesToBeDeletedFromStograge.value).then(() => productSaved());
                 } else {
                     product.value.createAt = Date.now();
-                    await createProductWithFiles(product.value, coverUploadFile.value, otherUploadFiles.value);
+                    await createProductWithFiles(product.value, coverUploadFile.value, otherUploadFiles.value).then(() => productSaved());
                 }
-                toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
-                router.push('http://localhost:5173/ecommerce/product/product-list');
             } catch (error) {
                 console.log(error);
             }
         },
         reject: () => {}
     });
+};
+
+const productSaved = () => {
+    toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
+    window.localStorage.removeItem('newProduct');
+    router.push('/ecommerce/product/product-list');
 };
 const onCoverSelectedFile = (event) => {
     coverUploadFile.value = event.files[0];
@@ -474,6 +282,16 @@ const onSizeChange = () => {
     });
 };
 
+/*
+watch(
+    (sourceProduct) => {
+        if (sourceProduct && sourceProduct.value) {
+            product.value = { ...sourceProduct.value };
+        }
+    },
+    { deep: true }
+);*/
+
 const computedSizes = computed(() => {
     const localeSizes = sizes.value;
     localeSizes.forEach((size) => {
@@ -482,90 +300,10 @@ const computedSizes = computed(() => {
     });
     return localeSizes;
 });
-
-onMounted(() => {
-    if (route.params.id) {
-        product.value = {
-            tags: ['Recycle ', 'Paper '],
-            name: 'Thalssa',
-            valid: true,
-            details: {
-                highlights: [
-                    { name: 'Hand cut and sewn locally', icon: 'pi-sun' },
-                    { icon: 'pi-sun', name: 'Ultra-soft 100% cotton' },
-                    { icon: 'pi-sun', name: 'Dyed with our proprietary colors' }
-                ],
-                materialAndCares: [
-                    { icon: 'pi-sun', name: 'Hand cut and sewn locally' },
-                    { name: 'Ultra-soft 100% cotton', icon: 'pi-sun' },
-                    { icon: 'pi-sun', name: 'Dyed with our proprietary colors' }
-                ],
-                shippings: [
-                    { name: 'Hand cut and sewn locally', icon: 'pi-sun' },
-                    { icon: 'pi-sun', name: 'Ultra-soft 100% cotton' },
-                    { name: 'Dyed with our proprietary colors', icon: 'pi-sun' }
-                ],
-                returns: [
-                    { icon: 'pi-sun', name: 'Hand cut and sewn locally' },
-                    { icon: 'pi-sun', name: 'Ultra-soft 100% cotton' },
-                    { icon: 'pi-sun', name: 'Dyed with our proprietary colors' }
-                ]
-            },
-            occasion: { value: 'religious-celebrations', id: 2, name: 'Fêtes religieuses', description: 'Fêtes religieuses (ex. : Aïd) ' },
-            updatedAt: 1718140042968,
-            description:
-                'Volutpat maecenas volutpat blandit aliquam etiam erat velit scelerisque in. Duis ultricies lacus sed turpis tincidunt id. Sed tempus urna et pharetra. Metus vulputate eu scelerisque felis imperdiet proin fermentum. Venenatis urna cursus eget nunc scelerisque viverra mauris in. Viverra justo nec ultrices dui sapien eget mi proin. Laoreet suspendisse interdum consectetur libero id faucibus.',
-            collection: { description: 'Évoquant les sommets majestueux et le patrimoine robuste de la Kabylie.', imageSrc: '/images/collections/2.png', id: 2, name: 'Montagnes de Djurdjura' },
-            id: '3FJ9yjunOrqZvCV9NaRQ',
-            model: { id: 3, description: 'Modèle revisité', value: 'revisited-model', name: 'Modèle revisité' },
-            occasions: [
-                { id: 1, name: 'Mariages ', value: 'mariages', description: 'Mariages' },
-                { id: 2, name: 'Fêtes religieuses', value: 'religious-celebrations', description: 'Fêtes religieuses (ex. : Aïd) ' },
-                { id: 3, name: 'Célébrations traditionnelles ', value: 'traditional-celebrations', description: 'Célébrations traditionnelles (fetes culturelles)' }
-            ],
-            colors: [
-                {
-                    reviews: { average: 0, totalCount: 0 },
-                    class: 'bg-green-200',
-                    name: 'Green',
-                    price: 89,
-                    images: [
-                        { path: 'products/others/green_1.png', src: 'https://firebasestorage.googleapis.com/v0/b/halha-fashion.appspot.com/o/products%2Fothers%2Fgreen_1.png?alt=media&token=5580d991-ba64-40b1-b231-51c558e3d252' },
-                        { path: 'products/others/green_2.png', src: 'https://firebasestorage.googleapis.com/v0/b/halha-fashion.appspot.com/o/products%2Fothers%2Fgreen_2.png?alt=media&token=76b824db-3108-4ed9-a68c-01f4f55f86c9' }
-                    ],
-                    selectedClass: 'ring-gray-900',
-                    sizes: [{ quantity: 67, description: 'La taille XL ...', id: 10, value: 'xl', name: 'XL' }]
-                },
-                {
-                    selectedClass: 'ring-gray-400',
-                    images: [
-                        { path: 'products/others/pink_3.png', src: 'https://firebasestorage.googleapis.com/v0/b/halha-fashion.appspot.com/o/products%2Fothers%2Fpink_3.png?alt=media&token=87ddcbb8-a222-43fb-8cbf-afc2291311d9' },
-                        { path: 'products/others/pink_4.png', src: 'https://firebasestorage.googleapis.com/v0/b/halha-fashion.appspot.com/o/products%2Fothers%2Fpink_4.png?alt=media&token=5fa853b3-550e-4f56-8e75-f490243a0f20' }
-                    ],
-                    name: 'Pink',
-                    price: 90,
-                    reviews: { average: 0, totalCount: 0 },
-                    sizes: [{ quantity: 89, value: 'xl-xxl', id: 6, name: 'XL/XXL', description: 'La taille XL/XXL ...' }],
-                    class: 'bg-pink-200'
-                }
-            ],
-            image: { path: 'products/covers/Thalssa_1.png', src: 'https://firebasestorage.googleapis.com/v0/b/halha-fashion.appspot.com/o/products%2Fcovers%2FThalssa_1.png?alt=media&token=f87a4e96-65ed-4594-b8b9-02ded58352a2' },
-            status: 'Draft',
-            material: { name: 'Soie', value: 'silk', id: 2, description: 'Soie ' },
-            category: {
-                name: 'Robes kabyles pour femme ',
-                id: 1,
-                image: { alt: 'BRobe de Fête ', src: '/images/collections/1.png' },
-                description: 'Mettant en avant le rayonnement et la modernité des designs tout en restant fidèle aux racines berbères traditionnelles.',
-                value: 'dress-woman'
-            }
-        };
-    }
-});
 </script>
 
 <template>
-    <div class="card">
+ <div class="card" v-if="product">
         <Toast />
         <ConfirmDialog></ConfirmDialog>
         <span class="block text-900 font-bold text-xl mb-4">Nouveau produit</span>
@@ -898,11 +636,15 @@ onMounted(() => {
                         <MultiSelect v-model="product.occasions" display="chip" :options="occasions" optionLabel="name" placeholder="Selectionnez plusieurs" :maxSelectedLabels="3" class="w-full md:w-30rem" />
                     </div>
                 </div>
-
                 <div class="border-1 surface-border border-round">
                     <span class="text-900 font-bold block border-bottom-1 surface-border p-3">Points forts</span>
-                    <div class="p-3">
-                        <MultiSelect v-model="product.details.highlights" display="chip" :options="highlights" optionLabel="name" placeholder="Selectionnez plusieurs" :maxSelectedLabels="3" class="w-full md:w-30rem" />
+                    <div class="p-3 flex flex-wrap gap-1">
+                        <div class="flex-auto">
+                            <FloatLabel>
+                                <Chips id="tag-chips" v-model="product.details.highlights" class="w-full md:w-30rem" />
+                                <label for="tag-chips">Taper un mot et appuer sur "Entrer" </label>
+                            </FloatLabel>
+                        </div>
                     </div>
                 </div>
                 <div class="border-1 surface-border border-round">
@@ -934,7 +676,6 @@ onMounted(() => {
                 </div>
             </div>
         </div>
-        {{ items }}
     </div>
 </template>
 
