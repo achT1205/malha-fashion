@@ -29,7 +29,7 @@ export function useFormEditWithFileUpload(collectionName) {
                 fileArray.map(async(file)=>{
                     let path =''
                     const color   = localProduct.colors[fileArrayIndex]
-                    path = `${collectionName}/others/${color.name.toLowerCase()}_${file.name}`;
+                    path = `${collectionName}/others/${color.name.toLowerCase()}_${Date.now()}_${file.name}`;
                     const itemFileRef = storageRef(storage, path);
                     const uploadTask = uploadBytesResumable(itemFileRef, file);
                     uploadTask.on(
@@ -104,7 +104,7 @@ export function useFormEditWithFileUpload(collectionName) {
                 fileArray.map(async(file)=>{
                     let path =''
                     const color   = localProduct.colors[fileArrayIndex]
-                    path = `${collectionName}/others/${color.name.toLowerCase()}_${file.name}`;
+                    path = `${collectionName}/others/${color.name.toLowerCase()}_${Date.now()}_${file.name}`;
                     const itemFileRef = storageRef(storage, path);
                     const uploadTask = uploadBytesResumable(itemFileRef, file);
                     uploadTask.on(
