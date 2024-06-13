@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, watchEffect, watch } from 'vue';
+import { ref, computed} from 'vue';
 import { useConfirm } from 'primevue/useconfirm';
 import { useToast } from 'primevue/usetoast';
 import { useForm } from 'vee-validate';
@@ -26,8 +26,6 @@ const collections = useCollection(collection(db, 'collections'));
 const materials = useCollection(collection(db, 'materials'));
 const models = useCollection(collection(db, 'models'));
 const occasions = useCollection(collection(db, 'occasions'));
-const sourceProduct = null;
-
 const { errors, defineField } = useForm({
     validationSchema: object({
         name: string().required('Le nom du produit est requis'),
@@ -303,7 +301,7 @@ const computedSizes = computed(() => {
 </script>
 
 <template>
- <div class="card" v-if="product">
+    <div class="card" v-if="product">
         <Toast />
         <ConfirmDialog></ConfirmDialog>
         <span class="block text-900 font-bold text-xl mb-4">Nouveau produit</span>

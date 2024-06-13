@@ -19,7 +19,7 @@ export function useUtils() {
     }
 
     const getProductPrice =(product)=>{
-        if(product.price) return product.price
+        if(product.price && product.price > 0) return product.price
         else{
             const prices = product.colors.map(color => color.price);
             const minPrice = Math.min(...prices);
@@ -28,19 +28,30 @@ export function useUtils() {
     }
 
 
-    const getSeverity = (color) => {
+    const getSeverity = (product, color) => {
         let quantity = 0;
+        if( product.quantity && product.quantity > 0)
+        {
+            quantity = product.quantity
+        }else{
         const quantities = color.sizes.map((size) => size.quantity);
          quantities.map((q) => quantity = quantity + q);
+        }
+        
         if (quantity >= 100) return 'success';
         else if (quantity > 0 && quantity < 100) return 'warning';
         else return 'danger';
     };
     
-    const getInventoryStatus = (color) => {
+    const getInventoryStatus = (product, color) => {
         let quantity = 0;
+        if( product.quantity && product.quantity > 0)
+        {
+            quantity = product.quantity
+        }else{
         const quantities = color.sizes.map((size) => size.quantity);
-        quantities.map((q) => quantity = quantity + q);
+         quantities.map((q) => quantity = quantity + q);
+        }
         if (quantity >= 100) return `INSTOCK (${quantity})`;
         else if (quantity > 0 && quantity < 100) return `LOWSTOCK (${quantity})`;
         else return 'OUTOFSTOCK';

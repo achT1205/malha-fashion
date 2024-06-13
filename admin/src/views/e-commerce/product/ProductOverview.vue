@@ -31,6 +31,14 @@ watchEffect(() => {
         selectedColor.value = product.value.colors[0];
     }
 });
+
+const isCloth = () => {
+    if (!product.value.category) return null;
+    else if (product.value.category) {
+        const cat = product.value.category;
+        return cat.value !== 'accessories' && cat.value !== 'bags' && cat.value !== 'jewelry';
+    } else return false;
+};
 </script>
 
 <template>
@@ -57,7 +65,7 @@ watchEffect(() => {
             <div class="col-12 lg:col-4 py-3 lg:pl-6">
                 <div class="flex align-items-center text-xl font-medium text-900 mb-4">{{ product.name }}</div>
                 <div class="flex align-items-center justify-content-between mb-5">
-                    <span class="text-900 font-medium text-3xl block">{{ selectedColor ? selectedColor.price : getProductPrice(product) }}</span>
+                    <span class="text-900 font-medium text-3xl block">{{ selectedColor && selectedColor.price ? selectedColor.price : getProductPrice(product) }}</span>
                     <div class="flex align-items-center">
                         <Rating :modelValue="getTotalAvrage(product)" :readonly="true" :cancel="false" />
                         <span class="text-sm ml-3">
@@ -77,7 +85,7 @@ watchEffect(() => {
                     ></div>
                 </div>
 
-                <div class="mb-3 flex align-items-center justify-content-between">
+                <div class="mb-3 flex align-items-center justify-content-between" v-if="isCloth()">
                     <span class="font-bold text-900">Size/Quantity</span>
                 </div>
                 <div class="grid grid-nogutter align-items-center mb-5" v-if="selectedColor">

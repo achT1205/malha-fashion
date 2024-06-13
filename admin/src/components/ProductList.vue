@@ -151,7 +151,7 @@ const initFilters = () => {
                                 <li v-for="col in slotProps.data.colors" :key="col.name" :class="['p-2 border-round border-1 border-transparent transition-all transition-duration-200 flex align-items-center justify-content-between']">
                                     <div class="flex align-items-center gap-2">
                                         <div class="w-2rem h-2rem border-1 surface-border border-circle flex justify-content-center align-items-center" :class="col.class"></div>
-                                        <Tag :value="getInventoryStatus(col)" :severity="getSeverity(col)" style="left: 5px; top: 5px" />
+                                        <Tag :value="getInventoryStatus(slotProps.data, col)" :severity="getSeverity(slotProps.data, col)" style="left: 5px; top: 5px" />
                                     </div>
                                 </li>
                             </ul>

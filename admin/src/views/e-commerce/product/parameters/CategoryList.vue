@@ -3,7 +3,7 @@ import ItemWithImageCrud from '../../../../components/ItemWithImageCrud.vue';
 import { useFormEditWithFileUpload } from '../../../../composables/useFormEditWithFileUpload';
 
 const collectionName = 'categories';
-const { items, saveItemWithFile, updateItemWithFile, deleteItemWithFile , saveParssedData, deleteSelectedItems} = useFormEditWithFileUpload(collectionName);
+const { items, saveItemWithFile, updateItemWithFile, deleteItemWithFile, saveParssedData, deleteSelectedItems } = useFormEditWithFileUpload(collectionName);
 
 const headers = [
     {
@@ -20,6 +20,14 @@ const headers = [
         sortable: true,
         extarea: false,
         required: true,
+        headerStyle: 'width:16%; min-width:10rem;'
+    },
+    {
+        fieldName: 'value',
+        headerName: 'Valeur',
+        sortable: true,
+        required: true,
+        extarea: false,
         headerStyle: 'width:16%; min-width:10rem;'
     },
     {
@@ -52,7 +60,7 @@ const messages = {
 </script>
 
 <template>
-    <ItemWithImageCrud :messages="messages" :items="items" :headers="headers" @save="saveItemWithFile" @update="updateItemWithFile" @delete="deleteItemWithFile"  @saveall="saveParssedData" @deleteSelectedItems="deleteSelectedItems"  />
+    <ItemWithImageCrud :messages="messages" :items="items" :headers="headers" @save="saveItemWithFile" @update="updateItemWithFile" @delete="deleteItemWithFile" @saveall="saveParssedData" @deleteSelectedItems="deleteSelectedItems" />
 </template>
 <style scoped lang="scss">
 .remove-file-wrapper:hover {
