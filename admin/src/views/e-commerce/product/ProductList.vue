@@ -72,6 +72,8 @@ const messages = {
         plural: 'Produits'
     }
 };
+
+console.log(items)
 </script>
 
 <template>

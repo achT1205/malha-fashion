@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed} from 'vue';
+import { ref, computed } from 'vue';
 import { useConfirm } from 'primevue/useconfirm';
 import { useToast } from 'primevue/usetoast';
 import { useForm } from 'vee-validate';

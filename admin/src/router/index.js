@@ -143,20 +143,28 @@ const routes = [
                 component: () => import('@/views/e-commerce/product/parameters/TagList.vue')
             },
             {
-                path: '/profile/create',
-                name: 'user-create',
+                path: '/profile',
+                name: 'admin-profile',
                 meta: {
-                    breadcrumb: ['User Management', 'Create']
+                    breadcrumb: ['Admin Management', 'Profile']
                 },
-                component: () => import('@/views/user-management/UserCreate.vue')
+                component: () => import('@/views/admin-management/Profile.vue')
+            },
+            {
+                path: '/profiles/:id/edit',
+                name: 'admin-profile-edit',
+                meta: {
+                    breadcrumb: ['Admin Management', 'Profile']
+                },
+                component: () => import('@/views/admin-management/Profile.vue')
             },
             {
                 path: '/profile/list',
-                name: 'user-list',
+                name: 'admin-list',
                 meta: {
-                    breadcrumb: ['User Management', 'List']
+                    breadcrumb: ['Admin Management', 'List']
                 },
-                component: () => import('@/views/user-management/UserList.vue')
+                component: () => import('@/views/admin-management/AdminList.vue')
             },
             {
                 path: '/auth/login',

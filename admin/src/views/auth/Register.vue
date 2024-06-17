@@ -10,7 +10,11 @@ const toast = useToast();
 const router = useRouter();
 const auth = useFirebaseAuth();
 import { useForm } from 'vee-validate';
-import { object, string} from 'yup'
+import { object, string } from 'yup';
+import { collection, setDoc, doc } from 'firebase/firestore';
+import { useFirestore } from 'vuefire';
+
+const db = useFirestore();
 
 const { errors, defineField, handleSubmit } = useForm({
     validationSchema: object({
@@ -37,9 +41,13 @@ const onSubmit = handleSubmit((values) => {
 
 const createUser = async (email, password) => {
     createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
+        .then(async (userCredential) => {
             const user = userCredential.user;
             console.log(user);
+
+            const docRef = doc(collection(db, 'admins'), user.uid);
+            await setDoc(docRef, { createdAt: Date.now(), firstName: email, lastName: email, role: 'admin' });
+
             router.push('/');
         })
         .catch((error) => {

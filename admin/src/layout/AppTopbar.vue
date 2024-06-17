@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount, computed } from 'vue';
+import { ref, onMounted, onBeforeUnmount, computed, watch } from 'vue';
 import { useLayout } from '@/layout/composables/layout';
 import AppSidebar from '@/layout/AppSidebar.vue';
 import AppBreadcrumb from './AppBreadcrumb.vue';
@@ -7,10 +7,22 @@ import { usePrimeVue } from 'primevue/config';
 import { useCurrentUser, useFirebaseAuth } from 'vuefire';
 import { signOut } from '@firebase/auth';
 import { useRouter } from 'vue-router';
+import { useDocument, useFirestore } from 'vuefire';
+import { doc } from 'firebase/firestore';
 
 const router = useRouter();
 const user = useCurrentUser();
 const auth = useFirebaseAuth();
+const profile = ref(null);
+const db = useFirestore();
+
+watch(
+    user,
+    (val) => {
+        if (val && val.uid) profile.value = useDocument(doc(db, 'admins', val.uid));
+    },
+    { deep: true }
+);
 
 const logout = async () => {
     await signOut(auth)
@@ -29,7 +41,7 @@ defineExpose({
     $primevue
 });
 
-const { onMenuToggle, showRightMenu, toggleSearchBar, layoutConfig } = useLayout();
+const { onMenuToggle, toggleSearchBar, layoutConfig } = useLayout();
 const outsideClickListener = ref(null);
 const topbarMenuActive = ref(false);
 const sidebarRef = ref(null);
@@ -144,35 +156,20 @@ const isOutsideClicked = (event) => {
 
                 <li class="profile-item static sm:relative" v-if="user">
                     <a tabindex="0" v-styleclass="{ selector: '@next', enterClass: 'hidden', enterActiveClass: 'scalein', leaveActiveClass: 'fadeout', leaveToClass: 'hidden', hideOnOutsideClick: true }">
-                        <img src="/layout/images/profile.jpg" alt="diamond-layout" class="profile-image" />
-                        <span class="profile-name">Amelia Stone</span>
+                        <img v-if="profile && profile.avatar && profile.avatar.url" :src="profile.avatar.url" alt="diamond-layout" class="profile-image" />
+                        <Avatar v-else :label="user.email[0].toUpperCase()" class="mr-2" size="large" style="background-color: #ece9fc; color: #2a1261" shape="circle" />
+                        <span class="profile-name" v-if="profile && profile.firstName">{{ profile.firstName }}</span>
+                        <span class="profile-name" v-else>{{ user.email }}</span>
                     </a>
                     <ul class="list-none p-3 m-0 border-round shadow-2 absolute surface-overlay hidden origin-top w-full sm:w-12rem mt-2 right-0 z-5 top-auto">
                         <li>
-                            <a v-ripple class="p-ripple flex p-2 border-round align-items-center hover:surface-hover transition-colors transition-duration-150 cursor-pointer">
+                            <router-link :to="`/profiles/${user.uid}/edit`" class="p-ripple flex p-2 border-round align-items-center hover:surface-hover transition-colors transition-duration-150 cursor-pointer">
                                 <i class="pi pi-user mr-3"></i>
                                 <span class="flex flex-column">
                                     <span class="font-semibold">Profile</span>
                                 </span>
-                            </a>
-                            <a v-ripple class="p-ripple flex p-2 border-round align-items-center hover:surface-hover transition-colors transition-duration-150 cursor-pointer">
-                                <i class="pi pi-cog mr-3"></i>
-                                <span class="flex flex-column">
-                                    <span class="font-semibold">Settings</span>
-                                </span>
-                            </a>
-                            <a v-ripple class="p-ripple flex p-2 border-round align-items-center hover:surface-hover transition-colors transition-duration-150 cursor-pointer">
-                                <i class="pi pi-calendar mr-3"></i>
-                                <span class="flex flex-column">
-                                    <span class="font-semibold">Calendar</span>
-                                </span>
-                            </a>
-                            <a v-ripple class="p-ripple flex p-2 border-round align-items-center hover:surface-hover transition-colors transition-duration-150 cursor-pointer">
-                                <i class="pi pi-inbox mr-3"></i>
-                                <span class="flex flex-column">
-                                    <span class="font-semibold">Inbox</span>
-                                </span>
-                            </a>
+                            </router-link>
+
                             <a v-ripple class="p-ripple flex p-2 border-round align-items-center hover:surface-hover transition-colors transition-duration-150 cursor-pointer" @click="logout">
                                 <i class="pi pi-power-off mr-3"></i>
                                 <span class="flex flex-column">
@@ -184,12 +181,6 @@ const isOutsideClicked = (event) => {
                 </li>
                 <li v-else>
                     <Button @click="router.push('/auth/login')" label="Login" severity="secondary" outlined />
-                </li>
-
-                <li class="right-sidebar-item">
-                    <a tabindex="0" @click="showRightMenu()">
-                        <i class="pi pi-align-right"></i>
-                    </a>
                 </li>
             </ul>
         </div>

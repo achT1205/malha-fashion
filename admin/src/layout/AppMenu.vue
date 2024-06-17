@@ -47,17 +47,17 @@ const navigation = ref([
                                 icon: 'pi pi-fw pi-list',
                                 to: '/ecommerce/product/shipping-list'
                             },
-                                                        {
+                            {
                                 label: 'Modes de retour',
                                 icon: 'pi pi-fw pi-list',
                                 to: '/ecommerce/product/return-list'
                             },
-                                                        {
+                            {
                                 label: 'Matériels et entretiens',
                                 icon: 'pi pi-fw pi-list',
                                 to: '/ecommerce/product/care-list'
                             },
-                                                        {
+                            {
                                 label: 'Liste des occasions',
                                 icon: 'pi pi-fw pi-list',
                                 to: '/ecommerce/product/occasion-list'
@@ -188,18 +188,13 @@ const navigation = ref([
     },
     { separator: true },
     {
-        label: 'Utilisateurs',
+        label: 'Administrateurs',
         icon: 'pi pi-fw pi-user',
         items: [
             {
                 label: 'List',
                 icon: 'pi pi-fw pi-list',
                 to: '/profile/list'
-            },
-            {
-                label: 'Create',
-                icon: 'pi pi-fw pi-plus',
-                to: '/profile/create'
             }
         ]
     }

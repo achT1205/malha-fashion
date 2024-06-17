@@ -37,7 +37,7 @@ const currentUser = ref({
 
 const singin = async (email, password) => {
     signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
+        .then(async (userCredential) => {
             const user = userCredential.user;
             console.log(user);
             router.push('/');
