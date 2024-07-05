@@ -18,8 +18,10 @@ const db = useFirestore();
 
 watch(
     user,
-    (val) => {
-        if (val && val.uid) profile.value = useDocument(doc(db, 'admins', val.uid));
+    async (val) => {
+        if (val && val.uid) {
+            profile.value = await useDocument(doc(db, 'admins', val.uid));
+        }
     },
     { deep: true }
 );
@@ -50,8 +52,9 @@ const logo = computed(() => {
     return layoutConfig.colorScheme.value === 'dark' ? 'white' : 'dark';
 });
 
-onMounted(() => {
+onMounted(async () => {
     bindOutsideClickListener();
+    //profile.value = await useDocument(doc(db, 'admins', user.uid));
 });
 
 onBeforeUnmount(() => {
@@ -154,11 +157,11 @@ const isOutsideClicked = (event) => {
                     </ul>
                 </li>
 
-                <li class="profile-item static sm:relative" v-if="user">
+                <li class="profile-item static sm:relative" v-if="profile && profile">
                     <a tabindex="0" v-styleclass="{ selector: '@next', enterClass: 'hidden', enterActiveClass: 'scalein', leaveActiveClass: 'fadeout', leaveToClass: 'hidden', hideOnOutsideClick: true }">
-                        <img v-if="profile && profile.avatar && profile.avatar.url" :src="profile.avatar.url" alt="diamond-layout" class="profile-image" />
+                        <img v-if="profile.value && profile.value.avatar && profile.value.avatar.url" :src="profile.value.avatar.url" alt="diamond-layout" class="profile-image" />
                         <Avatar v-else :label="user.email[0].toUpperCase()" class="mr-2" size="large" style="background-color: #ece9fc; color: #2a1261" shape="circle" />
-                        <span class="profile-name" v-if="profile && profile.firstName">{{ profile.firstName }}</span>
+                        <span class="profile-name" v-if="profile.value && profile.value.firstName && profile.value.lastName">{{ profile.value.firstName }} {{ profile.value.lastName }}</span>
                         <span class="profile-name" v-else>{{ user.email }}</span>
                     </a>
                     <ul class="list-none p-3 m-0 border-round shadow-2 absolute surface-overlay hidden origin-top w-full sm:w-12rem mt-2 right-0 z-5 top-auto">
