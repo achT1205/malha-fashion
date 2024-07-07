@@ -1,314 +1,388 @@
+
 <template>
-  <main>
-    <div class="relative overflow-hidden">
-      <div class="pb-80 pt-16 sm:pb-40 sm:pt-24 lg:pb-48 lg:pt-40">
-        <div class="relative mx-auto max-w-7xl px-4 sm:static sm:px-6 lg:px-8">
-          <div class="sm:max-w-lg">
-            <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-              L'Art de la Robe Kabyle
-            </h1>
-            <p class="mt-4 text-xl text-gray-500">
-              L'élégance et la tradition kabyle, par Malha Création.
-            </p>
-          </div>
-          <div>
-            <div class="mt-10">
-              <!-- Decorative image grid -->
-              <div
-                aria-hidden="true"
-                class="pointer-events-none lg:absolute lg:inset-y-0 lg:mx-auto lg:w-full lg:max-w-7xl"
-              >
-                <div
-                  class="absolute transform sm:left-1/2 sm:top-0 sm:translate-x-8 lg:left-1/2 lg:top-1/2 lg:-translate-y-1/2 lg:translate-x-8"
-                >
-                  <div class="flex items-center space-x-6 lg:space-x-8">
-                    <div class="grid flex-shrink-0 grid-cols-1 gap-y-6 lg:gap-y-8">
-                      <div class="h-64 w-44 overflow-hidden rounded-lg sm:opacity-0 lg:opacity-100">
-                        <img
-                          src="../assets/images/hero/bournous-fete.png"
-                          alt=""
-                          class="h-full w-full object-cover object-center"
-                        />
-                      </div>
-                      <div class="h-64 w-44 overflow-hidden rounded-lg">
-                        <img
-                          src="../assets/images/hero/burnous-maison.png"
-                          alt=""
-                          class="h-full w-full object-cover object-center"
-                        />
-                      </div>
-                    </div>
-                    <div class="grid flex-shrink-0 grid-cols-1 gap-y-6 lg:gap-y-8">
-                      <div class="h-64 w-44 overflow-hidden rounded-lg">
-                        <img
-                          src="../assets/images/hero/robe-maison.png"
-                          alt=""
-                          class="h-full w-full object-cover object-center"
-                        />
-                      </div>
-                      <div class="h-64 w-44 overflow-hidden rounded-lg">
-                        <img
-                          src="../assets/images/hero/robe-fete.png"
-                          alt=""
-                          class="h-full w-full object-cover object-center"
-                        />
-                      </div>
-                      <div class="h-64 w-44 overflow-hidden rounded-lg">
-                        <img
-                          src="../assets/images/hero/robe-sortie.png"
-                          alt=""
-                          class="h-full w-full object-cover object-center"
-                        />
-                      </div>
-                    </div>
-                    <div class="grid flex-shrink-0 grid-cols-1 gap-y-6 lg:gap-y-8">
-                      <div class="h-64 w-44 overflow-hidden rounded-lg">
-                        <img
-                          src="../assets/images/hero/garcon1.png"
-                          alt=""
-                          class="h-full w-full object-cover object-center"
-                        />
-                      </div>
-                      <div class="h-64 w-44 overflow-hidden rounded-lg">
-                        <img
-                          src="../assets/images/hero/fille-fete.png"
-                          alt=""
-                          class="h-full w-full object-cover object-center"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+  <div class="bg-white">
+    <AppHeader />
 
-              <a
-                href="#"
-                class="inline-block rounded-md border border-transparent bg-pink-600 px-8 py-3 text-center font-medium text-white hover:bg-pink-700"
-                >Voir les collections</a
-              >
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div aria-labelledby="category-heading" class="bg-gray-50">
-      <div class="mx-auto max-w-xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-        <h2 class="text-2xl font-bold tracking-tight text-gray-900">Nos collections</h2>
-        <p class="mt-4 text-base text-gray-500">
-          Pour chaque occasion, nos collections de robes kabyles pour femmes célèbrent les
-          traditions et le style unique de la mode kabyle, offrant une variété d'options.
-        </p>
-        <div class="mt-10 space-y-12 lg:gap-x-8 lg:space-y-0">
-          <CollectionCarousel
-            v-if="collections"
-            :collections="collections"
-            :numVisible="3"
-            :numScroll="1"
-            :autoplayInterval="8000"
-            :showNavigators="false"
-            :showIndicators="true"
-          />
-        </div>
-      </div>
-    </div>
-    <section aria-labelledby="sale-heading">
-      <div class="overflow-hidden pt-32 sm:pt-14">
-        <div class="bg-gray-800">
-          <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div class="relative pb-16 pt-48 sm:pb-24">
-              <div>
-                <h2
-                  id="sale-heading"
-                  class="text-4xl font-bold tracking-tight text-white md:text-5xl"
-                >
-                  Code #PROMO201
-                  <br />
-                  15% de remise.
-                </h2>
-              </div>
-
-              <div
-                class="absolute -top-32 left-1/2 -translate-x-1/2 transform sm:top-16 sm:translate-x-0"
-              >
-                <div class="ml-24 flex min-w-max space-x-6 sm:ml-3 lg:space-x-8">
-                  <div class="flex space-x-6 sm:flex-col sm:space-x-0 sm:space-y-6 lg:space-y-8">
-                    <div class="flex-shrink-0">
-                      <img
-                        class="h-64 w-64 rounded-lg object-cover md:h-72 md:w-72"
-                        src="../assets/images/hero/robe-fete.png"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                  <div class="flex space-x-6 sm:flex-col sm:space-x-0 sm:space-y-6 lg:space-y-8">
-                    <div class="flex-shrink-0">
-                      <img
-                        class="h-64 w-64 rounded-lg object-cover md:h-72 md:w-72"
-                        src="../assets/images/hero/bournous-fete.png"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section aria-labelledby="trending-heading">
-      <div class="mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:px-8 lg:pt-32">
-        <div>
-          <div class="md:flex md:items-center md:justify-between">
-            <h2 id="favorites-heading" class="text-2xl font-bold tracking-tight text-gray-900">
-              Les tendances du moment
-            </h2>
-            <a
-              href="#"
-              class="hidden text-sm font-medium text-pink-600 hover:text-pink-500 md:block"
-            >
-              Voir toute la liste
-              <span aria-hidden="true"> &rarr;</span>
-            </a>
-          </div>
-
-          <div class="mt-6 gap-x-4 gap-y-10 sm:gap-x-6 md:gap-y-0 lg:gap-x-8">
-            <ProductCarousel
-              v-if="trendingProducts"
-              :products="trendingProducts"
-              :numVisible="4"
-              :numScroll="1"
-              :autoplayInterval="null"
-              :showNavigators="false"
-              :showIndicators="true"
-            />
-          </div>
-        </div>
-
-        <div>
-          <div class="md:flex md:items-center md:justify-between">
-            <h2 id="favorites-heading" class="text-2xl font-bold tracking-tight text-gray-900">
-              Style et confort
-            </h2>
-            <a
-              href="#"
-              class="hidden text-sm font-medium text-pink-600 hover:text-pink-500 md:block"
-            >
-              Voir toute la liste
-              <span aria-hidden="true"> &rarr;</span>
-            </a>
-          </div>
-
-          <div class="mt-6 gap-x-4 gap-y-10 sm:gap-x-6 md:gap-y-0 lg:gap-x-8">
-            <ProductCarousel
-              v-if="trendingProducts"
-              :products="trendingProducts"
-              :numVisible="4"
-              :numScroll="1"
-              :autoplayInterval="null"
-              :showNavigators="false"
-              :showIndicators="true"
-            />
-          </div>
-        </div>
-
-        <div>
-          <div class="md:flex md:items-center md:justify-between">
-            <h2 id="favorites-heading" class="text-2xl font-bold tracking-tight text-gray-900">
-              Faites plaisir aux enfants
-            </h2>
-            <a
-              href="#"
-              class="hidden text-sm font-medium text-pink-600 hover:text-pink-500 md:block"
-            >
-              Voir toute la liste
-              <span aria-hidden="true"> &rarr;</span>
-            </a>
-          </div>
-
-          <div class="mt-6 gap-x-4 gap-y-10 sm:gap-x-6 md:gap-y-0 lg:gap-x-8">
-            <ProductCarousel
-              v-if="trendingProducts"
-              :products="trendingProducts"
-              :numVisible="4"
-              :numScroll="1"
-              :autoplayInterval="null"
-              :showNavigators="false"
-              :showIndicators="true"
-            />
-          </div>
-        </div>
-
-        <div>
-          <div class="md:flex md:items-center md:justify-between">
-            <h2 id="favorites-heading" class="text-2xl font-bold tracking-tight text-gray-900">
-              Nos sacs et accessoires
-            </h2>
-            <a
-              href="#"
-              class="hidden text-sm font-medium text-pink-600 hover:text-pink-500 md:block"
-            >
-              Voir toute la liste
-              <span aria-hidden="true"> &rarr;</span>
-            </a>
-          </div>
-          <div class="mt-6 gap-x-4 gap-y-10 sm:gap-x-6 md:gap-y-0 lg:gap-x-8">
-            <ProductCarousel
-              v-if="accessoires"
-              :products="accessoires"
-              :numVisible="3"
-              :numScroll="1"
-              :autoplayInterval="null"
-              :showNavigators="false"
-              :showIndicators="true"
-            />
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <div class="relative overflow-hidden lg:h-96">
-      <div class="absolute inset-0">
+    <!-- Hero section -->
+    <div class="relative">
+      <!-- Decorative image and overlay -->
+      <div aria-hidden="true" class="absolute inset-0 overflow-hidden">
         <img
-          src="../assets/images/hero/robe-fete.png"
+          src="@/assets/images/hero2.png"
           alt=""
           class="h-full w-full object-cover object-center"
         />
       </div>
-      <div aria-hidden="true" class="relative h-96 w-full lg:hidden" />
-      <div aria-hidden="true" class="relative h-32 w-full lg:hidden" />
-      <div
-        class="absolute inset-x-0 bottom-0 bg-black bg-opacity-75 p-6 backdrop-blur backdrop-filter sm:flex sm:items-center sm:justify-between lg:inset-x-auto lg:inset-y-0 lg:w-96 lg:flex-col lg:items-start lg:rounded-br-none"
-      >
-        <div>
-          <h2 class="text-xl font-bold text-white">Éclats de Tizi</h2>
-          <p class="mt-1 text-sm text-gray-300">
-            Inspirée par la ville de Tizi Ouzou, au cœur de la Kabylie.
-          </p>
+
+      <div class="relative px-6 py-32 sm:py-40 lg:px-8 lg:py-56 lg:pr-0">
+        <div class="mx-auto max-w-2xl lg:mx-0 lg:max-w-xl">
+          <h1 class="text-4xl font-bold tracking-tight text-white sm:text-4xl">
+            L'élégance et la tradition kabyle, par Malha Création.
+          </h1>
+          <div class="mt-10 flex items-center gap-x-6">
+            <router-link
+              class="mt-8 inline-block border bg-white px-8 py-3 text-base font-medium text-gray-900 hover:bg-gray-100"
+              to="/collections/new-in"
+            >
+              SHOP NEW
+            </router-link>
+          </div>
         </div>
-        <a
-          href="#"
-          class="mt-6 flex flex-shrink-0 items-center justify-center rounded-md border border-white border-opacity-25 bg-white bg-opacity-0 px-4 py-3 text-base font-medium text-white hover:bg-opacity-10 sm:ml-8 sm:mt-0 lg:ml-0 lg:w-full"
-          >Voir la collection</a
-        >
       </div>
     </div>
-  </main>
+    <main>
+      <nav aria-label="Offers" class="order-last lg:order-first">
+        <div class="mx-auto max-w-7xl lg:px-8">
+          <ul
+            role="list"
+            class="grid grid-cols-1 divide-y divide-gray-200 lg:grid-cols-3 lg:divide-x lg:divide-y-0"
+          >
+            <li v-for="offer in offers" :key="offer.name" class="flex flex-col">
+              <a
+                class="relative flex flex-1 flex-col justify-center bg-white px-4 py-6 text-center focus:z-10"
+              >
+                <p class="text-sm text-gray-500">
+                  {{ offer.name }}
+                </p>
+                <p class="font-semibold text-gray-900">{{ offer.description }}</p>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <!-- new arrivals -->
+      <section aria-labelledby="trending-heading" class="bg-white">
+        <div class="py-16 sm:py-24 lg:mx-auto lg:max-w-12xl lg:px-4 lg:py-16">
+          <div class="flex items-center justify-center px-4 sm:px-6 lg:px-0">
+            <h2 id="trending-heading" class="text-xl font-bold tracking-tight text-gray-900">
+              NOUVELS ARRIVES
+            </h2>
+          </div>
+
+          <div class="relative mt-8">
+            <div class="relative w-full overflow-x-auto">
+              <ul
+                role="list"
+                class="mx-4 inline-flex space-x-8 sm:mx-6 lg:mx-0 lg:grid lg:grid-cols-5 lg:gap-x-2 lg:space-x-0"
+              >
+                <li
+                  v-for="product in arrivals"
+                  :key="product.id"
+                  class="inline-flex w-64 flex-col text-center lg:w-auto"
+                >
+                  <div class="group relative">
+                    <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden bg-gray-200">
+                      <img
+                        :src="`/images/p${product.id}.png`"
+                        :alt="product.imageAlt"
+                        class="h-full w-full object-cover object-center group-hover:opacity-75"
+                      />
+                    </div>
+                    <div
+                      class="absolute inset-x-0 top-0 flex h-5/6 items-end justify-start overflow-hidden rounded-lg p-4"
+                    >
+                      <span
+                        v-if="product.promo"
+                        class="inline-flex items-center rounded-full bg-red-100 px-1.5 py-0.5 text-xs font-medium text-red-700"
+                        >{{ product.promo }} OFF</span
+                      >
+                      <span
+                        v-else
+                        class="inline-flex items-center rounded-full bg-gray-100 px-1.5 py-0.5 text-xs font-medium text-gray-600"
+                        >NOUVEAU</span
+                      >
+                    </div>
+
+                    <div class="mt-6">
+                      <h3 class="mt-1 font-semibold text-gray-900">
+                        <a :href="product.href">
+                          <span class="absolute inset-0" />
+                          {{ product.name }}
+                        </a>
+                      </h3>
+                      <p class="mt-1 text-gray-900">{{ product.price }}</p>
+                    </div>
+                  </div>
+
+                  <h4 class="sr-only">Available colors</h4>
+                  <ul role="list" class="mt-auto flex items-center justify-center space-x-3 pt-6">
+                    <li
+                      v-for="color in product.availableColors"
+                      :key="color.name"
+                      class="h-4 w-4 rounded-full border border-black border-opacity-10"
+                      :style="{ backgroundColor: color.colorBg }"
+                    >
+                      <span class="sr-only">{{ color.name }}</span>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="relative mx-auto flex max-w-3xl flex-col items-center text-center mt-8">
+            <router-link
+              class="mt-8 inline-block border bg-white px-8 py-3 text-base font-medium text-gray-900 hover:bg-gray-100"
+              to="/collections/new-in"
+            >
+              VOIR TOUT
+            </router-link>
+          </div>
+        </div>
+      </section>
+
+      <!-- categories -->
+      <section aria-labelledby="trending-heading" class="bg-white">
+        <div class="lg:mx-auto lg:max-w-12xl lg:px-4 lg:py-4">
+          <div class="relative">
+            <div class="relative w-full overflow-x-auto">
+              <ul
+                role="list"
+                class="mx-4 inline-flex space-x-8 sm:mx-6 lg:mx-0 lg:grid lg:grid-cols-4 lg:gap-x-2 lg:space-x-0"
+              >
+                <li
+                  v-for="category in bigcategories"
+                  :key="category.id"
+                  class="inline-flex flex-col text-center lg:w-auto"
+                >
+                  <div class="group relative">
+                    <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden bg-gray-200">
+                      <img
+                        :src="`/images/categories/${category.value}.png`"
+                        :alt="category.name"
+                        class="h-full w-full object-cover object-center group-hover:opacity-75"
+                      />
+                    </div>
+                    <div
+                      class="absolute inset-x-0 top-0 flex h-full items-end justify-center overflow-hidden rounded-lg p-4"
+                    >
+                      <div
+                        class="relative mx-auto flex max-w-3xl flex-col items-center text-center"
+                      >
+                        <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+                          {{ category.name }}
+                        </h2>
+                        <router-link
+                          class="mt-8 inline-block border bg-white px-8 py-3 text-base font-medium text-gray-900 hover:bg-gray-100"
+                          :to="`/collections/${category.value}`"
+                        >
+                          SHOP NOW
+                        </router-link>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="relative">
+        <!-- Decorative image and overlay -->
+        <div aria-hidden="true" class="absolute inset-0 overflow-hidden">
+          <img
+            src="@/assets/images/hero.png"
+            alt=""
+            class="h-full w-full object-cover object-center"
+          />
+        </div>
+
+        <div class="relative px-6 py-32 sm:py-40 lg:px-8 lg:py-56 lg:pr-0">
+          <div class="mx-auto max-w-2xl lg:mx-0 lg:max-w-xl">
+            <h1 class="text-4xl font-bold tracking-tight text-white sm:text-4xl">
+              Intensifiez votre jeu de mode
+            </h1>
+            <div class="mt-10 flex items-center gap-x-6">
+              <router-link
+                class="mt-8 inline-block border bg-white px-8 py-3 text-base font-medium text-gray-900 hover:bg-gray-100"
+                to="/collections/men"
+              >
+                SHOP NOW
+              </router-link>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- accessories -->
+      <section aria-labelledby="trending-heading" class="bg-white">
+        <div class="lg:mx-auto lg:max-w-12xl lg:px-4 lg:py-4">
+          <div class="relative mt-2">
+            <div class="relative w-full overflow-x-auto">
+              <ul
+                role="list"
+                class="mx-4 inline-flex space-x-8 sm:mx-6 lg:mx-0 lg:grid lg:grid-cols-4 lg:gap-x-2 lg:space-x-0"
+              >
+                <li
+                  v-for="accessory in accessories"
+                  :key="accessory.id"
+                  class="inline-flex flex-col text-center lg:w-auto"
+                >
+                  <div class="group relative">
+                    <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden bg-gray-200">
+                      <img
+                        :src="`/images/accessories/${accessory.value}.png`"
+                        :alt="accessory.name"
+                        class="h-full w-full object-cover object-center group-hover:opacity-75"
+                      />
+                    </div>
+                    <div
+                      class="absolute inset-x-0 top-0 flex h-full items-end justify-center overflow-hidden rounded-lg p-4"
+                    >
+                      <div
+                        class="relative mx-auto flex max-w-3xl flex-col items-center text-center"
+                      >
+                        <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+                          {{ accessory.name }}
+                        </h2>
+                        <router-link
+                          class="mt-8 inline-block border bg-white px-8 py-3 text-base font-medium text-gray-900 hover:bg-gray-100"
+                          :to="`/collections/${accessory.value}`"
+                        >
+                          SHOP NOW
+                        </router-link>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <AppFooter />
+  </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
-import CollectionCarousel from '../components/CollectionCarousel.vue'
-import ProductCarousel from '../components/ProductCarousel.vue'
-import { ProductService } from '@/service/ProductService'
+import AppHeader from '../components/AppHeader.vue'
+import AppFooter from '../components/AppFooter.vue'
 
-onMounted(() => {
-  ProductService.getCollections().then((data) => (collections.value = data))
-  ProductService.getProducts().then((data) => (trendingProducts.value = data.slice(0, 5)))
-  ProductService.getProducts().then((data) => (accessoires.value = data.slice(5, 8)))
-})
+const offers = [
+  { name: 'Livraison gratuite', description: 'pour des achats de +150€' },
+  { name: '35 jours', description: 'retour facile' },
+  { name: 'Acheter maintenant', description: 'Payer plutard' }
+]
 
-const collections = ref()
-const trendingProducts = ref()
-const accessoires = ref()
+const arrivals = [
+  {
+    id: 1,
+    name: 'Tassadit',
+    color: 'Black',
+    price: '$35',
+    href: '#',
+    promo: '5%',
+    imageSrc: 'https://tailwindui.com/img/ecommerce-images/home-page-02-product-01.jpg',
+    imageAlt: 'Black machined steel pen with hexagonal grip and small white logo at top.',
+    availableColors: [
+      { name: 'Black', colorBg: '#111827' },
+      { name: 'Brass', colorBg: '#FDE68A' },
+      { name: 'Chrome', colorBg: '#E5E7EB' }
+    ]
+  },
+  {
+    id: 2,
+    name: 'Tassadit',
+    color: 'Black',
+    price: '$35',
+    href: '#',
+    imageSrc: 'https://tailwindui.com/img/ecommerce-images/home-page-02-product-01.jpg',
+    imageAlt: 'Black machined steel pen with hexagonal grip and small white logo at top.',
+    availableColors: [
+      { name: 'Black', colorBg: '#111827' },
+      { name: 'Brass', colorBg: '#FDE68A' },
+      { name: 'Chrome', colorBg: '#E5E7EB' }
+    ]
+  },
+  {
+    id: 3,
+    name: 'Tassadit',
+    color: 'Black',
+    price: '$35',
+    href: '#',
+    imageSrc: 'https://tailwindui.com/img/ecommerce-images/home-page-02-product-01.jpg',
+    imageAlt: 'Black machined steel pen with hexagonal grip and small white logo at top.',
+    availableColors: [
+      { name: 'Black', colorBg: '#111827' },
+      { name: 'Brass', colorBg: '#FDE68A' },
+      { name: 'Chrome', colorBg: '#E5E7EB' }
+    ]
+  },
+  {
+    id: 4,
+    name: 'Tassadit',
+    color: 'Black',
+    price: '$35',
+    href: '#',
+    imageSrc: 'https://tailwindui.com/img/ecommerce-images/home-page-02-product-01.jpg',
+    imageAlt: 'Black machined steel pen with hexagonal grip and small white logo at top.',
+    availableColors: [
+      { name: 'Black', colorBg: '#111827' },
+      { name: 'Brass', colorBg: '#FDE68A' },
+      { name: 'Chrome', colorBg: '#E5E7EB' }
+    ]
+  },
+  {
+    id: 4,
+    name: 'Tassadit',
+    color: 'Black',
+    price: '$35',
+    href: '#',
+    imageSrc: 'https://tailwindui.com/img/ecommerce-images/home-page-02-product-01.jpg',
+    imageAlt: 'Black machined steel pen with hexagonal grip and small white logo at top.',
+    availableColors: [
+      { name: 'Black', colorBg: '#111827' },
+      { name: 'Brass', colorBg: '#FDE68A' },
+      { name: 'Chrome', colorBg: '#E5E7EB' }
+    ]
+  }
+]
+
+const bigcategories = [
+  {
+    id: 1,
+    name: 'FEMMES',
+    value: 'women'
+  },
+  {
+    id: 2,
+    name: 'HOMMES',
+    value: 'men'
+  },
+  {
+    id: 3,
+    name: 'FILLES',
+    value: 'girl'
+  },
+  {
+    id: 4,
+    name: 'GARCONS',
+    value: 'boy'
+  }
+]
+const accessories = [
+  {
+    id: 1,
+    name: 'SACS BERBERES',
+    value: 'bags'
+  },
+  {
+    id: 2,
+    name: 'BIJOUX KAYLES',
+    value: 'jewelry'
+  },
+  {
+    id: 3,
+    name: 'BROCHES',
+    value: 'broches'
+  },
+  {
+    id: 4,
+    name: 'FOULARDS',
+    value: 'scarves'
+  }
+]
 </script>
