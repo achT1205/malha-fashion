@@ -1,9 +1,6 @@
 
 <template>
-  <div class="bg-white">
-    <AppHeader />
-
-    <!-- Hero section -->
+<div>   <!-- Hero section -->
     <div class="relative">
       <!-- Decorative image and overlay -->
       <div aria-hidden="true" class="absolute inset-0 overflow-hidden">
@@ -252,14 +249,10 @@
           </div>
         </div>
       </section>
-    </main>
-    <AppFooter />
-  </div>
+    </main></div>
 </template>
 
 <script setup>
-import AppHeader from '../components/AppHeader.vue'
-import AppFooter from '../components/AppFooter.vue'
 
 const offers = [
   { name: 'Livraison gratuite', description: 'pour des achats de +150€' },

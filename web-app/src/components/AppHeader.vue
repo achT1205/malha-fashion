@@ -113,9 +113,11 @@
               </TabGroup>
               <div class="space-y-6 border-t border-gray-200 px-4 py-6">
                 <div v-for="page in navigation.pages" :key="page.name" class="flow-root">
-                  <a :href="page.href" class="-m-2 block p-2 font-medium text-gray-900">{{
-                    page.name
-                  }}</a>
+                  <router-link
+                    :to="`/collections/${page.path}`"
+                    class="-m-2 block p-2 font-medium text-gray-900"
+                    >{{ page.name }}</router-link
+                  >
                 </div>
               </div>
             </DialogPanel>
@@ -133,34 +135,33 @@
               <div class="flex h-16 items-center justify-between">
                 <!-- Logo (lg+) -->
                 <div class="hidden lg:flex lg:items-center">
-                  <a href="#">
+                  <a href="/">
                     <span class="sr-only">Your Company</span>
-
                     <svg
-                      width="200"
-                      height="200"
-                      viewBox="0 0 200 200"
+                      width="64"
+                      height="64"
+                      viewBox="0 0 64 64"
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <text
-                        x="60"
-                        y="130"
+                        x="8"
+                        y="40"
                         font-family="Roboto, Arial, sans-serif"
-                        font-size="62"
+                        font-size="32"
                         font-style="italic"
                         fill="black"
                       >
                         M
                       </text>
                       <text
-                        x="95"
-                        y="130"
+                        x="25"
+                        y="40"
                         font-family="Roboto, Arial, sans-serif"
-                        font-size="62"
+                        font-size="32"
                         font-style="italic"
                         fill="black"
                       >
-                        F
+                        C
                       </text>
                     </svg>
                   </a>
@@ -219,7 +220,7 @@
                                     >
                                       <img
                                         :src="item.imageSrc"
-                                        :alt="item.imageAlt"
+                                        :alt="item.name"
                                         class="object-cover object-center"
                                       />
                                     </div>
@@ -249,7 +250,7 @@
                                       >
                                         <img
                                           :src="item.imageSrc"
-                                          :alt="item.imageAlt"
+                                          :alt="item.name"
                                           class="object-cover object-center"
                                         />
                                       </div>
@@ -298,13 +299,12 @@
                           </PopoverPanel>
                         </transition>
                       </Popover>
-
-                      <a
+                      <router-link
                         v-for="page in navigation.pages"
                         :key="page.name"
-                        :href="page.href"
+                        :to="`/collections/${page.path}`"
                         class="flex items-center text-sm font-medium"
-                        >{{ page.name }}</a
+                        >{{ page.name }}</router-link
                       >
                     </div>
                   </PopoverGroup>
@@ -416,16 +416,13 @@ const navigation = {
       featured: [
         {
           name: 'LES PLUS POPULAIRES',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-category-01.jpg',
-          imageAlt: 'Models sitting back to back, wearing Basic Tee in black and bone.'
+
+          imageSrc: '/images/categories/women.png'
         },
         {
           name: 'NOUVELLES ARRIVESS',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-category-02.jpg',
-          imageAlt:
-            'Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.'
+
+          imageSrc: '/images/categories/women.png'
         }
       ],
       sections: [
@@ -468,16 +465,13 @@ const navigation = {
       featured: [
         {
           name: 'LES PLUS POPULAIRES',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-category-01.jpg',
-          imageAlt: 'Models sitting back to back, wearing Basic Tee in black and bone.'
+
+          imageSrc: '/images/categories/men.png'
         },
         {
           name: 'NOUVELLES ARRIVESS',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-category-02.jpg',
-          imageAlt:
-            'Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.'
+
+          imageSrc: '/images/categories/men.png'
         }
       ],
       sections: [
@@ -510,16 +504,13 @@ const navigation = {
       featured: [
         {
           name: 'LES PLUS POPULAIRES',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-category-01.jpg',
-          imageAlt: 'Models sitting back to back, wearing Basic Tee in black and bone.'
+
+          imageSrc: '/images/categories/girl.png'
         },
         {
           name: 'NOUVELLES ARRIVESS',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-category-02.jpg',
-          imageAlt:
-            'Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.'
+
+          imageSrc: '/images/categories/boy.png'
         }
       ],
       sections: [
@@ -537,7 +528,7 @@ const navigation = {
           name: 'En vedette',
           items: [
             { name: 'Nouvelles arrivées ', href: '/collections/new-in' },
-            { name: 'Promo en cours (2 pour 20%) ', href: '/collections/sale' },
+            { name: 'Promo en cours (2 pour 20%) ', href: '/collections/sale' }
           ]
         },
         {
@@ -560,37 +551,30 @@ const navigation = {
       featured: [
         {
           name: 'New Arrivals',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-01-men-category-01.jpg',
-          imageAlt:
-            'Hats and sweaters on wood shelves next to various colors of t-shirts on hangers.'
+
+          imageSrc: '/images/collections/1.png'
         },
         {
           name: 'Basic Tees',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-01-men-category-02.jpg',
-          imageAlt: 'Model wearing light heather gray t-shirt.'
+
+          imageSrc: '/images/collections/2.png'
         },
         {
           name: 'Accessories',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-01-men-category-03.jpg',
-          imageAlt:
-            'Grey 6-panel baseball hat with black brim, black mountain graphic on front, and light heather gray body.'
+
+          imageSrc: '/images/collections/3.png'
         },
         {
           name: 'Carry',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-01-men-category-04.jpg',
-          imageAlt:
-            'Model putting folded cash into slim card holder olive leather wallet with hand stitching.'
+
+          imageSrc: '/images/collections/4.png'
         }
       ]
     }
   ],
   pages: [
-    { name: 'New IN', href: '#' },
-    { name: 'Promo', href: '#' }
+    { name: 'New IN', path: 'new-in' },
+    { name: 'Promo', path: 'sale' }
   ]
 }
 const mobileMenuOpen = ref(false)
