@@ -141,7 +141,7 @@
                 <li
                   v-for="category in bigcategories"
                   :key="category.id"
-                  class="inline-flex flex-col text-center lg:w-auto"
+                  class="inline-flex w-64 flex-col text-center lg:w-auto"
                 >
                   <div class="group relative">
                     <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden bg-gray-200">
@@ -215,7 +215,7 @@
                 <li
                   v-for="accessory in accessories"
                   :key="accessory.id"
-                  class="inline-flex flex-col text-center lg:w-auto"
+                  class="inline-flex w-64 flex-col text-center lg:w-auto"
                 >
                   <div class="group relative">
                     <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden bg-gray-200">
