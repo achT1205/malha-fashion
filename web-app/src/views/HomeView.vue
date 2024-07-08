@@ -1,6 +1,189 @@
+<script setup>
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const offers = [
+  { name: 'Livraison gratuite', description: 'pour des achats de +150€' },
+  { name: '35 jours', description: 'retour facile' },
+  { name: 'Acheter maintenant', description: 'Payer plutard' }
+]
+const arrivals = [
+  {
+    id: 1,
+    name: 'Tassadit',
+    color: 'Black',
+    price: '35',
+    href: '#',
+    promo: '5%',
+    imageSrc: 'https://tailwindui.com/img/ecommerce-images/home-page-02-product-01.jpg',
+    imageAlt: 'Black machined steel pen with hexagonal grip and small white logo at top.',
+    availableColors: [
+      { name: 'Black', colorBg: '#111827' },
+      { name: 'Brass', colorBg: '#FDE68A' },
+      { name: 'Chrome', colorBg: '#E5E7EB' }
+    ],
+    sizes: [
+      { name: 'XXS', inStock: true },
+      { name: 'XS', inStock: true },
+      { name: 'S', inStock: true },
+      { name: 'M', inStock: true },
+      { name: 'L', inStock: true },
+      { name: 'XL', inStock: false }
+    ]
+  },
+  {
+    id: 2,
+    name: 'Tassadit',
+    color: 'Black',
+    price: '35',
+    href: '#',
+    imageSrc: 'https://tailwindui.com/img/ecommerce-images/home-page-02-product-01.jpg',
+    imageAlt: 'Black machined steel pen with hexagonal grip and small white logo at top.',
+    availableColors: [
+      { name: 'Black', colorBg: '#111827' },
+      { name: 'Brass', colorBg: '#FDE68A' },
+      { name: 'Chrome', colorBg: '#E5E7EB' }
+    ],
+    sizes: [
+      { name: 'XXS', inStock: true },
+      { name: 'XS', inStock: true },
+      { name: 'S', inStock: true },
+      { name: 'M', inStock: true },
+      { name: 'L', inStock: true },
+      { name: 'XL', inStock: false }
+    ]
+  },
+  {
+    id: 3,
+    name: 'Tassadit',
+    color: 'Black',
+    price: '35',
+    href: '#',
+    imageSrc: 'https://tailwindui.com/img/ecommerce-images/home-page-02-product-01.jpg',
+    imageAlt: 'Black machined steel pen with hexagonal grip and small white logo at top.',
+    availableColors: [
+      { name: 'Black', colorBg: '#111827' },
+      { name: 'Brass', colorBg: '#FDE68A' },
+      { name: 'Chrome', colorBg: '#E5E7EB' }
+    ],
+    sizes: [
+      { name: 'XXS', inStock: true },
+      { name: 'XS', inStock: true },
+      { name: 'S', inStock: true },
+      { name: 'M', inStock: true },
+      { name: 'L', inStock: true },
+      { name: 'XL', inStock: false }
+    ]
+  },
+  {
+    id: 4,
+    name: 'Tassadit',
+    color: 'Black',
+    price: '35',
+    href: '#',
+    imageSrc: 'https://tailwindui.com/img/ecommerce-images/home-page-02-product-01.jpg',
+    imageAlt: 'Black machined steel pen with hexagonal grip and small white logo at top.',
+    availableColors: [
+      { name: 'Black', colorBg: '#111827' },
+      { name: 'Brass', colorBg: '#FDE68A' },
+      { name: 'Chrome', colorBg: '#E5E7EB' }
+    ],
+    sizes: [
+      { name: 'XXS', inStock: true },
+      { name: 'XS', inStock: true },
+      { name: 'S', inStock: true },
+      { name: 'M', inStock: true },
+      { name: 'L', inStock: true },
+      { name: 'XL', inStock: false }
+    ]
+  },
+  {
+    id: 4,
+    name: 'Tassadit',
+    color: 'Black',
+    price: '35',
+    href: '#',
+    imageSrc: 'https://tailwindui.com/img/ecommerce-images/home-page-02-product-01.jpg',
+    imageAlt: 'Black machined steel pen with hexagonal grip and small white logo at top.',
+    availableColors: [
+      { name: 'Black', colorBg: '#111827' },
+      { name: 'Brass', colorBg: '#FDE68A' },
+      { name: 'Chrome', colorBg: '#E5E7EB' }
+    ],
+    sizes: [
+      { name: 'XXS', inStock: true },
+      { name: 'XS', inStock: true },
+      { name: 'S', inStock: true },
+      { name: 'M', inStock: true },
+      { name: 'L', inStock: true },
+      { name: 'XL', inStock: false }
+    ]
+  }
+]
+
+const collections = [
+  {
+    id: 1,
+    name: 'FEMMES',
+    value: 'women-dresses'
+  },
+  {
+    id: 2,
+    name: 'HOMMES',
+    value: 'men-burnous'
+  },
+  {
+    id: 3,
+    name: 'FILLES',
+    value: 'girl-dresses'
+  },
+  {
+    id: 4,
+    name: 'GARCONS',
+    value: 'boys-burnous'
+  }
+]
+const accessories = [
+  {
+    id: 1,
+    name: 'SACS BERBERES',
+    value: 'bags'
+  },
+  {
+    id: 2,
+    name: 'BIJOUX KAYLES',
+    value: 'jewelry'
+  },
+  {
+    id: 3,
+    name: 'BROCHES',
+    value: 'broches'
+  },
+  {
+    id: 4,
+    name: 'FOULARDS',
+    value: 'scarves'
+  }
+]
+
+const onSelectSize = (event, size) => {
+  event.stopPropagation()
+  alert(JSON.stringify(size))
+}
+
+const onCollectionSelect = (collection) => {
+  router.push(`collections/${collection.value}`)
+}
+
+const onProductSelect = (product) => {
+  router.push('/products/side-stripe-swim-short-in-pale-blue')
+}
+</script>
 
 <template>
-<div>   <!-- Hero section -->
+  <div>
+    <!-- Hero section -->
     <div class="relative">
       <!-- Decorative image and overlay -->
       <div aria-hidden="true" class="absolute inset-0 overflow-hidden">
@@ -67,6 +250,7 @@
                   v-for="product in arrivals"
                   :key="product.id"
                   class="inline-flex w-64 flex-col text-center lg:w-auto"
+                  @click="onProductSelect(product)"
                 >
                   <div class="group relative">
                     <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden bg-gray-200">
@@ -81,38 +265,62 @@
                     >
                       <span
                         v-if="product.promo"
-                        class="inline-flex items-center rounded-full bg-red-100 px-1.5 py-0.5 text-xs font-medium text-red-700"
-                        >{{ product.promo }} OFF</span
+                        class="inline-flex items-center rounded-full bg-red-100 px-1.5 py-0.5 text-xs font-medium text-red-700 group-hover:hidden transition-all"
+                        >{{ product.promo }}OFF</span
                       >
                       <span
                         v-else
-                        class="inline-flex items-center rounded-full bg-gray-100 px-1.5 py-0.5 text-xs font-medium text-gray-600"
+                        class="inline-flex items-center rounded-full bg-gray-100 px-1.5 py-0.5 text-xs font-medium text-gray-600 group-hover:hidden transition-all"
                         >NOUVEAU</span
                       >
+                      <div
+                        class="bg-gray-100 shadow sm:rounded-lg w-96 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      >
+                        <div class="px-4 py-2">
+                          <div class="mt-1">
+                            <h2 class="text-l font-bold tracking-tight text-gray-900">QUICK ADD</h2>
+                            <div class="grid grid-cols-4 gap-2 mt-3">
+                              <div v-for="size in product.sizes" :key="size.name">
+                                <div
+                                  class="flex items-center justify-center rounded-md border px-3 py-3 text-sm font-medium uppercase sm:flex-1 bg-white hover:bg-black hover:text-white cursor-pointer"
+                                  @click="onSelectSize($event, size)"
+                                >
+                                  {{ size.name }}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
 
                     <div class="mt-6">
                       <h3 class="mt-1 font-semibold text-gray-900">
-                        <a :href="product.href">
+                        <router-link
+                          to="/products/essential-t-shirt-in-white"
+                          class="pointer-events-none"
+                        >
                           <span class="absolute inset-0" />
                           {{ product.name }}
-                        </a>
+                        </router-link>
                       </h3>
-                      <p class="mt-1 text-gray-900">{{ product.price }}</p>
+                      <h4 class="sr-only">Available colors</h4>
+                      <ul
+                        role="list"
+                        class="mt-auto flex items-center justify-center space-x-3 pt-6"
+                      >
+                        <li
+                          v-for="color in product.availableColors"
+                          :key="color.name"
+                          class="h-4 w-4 rounded-full border border-black border-opacity-10"
+                          :style="{ backgroundColor: color.colorBg }"
+                        >
+                          <span class="sr-only">{{ color.name }}</span>
+                        </li>
+                      </ul>
+                      <p class="mt-5 text-gray-900">€{{ product.price }} EUR</p>
                     </div>
                   </div>
-
-                  <h4 class="sr-only">Available colors</h4>
-                  <ul role="list" class="mt-auto flex items-center justify-center space-x-3 pt-6">
-                    <li
-                      v-for="color in product.availableColors"
-                      :key="color.name"
-                      class="h-4 w-4 rounded-full border border-black border-opacity-10"
-                      :style="{ backgroundColor: color.colorBg }"
-                    >
-                      <span class="sr-only">{{ color.name }}</span>
-                    </li>
-                  </ul>
                 </li>
               </ul>
             </div>
@@ -139,15 +347,16 @@
                 class="mx-4 inline-flex space-x-8 sm:mx-6 lg:mx-0 lg:grid lg:grid-cols-4 lg:gap-x-2 lg:space-x-0"
               >
                 <li
-                  v-for="category in bigcategories"
-                  :key="category.id"
+                  v-for="collection in collections"
+                  :key="collection.id"
+                  @click="onCollectionSelect(product)"
                   class="inline-flex w-64 flex-col text-center lg:w-auto"
                 >
                   <div class="group relative">
                     <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden bg-gray-200">
                       <img
-                        :src="`/images/categories/${category.value}.png`"
-                        :alt="category.name"
+                        :src="`/images/categories/${collection.value}.png`"
+                        :alt="collection.name"
                         class="h-full w-full object-cover object-center group-hover:opacity-75"
                       />
                     </div>
@@ -158,11 +367,11 @@
                         class="relative mx-auto flex max-w-3xl flex-col items-center text-center"
                       >
                         <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-                          {{ category.name }}
+                          {{ collection.name }}
                         </h2>
                         <router-link
                           class="mt-8 inline-block border bg-white px-8 py-3 text-base font-medium text-gray-900 hover:bg-gray-100"
-                          :to="`/collections/${category.value}`"
+                          :to="`/collections/${collection.value}`"
                         >
                           SHOP NOW
                         </router-link>
@@ -249,133 +458,6 @@
           </div>
         </div>
       </section>
-    </main></div>
+    </main>
+  </div>
 </template>
-
-<script setup>
-
-const offers = [
-  { name: 'Livraison gratuite', description: 'pour des achats de +150€' },
-  { name: '35 jours', description: 'retour facile' },
-  { name: 'Acheter maintenant', description: 'Payer plutard' }
-]
-
-const arrivals = [
-  {
-    id: 1,
-    name: 'Tassadit',
-    color: 'Black',
-    price: '$35',
-    href: '#',
-    promo: '5%',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/home-page-02-product-01.jpg',
-    imageAlt: 'Black machined steel pen with hexagonal grip and small white logo at top.',
-    availableColors: [
-      { name: 'Black', colorBg: '#111827' },
-      { name: 'Brass', colorBg: '#FDE68A' },
-      { name: 'Chrome', colorBg: '#E5E7EB' }
-    ]
-  },
-  {
-    id: 2,
-    name: 'Tassadit',
-    color: 'Black',
-    price: '$35',
-    href: '#',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/home-page-02-product-01.jpg',
-    imageAlt: 'Black machined steel pen with hexagonal grip and small white logo at top.',
-    availableColors: [
-      { name: 'Black', colorBg: '#111827' },
-      { name: 'Brass', colorBg: '#FDE68A' },
-      { name: 'Chrome', colorBg: '#E5E7EB' }
-    ]
-  },
-  {
-    id: 3,
-    name: 'Tassadit',
-    color: 'Black',
-    price: '$35',
-    href: '#',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/home-page-02-product-01.jpg',
-    imageAlt: 'Black machined steel pen with hexagonal grip and small white logo at top.',
-    availableColors: [
-      { name: 'Black', colorBg: '#111827' },
-      { name: 'Brass', colorBg: '#FDE68A' },
-      { name: 'Chrome', colorBg: '#E5E7EB' }
-    ]
-  },
-  {
-    id: 4,
-    name: 'Tassadit',
-    color: 'Black',
-    price: '$35',
-    href: '#',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/home-page-02-product-01.jpg',
-    imageAlt: 'Black machined steel pen with hexagonal grip and small white logo at top.',
-    availableColors: [
-      { name: 'Black', colorBg: '#111827' },
-      { name: 'Brass', colorBg: '#FDE68A' },
-      { name: 'Chrome', colorBg: '#E5E7EB' }
-    ]
-  },
-  {
-    id: 4,
-    name: 'Tassadit',
-    color: 'Black',
-    price: '$35',
-    href: '#',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/home-page-02-product-01.jpg',
-    imageAlt: 'Black machined steel pen with hexagonal grip and small white logo at top.',
-    availableColors: [
-      { name: 'Black', colorBg: '#111827' },
-      { name: 'Brass', colorBg: '#FDE68A' },
-      { name: 'Chrome', colorBg: '#E5E7EB' }
-    ]
-  }
-]
-
-const bigcategories = [
-  {
-    id: 1,
-    name: 'FEMMES',
-    value: 'women'
-  },
-  {
-    id: 2,
-    name: 'HOMMES',
-    value: 'men'
-  },
-  {
-    id: 3,
-    name: 'FILLES',
-    value: 'girl'
-  },
-  {
-    id: 4,
-    name: 'GARCONS',
-    value: 'boy'
-  }
-]
-const accessories = [
-  {
-    id: 1,
-    name: 'SACS BERBERES',
-    value: 'bags'
-  },
-  {
-    id: 2,
-    name: 'BIJOUX KAYLES',
-    value: 'jewelry'
-  },
-  {
-    id: 3,
-    name: 'BROCHES',
-    value: 'broches'
-  },
-  {
-    id: 4,
-    name: 'FOULARDS',
-    value: 'scarves'
-  }
-]
-</script>
