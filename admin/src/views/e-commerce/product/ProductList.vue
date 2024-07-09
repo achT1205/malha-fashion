@@ -73,7 +73,7 @@ const messages = {
     }
 };
 
-console.log(items)
+console.log(JSON.stringify(items))
 </script>
 
 <template>
