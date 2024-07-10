@@ -117,7 +117,7 @@
                 </div>
 
                 <fieldset aria-label="Choose a size" class="mt-2">
-                  <RadioGroup v-model="selectedColor.selectedSize" class="grid grid-cols-3 gap-3 sm:grid-cols-6">
+                  <RadioGroup v-model="selectedColor.selectedSize" class="grid grid-cols-6 gap-3 sm:grid-cols-6">
                     <RadioGroupOption
                       as="template"
                       v-for="size in selectedColor.sizes"
