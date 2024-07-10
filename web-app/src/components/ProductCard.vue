@@ -2,23 +2,31 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { RadioGroup, RadioGroupOption } from '@headlessui/vue'
+import { useCartStore } from '@/stores/cartStore'
+
+const cartStore = useCartStore()
 const router = useRouter()
-const localProduct = ref()
+const selectedColor = ref()
 const props = defineProps({
   product: { type: Object, required: true }
 })
 
-localProduct.value = props.product
+selectedColor.value = props.product.colors[0]
 
-localProduct.value.selectedColor = localProduct.value.colors[0]
-
-console.log(localProduct)
-console.log(localProduct.value.selectedColor)
-
-const onSelectSize = (event, size) => {
+const onSelectSize = (event) => {
   event.stopPropagation()
 
-  console.log(size)
+  const product = {
+    id: props.product.id,
+    name: props.product.name,
+    price: selectedColor.value.price,
+    color: selectedColor.value.name.toLowerCase(),
+    size: selectedColor.value.selectedSize.name,
+    reviews: selectedColor.value.reviews,
+    image: selectedColor.value.images[0].src,
+    quantity: 1
+  }
+  cartStore.addItem(product)
 }
 
 const onProductSelect = () => {
@@ -28,11 +36,11 @@ const onProductSelect = () => {
 
 
 <template>
-  <div class="group relative cursor-pointer" v-if="localProduct && localProduct.selectedColor">
+  <div class="group relative cursor-pointer" v-if="selectedColor">
     <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden bg-gray-200">
       <img
-        :src="localProduct.selectedColor.images[0].src"
-        :alt="`${localProduct.name}_${localProduct.selectedColor.name}`"
+        :src="selectedColor.images[0].src"
+        :alt="`${props.product.name}_${selectedColor.name}`"
         class="h-full w-full object-cover object-center group-hover:opacity-75"
       />
     </div>
@@ -43,12 +51,10 @@ const onProductSelect = () => {
       <span
         :class="[
           'inline-flex items-center rounded-full  px-1.5 py-0.5 text-xs font-medium  group-hover:hidden transition-all',
-          localProduct.selectedColor.promo ? 'text-red-700 bg-red-100' : 'text-gray-600 bg-gray-100'
+          selectedColor.promo ? 'text-red-700 bg-red-100' : 'text-gray-600 bg-gray-100'
         ]"
       >
-        <span v-if="localProduct.selectedColor.promo"
-          >{{ localProduct.selectedColor.promo }}OFF</span
-        >
+        <span v-if="selectedColor.promo">{{ selectedColor.promo }}OFF</span>
         <span v-else>NOUVEAU</span>
       </span>
 
@@ -58,10 +64,10 @@ const onProductSelect = () => {
         <div class="px-4 py-2">
           <div class="mt-1">
             <h2 class="text-l font-bold tracking-tight text-gray-900">QUICK ADD</h2>
-            <RadioGroup v-model="localProduct.selectedSize" class="mt-4 grid grid-cols-8 gap-2">
+            <RadioGroup v-model="selectedColor.selectedSize" class="mt-4 grid grid-cols-8 gap-2">
               <RadioGroupOption
                 as="template"
-                v-for="size in localProduct.selectedColor.sizes"
+                v-for="size in selectedColor.sizes"
                 :key="size.name"
                 :value="size"
                 :disabled="!size.quantity || size.quantity == 0"
@@ -111,16 +117,16 @@ const onProductSelect = () => {
 
     <div class="mt-6">
       <h3 class="mt-1 font-semibold text-gray-900 cursor-pointer" @click="onProductSelect()">
-        {{ localProduct.name }}
+        {{ props.product.name }}
       </h3>
       <h4 class="sr-only">Available colors</h4>
       <RadioGroup
-        v-model="localProduct.selectedColor"
+        v-model="selectedColor"
         class="mt-auto flex items-center justify-center space-x-3 pt-6"
       >
         <RadioGroupOption
           as="template"
-          v-for="color in localProduct.colors"
+          v-for="color in props.product.colors"
           :key="color.name"
           :value="color"
           :aria-label="color.name"
@@ -142,7 +148,7 @@ const onProductSelect = () => {
         </RadioGroupOption>
       </RadioGroup>
 
-      <p class="mt-5 text-gray-900">€{{ localProduct.selectedColor.price }} EUR</p>
+      <p class="mt-5 text-gray-900">€{{ selectedColor.price }} EUR</p>
     </div>
   </div>
 </template>

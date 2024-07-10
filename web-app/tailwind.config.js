@@ -7,6 +7,10 @@ export default {
   theme: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    '@tailwindcss/forms',
+    '@tailwindcss/typography',
+    '@tailwindcss/aspect-ratio'
+  ],
 }
 

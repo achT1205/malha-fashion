@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import AboutView from '../views/AboutView.vue'
 import CollectionsView from '../views/CollectionsView.vue'
 import ProductView from '../views/ProductView.vue'
+import CheckoutView from '../views/CheckoutView.vue'
 
 
 const router = createRouter({
@@ -22,6 +23,11 @@ const router = createRouter({
       path: '/products/:slug',
       component: ProductView,
       name:'product'
+    },
+    {
+      path: '/checkout',
+      component: CheckoutView,
+      name:'checkout'
     },
     {
       path: '/about',

@@ -12,6 +12,7 @@ const offers = [
 const arrivals = [
   {
     updatedAt: 1718312207906,
+    id: 1,
     collection: {
       imageSrc:
         'https://firebasestorage.googleapis.com/v0/b/halha-fashion.appspot.com/o/collections%2F1718055580716_1.png?alt=media&token=4b2cf17f-0d7c-409a-adf3-a4477ba5603f',
@@ -149,6 +150,7 @@ const arrivals = [
     valid: true
   },
   {
+    id: 2,
     updatedAt: 1718312207906,
     collection: {
       imageSrc:
@@ -287,6 +289,7 @@ const arrivals = [
     valid: true
   },
   {
+    id: 3,
     updatedAt: 1718312207906,
     collection: {
       imageSrc:
@@ -425,6 +428,7 @@ const arrivals = [
     valid: true
   },
   {
+    id: 4,
     updatedAt: 1718312207906,
     collection: {
       imageSrc:
@@ -563,6 +567,7 @@ const arrivals = [
     valid: true
   },
   {
+    id: 5,
     updatedAt: 1718312207906,
     collection: {
       imageSrc:

@@ -1,3 +1,212 @@
+
+<script setup>
+import { ref } from 'vue'
+import {
+  Dialog,
+  DialogPanel,
+  Popover,
+  PopoverButton,
+  PopoverGroup,
+  PopoverPanel,
+  Tab,
+  TabGroup,
+  TabList,
+  TabPanel,
+  TabPanels,
+  TransitionChild,
+  TransitionRoot
+} from '@headlessui/vue'
+import {
+  Bars3Icon,
+  MagnifyingGlassIcon,
+  ShoppingCartIcon,
+  UserIcon,
+  XMarkIcon
+} from '@heroicons/vue/24/outline'
+import { ChevronDownIcon } from '@heroicons/vue/20/solid'
+import Cart from './ProductCart.vue'
+
+import { useCartStore } from '@/stores/cartStore'
+
+const cartStore = useCartStore()
+
+const navigation = {
+  categories: [
+    {
+      name: 'Femmes',
+      featured: [
+        {
+          name: 'LES PLUS POPULAIRES',
+
+          imageSrc: '/images/categories/women.png'
+        },
+        {
+          name: 'NOUVELLES ARRIVESS',
+
+          imageSrc: '/images/categories/women.png'
+        }
+      ],
+      sections: [
+        {
+          id: 'category',
+          name: 'Par catégories',
+          items: [
+            { name: 'Robes kabyles pour femmes', href: '/collections/women-dresses' },
+            { name: 'Sacs', href: '/collections/wemen-bags' },
+            { name: 'Accessoires', href: '/collections/wemen-accessoires' }
+          ]
+        },
+        {
+          id: 'joularies',
+          name: 'En vedette',
+          items: [
+            { name: 'Nouvelles arrivées ', href: '/collections/new-in' },
+            { name: 'Promo en cours (2 pour 20%) ', href: '/collections/sale' },
+            { name: 'Les plus populairs ', href: '/collections/most-popular' }
+          ]
+        },
+        {
+          id: 'occasions',
+          name: 'Par Occasion',
+          items: [
+            { name: 'Pour le bureau', href: '/collections/for-the-office' },
+            { name: 'Fêtes religieuses (ex. : Aïd)', href: '/collections/for-celebrations' },
+            { name: 'Simple', href: '/collections/casual-weekends' },
+            { name: 'Mariages', href: '/collections/for-wedding' },
+            {
+              name: 'Célébrations traditionnelles',
+              href: '/collections/for-traditional-celebrations'
+            }
+          ]
+        }
+      ]
+    },
+    {
+      name: 'Hommes',
+      featured: [
+        {
+          name: 'LES PLUS POPULAIRES',
+
+          imageSrc: '/images/categories/men.png'
+        },
+        {
+          name: 'NOUVELLES ARRIVESS',
+
+          imageSrc: '/images/categories/men.png'
+        }
+      ],
+      sections: [
+        {
+          id: 'category',
+          name: 'Par catégories',
+          items: [
+            { name: 'bournu kabyles', href: '/collections/men-bournu' },
+            { name: 'Accessoires', href: '/collections/men-accessoires' }
+          ]
+        },
+        {
+          id: 'occasions',
+          name: 'Par Occasion',
+          items: [
+            { name: 'Pour le bureau', href: '/collections/for-the-office' },
+            { name: 'Fêtes religieuses (ex. : Aïd)', href: '/collections/for-celebrations' },
+            { name: 'Simple', href: '/collections/casual-weekends' },
+            { name: 'Mariages', href: '/collections/for-wedding' },
+            {
+              name: 'Célébrations traditionnelles',
+              href: '/collections/for-traditional-celebrations'
+            }
+          ]
+        }
+      ]
+    },
+    {
+      name: 'Enfants',
+      featured: [
+        {
+          name: 'LES PLUS POPULAIRES',
+
+          imageSrc: '/images/categories/girl.png'
+        },
+        {
+          name: 'NOUVELLES ARRIVESS',
+
+          imageSrc: '/images/categories/boy.png'
+        }
+      ],
+      sections: [
+        {
+          id: 'category',
+          name: 'Par catégories',
+          items: [
+            { name: 'Robes kabyles pour filles', href: '/collections/women-dresses' },
+            { name: 'Bournu kabyles pour garçons', href: '/collections/girls-dresses' },
+            { name: 'Accessoires', href: '/collections/wemen-accessoires' }
+          ]
+        },
+        {
+          id: 'joularies',
+          name: 'En vedette',
+          items: [
+            { name: 'Nouvelles arrivées ', href: '/collections/new-in' },
+            { name: 'Promo en cours (2 pour 20%) ', href: '/collections/sale' }
+          ]
+        },
+        {
+          id: 'occasions',
+          name: 'Par Occasion',
+          items: [
+            { name: 'Fêtes religieuses (ex. : Aïd)', href: '/collections/for-celebrations' },
+            { name: 'Simple', href: '/collections/casual-weekends' },
+            { name: 'Mariages', href: '/collections/for-wedding' },
+            {
+              name: 'Célébrations traditionnelles',
+              href: '/collections/for-traditional-celebrations'
+            }
+          ]
+        }
+      ]
+    },
+    {
+      name: 'Collections',
+      featured: [
+        {
+          name: 'New Arrivals',
+
+          imageSrc: '/images/collections/1.png'
+        },
+        {
+          name: 'Basic Tees',
+
+          imageSrc: '/images/collections/2.png'
+        },
+        {
+          name: 'Accessories',
+
+          imageSrc: '/images/collections/3.png'
+        },
+        {
+          name: 'Carry',
+
+          imageSrc: '/images/collections/4.png'
+        }
+      ]
+    }
+  ],
+  pages: [
+    { name: 'New IN', path: 'new-in' },
+    { name: 'Promo', path: 'sale' }
+  ]
+}
+const mobileMenuOpen = ref(false)
+const open = ref(false)
+
+const toogleCart = (toogle) => {
+  if (toogle === true && open.value === false && cartStore.itemCount === 0) return
+  open.value = toogle
+}
+</script>
+
 <template>
   <div>
     <!-- Mobile menu -->
@@ -50,9 +259,7 @@
                     >
                       <button
                         :class="[
-                          selected
-                            ? 'border-black text-black'
-                            : 'border-transparent text-gray-900',
+                          selected ? 'border-black text-black' : 'border-transparent text-gray-900',
                           'flex-1 whitespace-nowrap border-b-2 px-1 py-4 text-base font-medium'
                         ]"
                       >
@@ -332,35 +539,33 @@
                 <a href="/" class="lg:hidden">
                   <span class="sr-only">Your Company</span>
                   <svg
-                      width="64"
-                      height="64"
-                      viewBox="0 0 64 64"
-                      xmlns="http://www.w3.org/2000/svg"
+                    width="64"
+                    height="64"
+                    viewBox="0 0 64 64"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <text
+                      x="8"
+                      y="40"
+                      font-family="Roboto, Arial, sans-serif"
+                      font-size="32"
+                      font-style="italic"
+                      fill="black"
                     >
-                      <text
-                        x="8"
-                        y="40"
-                        font-family="Roboto, Arial, sans-serif"
-                        font-size="32"
-                        font-style="italic"
-                        fill="black"
-                      >
-                        M
-                      </text>
-                      <text
-                        x="25"
-                        y="40"
-                        font-family="Roboto, Arial, sans-serif"
-                        font-size="32"
-                        font-style="italic"
-                        fill="black"
-                      >
-                        C
-                      </text>
-                    </svg>
+                      M
+                    </text>
+                    <text
+                      x="25"
+                      y="40"
+                      font-family="Roboto, Arial, sans-serif"
+                      font-size="32"
+                      font-style="italic"
+                      fill="black"
+                    >
+                      C
+                    </text>
+                  </svg>
                 </a>
-
-           
 
                 <div class="flex flex-1 items-center justify-end">
                   <div class="flex items-center lg:ml-8">
@@ -385,12 +590,13 @@
                     <div class="flow-root">
                       <a href="#" class="group -m-2 flex items-center p-2">
                         <ShoppingCartIcon
+                          @click="toogleCart(true)"
                           class="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                           aria-hidden="true"
                         />
                         <span
                           class="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800"
-                          >0</span
+                          >{{ cartStore.itemCount }}</span
                         >
                         <span class="sr-only">items in cart, view bag</span>
                       </a>
@@ -403,203 +609,6 @@
         </div>
       </nav>
     </header>
+    <Cart :open="open" @toogle="toogleCart" />
   </div>
 </template>
-
-
-<script setup>
-import { ref } from 'vue'
-import {
-  Dialog,
-  DialogPanel,
-  Popover,
-  PopoverButton,
-  PopoverGroup,
-  PopoverPanel,
-  Tab,
-  TabGroup,
-  TabList,
-  TabPanel,
-  TabPanels,
-  TransitionChild,
-  TransitionRoot
-} from '@headlessui/vue'
-import {
-  Bars3Icon,
-  MagnifyingGlassIcon,
-  ShoppingCartIcon,
-  UserIcon,
-  XMarkIcon
-} from '@heroicons/vue/24/outline'
-import { ChevronDownIcon } from '@heroicons/vue/20/solid'
-
-const navigation = {
-  categories: [
-    {
-      name: 'Femmes',
-      featured: [
-        {
-          name: 'LES PLUS POPULAIRES',
-
-          imageSrc: '/images/categories/women.png'
-        },
-        {
-          name: 'NOUVELLES ARRIVESS',
-
-          imageSrc: '/images/categories/women.png'
-        }
-      ],
-      sections: [
-        {
-          id: 'category',
-          name: 'Par catégories',
-          items: [
-            { name: 'Robes kabyles pour femmes', href: '/collections/women-dresses' },
-            { name: 'Sacs', href: '/collections/wemen-bags' },
-            { name: 'Accessoires', href: '/collections/wemen-accessoires' }
-          ]
-        },
-        {
-          id: 'joularies',
-          name: 'En vedette',
-          items: [
-            { name: 'Nouvelles arrivées ', href: '/collections/new-in' },
-            { name: 'Promo en cours (2 pour 20%) ', href: '/collections/sale' },
-            { name: 'Les plus populairs ', href: '/collections/most-popular' }
-          ]
-        },
-        {
-          id: 'occasions',
-          name: 'Par Occasion',
-          items: [
-            { name: 'Pour le bureau', href: '/collections/for-the-office' },
-            { name: 'Fêtes religieuses (ex. : Aïd)', href: '/collections/for-celebrations' },
-            { name: 'Simple', href: '/collections/casual-weekends' },
-            { name: 'Mariages', href: '/collections/for-wedding' },
-            {
-              name: 'Célébrations traditionnelles',
-              href: '/collections/for-traditional-celebrations'
-            }
-          ]
-        }
-      ]
-    },
-    {
-      name: 'Hommes',
-      featured: [
-        {
-          name: 'LES PLUS POPULAIRES',
-
-          imageSrc: '/images/categories/men.png'
-        },
-        {
-          name: 'NOUVELLES ARRIVESS',
-
-          imageSrc: '/images/categories/men.png'
-        }
-      ],
-      sections: [
-        {
-          id: 'category',
-          name: 'Par catégories',
-          items: [
-            { name: 'bournu kabyles', href: '/collections/men-bournu' },
-            { name: 'Accessoires', href: '/collections/men-accessoires' }
-          ]
-        },
-        {
-          id: 'occasions',
-          name: 'Par Occasion',
-          items: [
-            { name: 'Pour le bureau', href: '/collections/for-the-office' },
-            { name: 'Fêtes religieuses (ex. : Aïd)', href: '/collections/for-celebrations' },
-            { name: 'Simple', href: '/collections/casual-weekends' },
-            { name: 'Mariages', href: '/collections/for-wedding' },
-            {
-              name: 'Célébrations traditionnelles',
-              href: '/collections/for-traditional-celebrations'
-            }
-          ]
-        }
-      ]
-    },
-    {
-      name: 'Enfants',
-      featured: [
-        {
-          name: 'LES PLUS POPULAIRES',
-
-          imageSrc: '/images/categories/girl.png'
-        },
-        {
-          name: 'NOUVELLES ARRIVESS',
-
-          imageSrc: '/images/categories/boy.png'
-        }
-      ],
-      sections: [
-        {
-          id: 'category',
-          name: 'Par catégories',
-          items: [
-            { name: 'Robes kabyles pour filles', href: '/collections/women-dresses' },
-            { name: 'Bournu kabyles pour garçons', href: '/collections/girls-dresses' },
-            { name: 'Accessoires', href: '/collections/wemen-accessoires' }
-          ]
-        },
-        {
-          id: 'joularies',
-          name: 'En vedette',
-          items: [
-            { name: 'Nouvelles arrivées ', href: '/collections/new-in' },
-            { name: 'Promo en cours (2 pour 20%) ', href: '/collections/sale' }
-          ]
-        },
-        {
-          id: 'occasions',
-          name: 'Par Occasion',
-          items: [
-            { name: 'Fêtes religieuses (ex. : Aïd)', href: '/collections/for-celebrations' },
-            { name: 'Simple', href: '/collections/casual-weekends' },
-            { name: 'Mariages', href: '/collections/for-wedding' },
-            {
-              name: 'Célébrations traditionnelles',
-              href: '/collections/for-traditional-celebrations'
-            }
-          ]
-        }
-      ]
-    },
-    {
-      name: 'Collections',
-      featured: [
-        {
-          name: 'New Arrivals',
-
-          imageSrc: '/images/collections/1.png'
-        },
-        {
-          name: 'Basic Tees',
-
-          imageSrc: '/images/collections/2.png'
-        },
-        {
-          name: 'Accessories',
-
-          imageSrc: '/images/collections/3.png'
-        },
-        {
-          name: 'Carry',
-
-          imageSrc: '/images/collections/4.png'
-        }
-      ]
-    }
-  ],
-  pages: [
-    { name: 'New IN', path: 'new-in' },
-    { name: 'Promo', path: 'sale' }
-  ]
-}
-const mobileMenuOpen = ref(false)
-</script>
