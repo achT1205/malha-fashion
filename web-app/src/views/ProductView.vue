@@ -2,28 +2,6 @@
 <template>
   <div class="bg-white">
     <div class="pb-16 pt-6 sm:pb-24">
-      <nav aria-label="Breadcrumb" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <ol role="list" class="flex items-center space-x-4">
-          <li v-for="breadcrumb in product1.breadcrumbs" :key="breadcrumb.id">
-            <div class="flex items-center">
-              <a :href="breadcrumb.href" class="mr-4 text-sm font-medium text-gray-900">{{
-                breadcrumb.name
-              }}</a>
-              <svg viewBox="0 0 6 20" aria-hidden="true" class="h-5 w-auto text-gray-300">
-                <path d="M4.878 4.34H3.551L.27 16.532h1.327l3.281-12.19z" fill="currentColor" />
-              </svg>
-            </div>
-          </li>
-          <li class="text-sm">
-            <a
-              :href="product.href"
-              aria-current="page"
-              class="font-medium text-gray-500 hover:text-gray-600"
-              >{{ product1.name }}</a
-            >
-          </li>
-        </ol>
-      </nav>
       <div class="mx-auto mt-8 max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         <div class="lg:grid lg:auto-rows-min lg:grid-cols-12 lg:gap-x-8">
           <div class="lg:col-span-5 lg:col-start-8">
@@ -52,7 +30,7 @@
                 </div>
                 <div aria-hidden="true" class="ml-4 text-sm text-gray-300">·</div>
                 <div class="ml-4 flex">
-                  <a href="#" class="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                  <a href="#" class="text-sm font-medium text-gray-600 hover:text-gray-500"
                     >See all {{ selectedColor.reviews.totalCount }} reviews</a
                   >
                 </div>
@@ -79,7 +57,7 @@
                     </span>
                     <span
                       :class="[
-                        selected ? 'ring-indigo-500' : 'ring-transparent',
+                        selected ? 'ring-gray-500' : 'ring-transparent',
                         'pointer-events-none absolute inset-0 rounded-md ring-2 ring-offset-2'
                       ]"
                       aria-hidden="true"
@@ -100,7 +78,6 @@
           </div>
 
           <div class="mt-8 lg:col-span-5">
-            <form>
               <!-- Color picker -->
               <div>
                 <h2 class="text-sm font-medium text-gray-900">Color</h2>
@@ -137,9 +114,6 @@
               <div class="mt-8">
                 <div class="flex items-center justify-between">
                   <h2 class="text-sm font-medium text-gray-900">Size</h2>
-                  <a href="#" class="text-sm font-medium text-indigo-600 hover:text-indigo-500"
-                    >See sizing chart</a
-                  >
                 </div>
 
                 <fieldset aria-label="Choose a size" class="mt-2">
@@ -157,9 +131,9 @@
                           size.quantity > 0
                             ? 'cursor-pointer focus:outline-none'
                             : 'cursor-not-allowed opacity-25',
-                          active ? 'ring-2 ring-indigo-500 ring-offset-2' : '',
+                          active ? 'ring-2 ring-gray-500 ring-offset-2' : '',
                           checked
-                            ? 'border-transparent bg-indigo-600 text-white hover:bg-indigo-700'
+                            ? 'border-transparent bg-gray-600 text-white hover:bg-gray-700'
                             : 'border-gray-200 bg-white text-gray-900 hover:bg-gray-50',
                           'flex items-center justify-center rounded-md border px-3 py-3 text-sm font-medium uppercase sm:flex-1'
                         ]"
@@ -172,12 +146,12 @@
               </div>
 
               <button
-                type="submit"
-                class="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                :disabled='!selectedColor.selectedSize'
+                @click="addToCart"
+                class="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-gray-600 px-8 py-3 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
               >
                 Add to cart
               </button>
-            </form>
 
             <!-- Product details -->
             <div class="mt-10">
@@ -202,7 +176,7 @@
                     class="group relative flex w-full items-center justify-between py-6 text-left"
                   >
                     <span
-                      :class="[open ? 'text-pink-600' : 'text-gray-900', 'text-sm font-medium']"
+                      :class="[open ? 'text-gray-600' : 'text-gray-900', 'text-sm font-medium']"
                       >{{ detail.name }}</span
                     >
                     <span class="ml-6 flex items-center">
@@ -213,7 +187,7 @@
                       />
                       <MinusIcon
                         v-else
-                        class="block h-6 w-6 text-pink-400 group-hover:text-pink-500"
+                        class="block h-6 w-6 text-gray-400 group-hover:text-gray-500"
                         aria-hidden="true"
                       />
                     </span>
@@ -238,7 +212,6 @@
 <script setup>
 import { ref } from 'vue'
 import { StarIcon, PlusIcon , MinusIcon} from '@heroicons/vue/20/solid'
-import { CurrencyDollarIcon, GlobeAmericasIcon } from '@heroicons/vue/24/outline'
 import {
   Disclosure,
   DisclosureButton,
@@ -250,14 +223,13 @@ import {
   TabList,
   TabPanel,
   TabPanels,
-  RadioGroupLabel
 } from '@headlessui/vue'
+import { useCartStore } from '@/stores/cartStore'
+
+const cartStore = useCartStore()
 
 const product1 = {
-  breadcrumbs: [
-    { id: 1, name: 'Women', href: '#' },
-    { id: 2, name: 'Clothing', href: '#' }
-  ],
+
   updatedAt: 1718312207906,
   id: 1,
   collection: {
@@ -318,29 +290,29 @@ const product1 = {
     },
     {
       price: 23,
-      class: 'text-pink-200',
+      class: 'text-gray-200',
       reviews: { totalCount: 500, average: 4 },
       selectedClass: 'ring-gray-400',
       images: [
         {
-          path: 'products/others/pink_1718312207909_1.png',
+          path: 'products/others/gray_1718312207909_1.png',
           src: '/images/p3.png'
         },
         {
-          path: 'products/others/pink_1718312207910_4.png',
+          path: 'products/others/gray_1718312207910_4.png',
           src: '/images/p3.png'
         },
         {
           src: '/images/p3.png',
-          path: 'products/others/pink_1718312207910_2.png'
+          path: 'products/others/gray_1718312207910_2.png'
         },
         {
-          path: 'products/others/pink_1718312207910_3.png',
+          path: 'products/others/gray_1718312207910_3.png',
           src: '/images/p3.png'
         }
       ],
       sizes: [{ quantity: 356, description: 'L', name: 'L', value: 'l' }],
-      name: 'Pink'
+      name: 'gray'
     }
   ],
   image: {
@@ -440,17 +412,18 @@ const product = {
     'Machine wash cold with similar colors'
   ]
 }
-const policies = [
-  {
-    name: 'International delivery',
-    icon: GlobeAmericasIcon,
-    description: 'Get your order in 2 years'
-  },
-  { name: 'Loyalty rewards', icon: CurrencyDollarIcon, description: "Don't look at other tees" }
-]
-
+const addToCart = () => {
+  const p = {
+    id: product1.id,
+    name: product1.name,
+    price: selectedColor.value.price,
+    color: selectedColor.value.name.toLowerCase(),
+    size: selectedColor.value.selectedSize.name,
+    reviews: selectedColor.value.reviews,
+    image: selectedColor.value.images[0].src,
+    quantity: 1
+  }
+  cartStore.addItem(p)
+}
 const selectedColor = ref(product1.colors[0])
-const selectedSize = ref(selectedColor.value.sizes[2])
-
-console.log(selectedColor)
 </script>

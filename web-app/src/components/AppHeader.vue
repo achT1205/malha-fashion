@@ -587,10 +587,9 @@ const toogleCart = (toogle) => {
 
                     <span class="mx-4 h-6 w-px bg-gray-200 lg:mx-6" aria-hidden="true" />
 
-                    <div class="flow-root">
-                      <a href="#" class="group -m-2 flex items-center p-2">
+                    <div class="flow-root cursor-pointer" @click="toogleCart(true)">
+                      <a class="group -m-2 flex items-center p-2">
                         <ShoppingCartIcon
-                          @click="toogleCart(true)"
                           class="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                           aria-hidden="true"
                         />
