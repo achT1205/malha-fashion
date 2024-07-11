@@ -23,7 +23,7 @@ const onSelectSize = (event) => {
     name: props.product.name,
     price: selectedColor.value.price,
     color: selectedColor.value.name.toLowerCase(),
-    size: selectedColor.value.selectedSize.name,
+    size: selectedColor.value.selectedSize.value,
     reviews: selectedColor.value.reviews,
     image: selectedColor.value.images[0].src,
     quantity: 1

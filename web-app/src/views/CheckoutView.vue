@@ -1,4 +1,3 @@
-
 <script setup>
 import { ref } from 'vue'
 import { useCartStore } from '@/stores/cartStore'
@@ -19,6 +18,9 @@ const paymentMethods = [
   { id: 'paypal', title: 'PayPal' },
   { id: 'etransfer', title: 'eTransfer' }
 ]
+const removeFromCart = (product) => {
+  cartStore.removeItem(product)
+}
 
 const user = ref({})
 
@@ -54,7 +56,7 @@ const selectedDeliveryMethod = ref(deliveryMethods[0])
 
               <BaseInput v-model="user.lastName" label="Nom" type="text" />
 
-              <div >
+              <div>
                 <BaseInput v-model="user.address" label="Adresse" type="text" />
               </div>
 
@@ -247,7 +249,7 @@ const selectedDeliveryMethod = ref(deliveryMethods[0])
               >
                 <div class="flex-shrink-0">
                   <img
-                    :src="product.image"
+                    :src="`/images/products/${product.name.toLowerCase()}_${product.color}_1.png`"
                     :alt="`${product.name}_${product.color}_${product.size}`"
                     class="w-20 h-24 rounded-md"
                   />
@@ -271,6 +273,7 @@ const selectedDeliveryMethod = ref(deliveryMethods[0])
                       <button
                         type="button"
                         class="-m-2.5 flex items-center justify-center bg-white p-2.5 text-gray-400 hover:text-gray-500"
+                        @click="removeFromCart(product)"
                       >
                         <span class="sr-only">Remove</span>
                         <TrashIcon class="h-5 w-5" aria-hidden="true" />
@@ -279,7 +282,7 @@ const selectedDeliveryMethod = ref(deliveryMethods[0])
                   </div>
 
                   <div class="flex flex-1 items-end justify-between pt-2">
-                    <p class="mt-1 text-sm font-medium text-gray-900">{{ product.price }}</p>
+                    <p class="mt-1 text-sm font-medium text-gray-900">{{ product.price }} €</p>
 
                     <div class="ml-4">
                       <label for="quantity" class="sr-only">Quantity</label>
@@ -307,20 +310,20 @@ const selectedDeliveryMethod = ref(deliveryMethods[0])
             <dl class="space-y-6 border-t border-gray-200 px-4 py-6 sm:px-6">
               <div class="flex items-center justify-between">
                 <dt class="text-sm">Subtotal</dt>
-                <dd class="text-sm font-medium text-gray-900">${{ cartStore.totalPrice }}</dd>
+                <dd class="text-sm font-medium text-gray-900">{{ cartStore.totalPrice }} €</dd>
               </div>
               <div class="flex items-center justify-between">
                 <dt class="text-sm">Shipping</dt>
-                <dd class="text-sm font-medium text-gray-900">${{ shippingFee }}</dd>
+                <dd class="text-sm font-medium text-gray-900">{{ shippingFee }} €</dd>
               </div>
               <div class="flex items-center justify-between">
                 <dt class="text-sm">Taxes</dt>
-                <dd class="text-sm font-medium text-gray-900">${{ taxesFee }}</dd>
+                <dd class="text-sm font-medium text-gray-900">{{ taxesFee }} €</dd>
               </div>
               <div class="flex items-center justify-between border-t border-gray-200 pt-6">
                 <dt class="text-base font-medium">Total</dt>
                 <dd class="text-base font-medium text-gray-900">
-                  ${{ shippingFee + taxesFee + cartStore.totalPrice }}
+                  {{ shippingFee + taxesFee + cartStore.totalPrice }}€
                 </dd>
               </div>
             </dl>
@@ -330,7 +333,7 @@ const selectedDeliveryMethod = ref(deliveryMethods[0])
                 type="submit"
                 class="w-full rounded-md border border-transparent bg-gray-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-50"
               >
-                Confirm order
+                Confirmer la commande
               </button>
             </div>
           </div>

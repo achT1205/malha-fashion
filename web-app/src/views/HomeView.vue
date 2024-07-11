@@ -40,7 +40,7 @@ const arrivals = [
           { value: 'Medium', name: 'M', description: 'M', quantity: 120 },
           { name: 'L', value: 'Large', quantity: 110, description: 'L' }
         ],
-        reviews: { totalCount: 0, average: 0 },
+        reviews: { average: 4.7, totalCount: 860 },
         images: [
           {
             path: 'products/others/red_1.png',
@@ -67,7 +67,7 @@ const arrivals = [
             path: 'products/others/green_2.png'
           }
         ],
-        reviews: { average: 0, totalCount: 0 },
+        reviews: { average: 4.7, totalCount: 860 },
         price: 900,
         class: 'text-green-200'
       },
@@ -75,7 +75,7 @@ const arrivals = [
         slug: 'thalssa-in-pink',
         price: 23,
         class: 'text-pink-200',
-        reviews: { totalCount: 0, average: 0 },
+        reviews: { average: 4.7, totalCount: 860 },
         selectedClass: 'ring-gray-400',
         images: [
           {

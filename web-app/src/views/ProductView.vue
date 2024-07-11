@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { StarIcon, PlusIcon, MinusIcon } from '@heroicons/vue/20/solid'
 import {
   Disclosure,
@@ -57,7 +57,7 @@ const product = {
         { value: 'Medium', name: 'M', description: 'M', quantity: 120 },
         { name: 'L', value: 'Large', quantity: 110, description: 'L' }
       ],
-      reviews: { totalCount: 0, average: 0 },
+      reviews: { average: 4.7, totalCount: 860 },
       images: [
         {
           path: 'products/others/red_1.png',
@@ -84,7 +84,7 @@ const product = {
           path: 'products/others/green_2.png'
         }
       ],
-      reviews: { average: 0, totalCount: 0 },
+      reviews: { average: 4.7, totalCount: 860 },
       price: 900,
       class: 'text-green-200'
     },
@@ -92,7 +92,7 @@ const product = {
       slug: 'thalssa-in-pink',
       price: 23,
       class: 'text-pink-200',
-      reviews: { totalCount: 0, average: 0 },
+      reviews: { average: 4.7, totalCount: 860 },
       selectedClass: 'ring-gray-400',
       images: [
         {
@@ -173,7 +173,7 @@ const addToCart = () => {
     name: product.name,
     price: selectedColor.value.price,
     color: selectedColor.value.name.toLowerCase(),
-    size: selectedColor.value.selectedSize.name,
+    size: selectedColor.value.selectedSize.value,
     reviews: selectedColor.value.reviews,
     image: selectedColor.value.images[0].src,
     quantity: 1
@@ -203,13 +203,52 @@ const onSelectColor = () => {
 </script>
 <template>
   <div class="bg-white">
-    <div class="pb-16 pt-6 sm:pb-24">
-      <div class="mx-auto mt-8 max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-        <div class="lg:grid lg:auto-rows-min lg:grid-cols-12 lg:gap-x-8">
-          <div class="lg:col-span-5 lg:col-start-8">
+    <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+      <div class="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
+        <!-- Image gallery -->
+        <TabGroup as="div" class="flex flex-col-reverse">
+          <!-- Image selector -->
+          <div class="mx-auto mt-6 hidden w-full max-w-2xl sm:block lg:max-w-none">
+            <TabList class="grid grid-cols-4 gap-6">
+              <Tab
+                v-for="imageIndex in 4"
+                :key="imageIndex"
+                class="relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4"
+                v-slot="{ selected }"
+              >
+                <span class="absolute inset-0 overflow-hidden rounded-md">
+                  <img
+                    :src="`/images/products/${product.name.toLowerCase()}_${selectedColor.name.toLowerCase()}_${imageIndex}.png`"
+                    class="h-full w-full object-cover object-center"
+                  />
+                </span>
+                <span
+                  :class="[
+                    selected ? 'ring-indigo-500' : 'ring-transparent',
+                    'pointer-events-none absolute inset-0 rounded-md ring-2 ring-offset-2'
+                  ]"
+                  aria-hidden="true"
+                />
+              </Tab>
+            </TabList>
+          </div>
+
+          <TabPanels class="aspect-h-1 aspect-w-1 w-full">
+            <TabPanel v-for="imageIndex in 4" :key="imageIndex">
+              <img
+                :src="`/images/products/${product.name.toLowerCase()}_${selectedColor.name.toLowerCase()}_${imageIndex}.png`"
+                class="h-full w-full object-cover object-center sm:rounded-lg"
+              />
+            </TabPanel>
+          </TabPanels>
+        </TabGroup>
+
+        <!-- Product info -->
+        <div class="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
+          <div>
             <div class="flex justify-between">
               <h1 class="text-xl font-medium text-gray-900">{{ product.name }} {{ slug }}</h1>
-              <p class="text-xl font-medium text-gray-900">{{ selectedColor.price }}</p>
+              <p class="text-xl font-medium text-gray-900">€ {{ selectedColor.price }} EUR</p>
             </div>
             <!-- Reviews -->
             <div class="mt-4">
@@ -232,183 +271,139 @@ const onSelectColor = () => {
                 </div>
                 <div aria-hidden="true" class="ml-4 text-sm text-gray-300">·</div>
                 <div class="ml-4 flex">
-                  <a href="#" class="text-sm font-medium text-gray-600 hover:text-gray-500"
-                    >See all {{ selectedColor.reviews.totalCount }} reviews</a
+                  <a href="#" class="text-sm font-medium text-blue-600 hover:text-blue-500"
+                    >Voir toutes les {{ selectedColor.reviews.totalCount }} reviews</a
                   >
                 </div>
               </div>
             </div>
           </div>
+          <!-- Color picker -->
+          <div class="mt-6">
+            <h2 class="text-sm font-medium text-gray-900">Color</h2>
 
-          <!-- Image gallery -->
-          <div class="mt-8 lg:col-span-7 lg:col-start-1 lg:row-span-3 lg:row-start-1 lg:mt-0">
-            <!-- Image gallery -->
-            <TabGroup as="div" class="flex flex-col-reverse">
-              <!-- Image selector -->
-              <div class="mx-auto mt-6 hidden w-full max-w-2xl sm:block lg:max-w-none">
-                <TabList class="grid grid-cols-4 gap-6">
-                  <Tab
-                    v-for="imageIndex in 4"
-                    :key="imageIndex"
-                    class="relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4"
-                    v-slot="{ selected }"
+            <fieldset aria-label="Choose a color" class="mt-3">
+              <RadioGroup v-model="selectedColor" class="flex items-center space-x-3">
+                <RadioGroupOption
+                  as="template"
+                  v-for="color in product.colors"
+                  :key="color.name"
+                  :value="color"
+                  :aria-label="color.name"
+                  @click="onSelectColor"
+                  v-slot="{ active, checked }"
+                >
+                  <div
+                    :class="[
+                      color.class,
+                      active && checked ? 'ring ring-offset-1' : '',
+                      !active && checked ? 'ring-2' : '',
+                      'relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 ring-current focus:outline-none'
+                    ]"
                   >
-                    <span class="absolute inset-0 overflow-hidden rounded-md">
-                      <img
-                        :src="`/images/products/${product.name.toLowerCase()}_${selectedColor.name.toLowerCase()}_${imageIndex}.png`"
-                        class="h-full w-full object-cover object-center"
-                      />
-                    </span>
                     <span
-                      :class="[
-                        selected ? 'ring-gray-500' : 'ring-transparent',
-                        'pointer-events-none absolute inset-0 rounded-md ring-2 ring-offset-2'
-                      ]"
                       aria-hidden="true"
+                      class="h-4 w-4 rounded-full border border-black border-opacity-10 bg-current"
                     />
-                  </Tab>
-                </TabList>
-              </div>
-
-              <TabPanels class="aspect-h-1 aspect-w-1 w-full">
-                <TabPanel v-for="imageIndex in 4" :key="imageIndex">
-                  <img
-                    :src="`/images/products/${product.name.toLowerCase()}_${selectedColor.name.toLowerCase()}_${imageIndex}.png`"
-                    class="h-full w-full object-cover object-center sm:rounded-lg"
-                  />
-                </TabPanel>
-              </TabPanels>
-            </TabGroup>
+                  </div>
+                </RadioGroupOption>
+              </RadioGroup>
+            </fieldset>
           </div>
 
-          <div class="mt-8 lg:col-span-5">
-            <!-- Color picker -->
-            <div>
-              <h2 class="text-sm font-medium text-gray-900">Color</h2>
+          <!-- Size picker -->
+          <div class="mt-8">
+            <div class="flex items-center justify-between">
+              <h2 class="text-sm font-medium text-gray-900">Size</h2>
+            </div>
 
-              <fieldset aria-label="Choose a color" class="mt-2">
-                <RadioGroup v-model="selectedColor" class="flex items-center space-x-3">
-                  <RadioGroupOption
-                    as="template"
-                    v-for="color in product.colors"
-                    :key="color.name"
-                    :value="color"
-                    :aria-label="color.name"
-                    @click="onSelectColor"
-                    v-slot="{ active, checked }"
+            <fieldset aria-label="Choose a size" class="mt-2">
+              <RadioGroup
+                v-model="selectedColor.selectedSize"
+                class="grid grid-cols-6 gap-3 sm:grid-cols-6"
+              >
+                <RadioGroupOption
+                  as="template"
+                  v-for="size in selectedColor.sizes"
+                  :key="size.name"
+                  :value="size"
+                  :disabled="!size.quantity || size.quantity === 0"
+                  v-slot="{ active, checked }"
+                  @click="onSelectSize"
+                >
+                  <div
+                    :class="[
+                      size.quantity > 0
+                        ? 'cursor-pointer focus:outline-none'
+                        : 'cursor-not-allowed opacity-25',
+                      active ? 'ring-2 ring-gray-500 ring-offset-2' : '',
+                      checked
+                        ? 'border-transparent bg-gray-600 text-white hover:bg-gray-700'
+                        : 'border-gray-200 bg-white text-gray-900 hover:bg-gray-50',
+                      'flex items-center justify-center rounded-md border px-3 py-3 text-sm font-medium uppercase sm:flex-1'
+                    ]"
                   >
-                    <div
-                      :class="[
-                        color.class,
-                        active && checked ? 'ring ring-offset-1' : '',
-                        !active && checked ? 'ring-2' : '',
-                        'relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 ring-current focus:outline-none'
-                      ]"
+                    {{ size.name }}
+                  </div>
+                </RadioGroupOption>
+              </RadioGroup>
+            </fieldset>
+          </div>
+
+          <button
+            :disabled="!selectedColor.selectedSize"
+            @click="addToCart"
+            class="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-gray-600 px-8 py-3 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+          >
+            Add to cart
+          </button>
+
+          <!-- Product details -->
+          <div class="mt-10">
+            <h2 class="text-sm font-medium text-gray-900">Description</h2>
+
+            <div class="prose prose-sm mt-4 text-gray-500" v-html="product.description" />
+          </div>
+
+          <div class="mt-8 border-t border-gray-200 pt-8">
+            <h2 class="text-sm font-medium text-gray-900">Fabric &amp; Care</h2>
+
+            <div class="prose prose-sm mt-4 text-gray-500">
+              <div class="divide-y divide-gray-200 border-t">
+                <Disclosure
+                  as="div"
+                  v-for="detail in product.details"
+                  :key="detail.name"
+                  v-slot="{ open }"
+                >
+                  <h3>
+                    <DisclosureButton
+                      class="group relative flex w-full items-center justify-between py-6 text-left"
                     >
                       <span
-                        aria-hidden="true"
-                        class="h-4 w-4 rounded-full border border-black border-opacity-10 bg-current"
-                      />
-                    </div>
-                  </RadioGroupOption>
-                </RadioGroup>
-              </fieldset>
-            </div>
-
-            <!-- Size picker -->
-            <div class="mt-8">
-              <div class="flex items-center justify-between">
-                <h2 class="text-sm font-medium text-gray-900">Size</h2>
-              </div>
-
-              <fieldset aria-label="Choose a size" class="mt-2">
-                <RadioGroup
-                  v-model="selectedColor.selectedSize"
-                  class="grid grid-cols-6 gap-3 sm:grid-cols-6"
-                >
-                  <RadioGroupOption
-                    as="template"
-                    v-for="size in selectedColor.sizes"
-                    :key="size.name"
-                    :value="size"
-                    :disabled="!size.quantity || size.quantity === 0"
-                    v-slot="{ active, checked }"
-                    @click="onSelectSize"
-                  >
-                    <div
-                      :class="[
-                        size.quantity > 0
-                          ? 'cursor-pointer focus:outline-none'
-                          : 'cursor-not-allowed opacity-25',
-                        active ? 'ring-2 ring-gray-500 ring-offset-2' : '',
-                        checked
-                          ? 'border-transparent bg-gray-600 text-white hover:bg-gray-700'
-                          : 'border-gray-200 bg-white text-gray-900 hover:bg-gray-50',
-                        'flex items-center justify-center rounded-md border px-3 py-3 text-sm font-medium uppercase sm:flex-1'
-                      ]"
-                    >
-                      {{ size.name }}
-                    </div>
-                  </RadioGroupOption>
-                </RadioGroup>
-              </fieldset>
-            </div>
-
-            <button
-              :disabled="!selectedColor.selectedSize"
-              @click="addToCart"
-              class="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-gray-600 px-8 py-3 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-            >
-              Add to cart
-            </button>
-
-            <!-- Product details -->
-            <div class="mt-10">
-              <h2 class="text-sm font-medium text-gray-900">Description</h2>
-
-              <div class="prose prose-sm mt-4 text-gray-500" v-html="product.description" />
-            </div>
-
-            <div class="mt-8 border-t border-gray-200 pt-8">
-              <h2 class="text-sm font-medium text-gray-900">Fabric &amp; Care</h2>
-
-              <div class="prose prose-sm mt-4 text-gray-500">
-                <div class="divide-y divide-gray-200 border-t">
-                  <Disclosure
-                    as="div"
-                    v-for="detail in product.details"
-                    :key="detail.name"
-                    v-slot="{ open }"
-                  >
-                    <h3>
-                      <DisclosureButton
-                        class="group relative flex w-full items-center justify-between py-6 text-left"
+                        :class="[open ? 'text-gray-600' : 'text-gray-900', 'text-sm font-medium']"
+                        >{{ detail.name }}</span
                       >
-                        <span
-                          :class="[open ? 'text-gray-600' : 'text-gray-900', 'text-sm font-medium']"
-                          >{{ detail.name }}</span
-                        >
-                        <span class="ml-6 flex items-center">
-                          <PlusIcon
-                            v-if="!open"
-                            class="block h-6 w-6 text-gray-400 group-hover:text-gray-500"
-                            aria-hidden="true"
-                          />
-                          <MinusIcon
-                            v-else
-                            class="block h-6 w-6 text-gray-400 group-hover:text-gray-500"
-                            aria-hidden="true"
-                          />
-                        </span>
-                      </DisclosureButton>
-                    </h3>
-                    <DisclosurePanel as="div" class="prose prose-sm pb-6">
-                      <ul role="list">
-                        <li v-for="item in detail.items" :key="item">{{ item }}</li>
-                      </ul>
-                    </DisclosurePanel>
-                  </Disclosure>
-                </div>
+                      <span class="ml-6 flex items-center">
+                        <PlusIcon
+                          v-if="!open"
+                          class="block h-6 w-6 text-gray-400 group-hover:text-gray-500"
+                          aria-hidden="true"
+                        />
+                        <MinusIcon
+                          v-else
+                          class="block h-6 w-6 text-gray-400 group-hover:text-gray-500"
+                          aria-hidden="true"
+                        />
+                      </span>
+                    </DisclosureButton>
+                  </h3>
+                  <DisclosurePanel as="div" class="prose prose-sm pb-6">
+                    <ul role="list">
+                      <li v-for="item in detail.items" :key="item">{{ item }}</li>
+                    </ul>
+                  </DisclosurePanel>
+                </Disclosure>
               </div>
             </div>
           </div>

@@ -17,7 +17,7 @@ const props = defineProps({
   open: { type: Boolean, required: true, default: false }
 })
 
-const onCheckout = ()=>{
+const onCheckout = () => {
   emit('toogle', false)
   router.push('/checkout')
 }
@@ -80,10 +80,10 @@ const emit = defineEmits(['toogle'])
                             class="flex py-3"
                           >
                             <div
-                              class="h-20 w-20 flex-shrink-0 overflow-hidden rounded-md border border-gray-200"
+                              class="h-24 w-20 flex-shrink-0 overflow-hidden rounded-md border border-gray-200"
                             >
                               <img
-                                :src="product.image"
+                                :src="`/images/products/${product.name.toLowerCase()}_${product.color}_1.png`"
                                 :alt="`${product.name}_${product.color}_${product.size}`"
                                 class="h-full w-full object-cover object-center"
                               />
@@ -109,14 +109,18 @@ const emit = defineEmits(['toogle'])
                                     class="-m-2.5 flex items-center justify-center bg-white p-2.5 text-gray-400 hover:text-gray-500"
                                   >
                                     <span class="sr-only">Remove</span>
-                                    <TrashIcon @click="removeFromCart(product)" class="h-5 w-5" aria-hidden="true" />
+                                    <TrashIcon
+                                      @click="removeFromCart(product)"
+                                      class="h-5 w-5"
+                                      aria-hidden="true"
+                                    />
                                   </button>
                                 </div>
                               </div>
 
                               <div class="flex flex-1 items-end justify-between pt-2">
                                 <p class="mt-1 text-sm font-medium text-gray-900">
-                                  {{ product.price * product.quantity }}
+                                  {{ product.price * product.quantity }} €
                                 </p>
 
                                 <div class="ml-4">
@@ -156,7 +160,7 @@ const emit = defineEmits(['toogle'])
                     </p>
                     <div class="mt-6">
                       <span
-                      @click="onCheckout"
+                        @click="onCheckout"
                         class="flex items-center justify-center rounded-md border border-transparent bg-gray-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-gray-700 cursor-pointer"
                         >Checkout</span
                       >
