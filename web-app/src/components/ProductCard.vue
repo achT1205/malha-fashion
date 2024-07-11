@@ -1,5 +1,6 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+
 import { useRouter } from 'vue-router'
 import { RadioGroup, RadioGroupOption } from '@headlessui/vue'
 import { useCartStore } from '@/stores/cartStore'
@@ -10,10 +11,6 @@ const selectedColor = ref()
 const props = defineProps({
   product: { type: Object, required: true }
 })
-
-selectedColor.value = props.product.colors.find(
-  (c) => c.name.toLowerCase() === props.product.defaultColor.toLowerCase()
-)
 
 const onSelectSize = (event) => {
   event.stopPropagation()
@@ -34,6 +31,11 @@ const onSelectSize = (event) => {
 const onProductSelect = () => {
   router.push(`/products/${selectedColor.value.slug}`)
 }
+onMounted(() => {
+  selectedColor.value = props.product.colors.find(
+    (c) => c.name.toLowerCase() === props.product.defaultColor.toLowerCase()
+  )
+})
 </script>
 
 
@@ -47,7 +49,7 @@ const onProductSelect = () => {
       />
     </div>
     <div
-      class="absolute inset-x-0 top-0 flex h-5/6 items-end justify-start overflow-hidden rounded-lg p-4"
+      class="absolute inset-x-0 top-0 flex h-4/5 items-end justify-start overflow-hidden rounded-lg p-4"
       @click="onProductSelect()"
     >
       <span

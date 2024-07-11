@@ -153,7 +153,7 @@ const emit = defineEmits(['toogle'])
                   <div class="border-t border-gray-200 px-4 py-6 sm:px-6">
                     <div class="flex justify-between text-base font-medium text-gray-900">
                       <p>Total</p>
-                      <p>{{ cartStore.totalPrice }}</p>
+                      <p>{{ cartStore.totalPrice }} €</p>
                     </div>
                     <p class="mt-0.5 text-sm text-gray-500">
                       Frais de port et taxes calculés à la caisse.

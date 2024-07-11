@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref , onMounted} from 'vue'
 import { StarIcon, PlusIcon, MinusIcon } from '@heroicons/vue/20/solid'
 import {
   Disclosure,
@@ -15,7 +15,9 @@ import {
 } from '@headlessui/vue'
 import { useCartStore } from '@/stores/cartStore'
 import { useRouter, useRoute } from 'vue-router'
+import { useProductStore } from '@/stores/productStore'
 
+const productStore = useProductStore()
 const router = useRouter()
 const route = useRoute()
 
@@ -23,11 +25,14 @@ const props = defineProps({
   slug: { type: String, required: true }
 })
 
+const selectedColor = ref()
 const slugArr = props.slug.split('-in-')
 
 const cartStore = useCartStore()
 
-const product = {
+let product = {}
+/*
+{
   updatedAt: 1718312207906,
   id: 1,
   collection: {
@@ -165,7 +170,7 @@ const product = {
       'https://firebasestorage.googleapis.com/v0/b/halha-fashion.appspot.com/o/categories%2F1718055707845_9.png?alt=media&token=0fd3adb9-0c40-4be8-a120-e9387d40256f'
   },
   valid: true
-}
+}*/
 
 const addToCart = () => {
   const p = {
@@ -180,14 +185,6 @@ const addToCart = () => {
   }
   cartStore.addItem(p)
 }
-const selectedColor = ref(
-  product.colors.find((c) => c.name.toLocaleLowerCase() === slugArr[slugArr.length - 1])
-)
-if (route.query.size && selectedColor.value) {
-  selectedColor.value.selectedSize = selectedColor.value.sizes.find(
-    (s) => s.value.toLocaleLowerCase() === route.query.size
-  )
-}
 
 const onSelectSize = () => {
   const query = {}
@@ -200,9 +197,26 @@ const onSelectColor = () => {
   params.slug = selectedColor.value.slug
   router.push({ params: params })
 }
+
+onMounted(() => {
+  if (!productStore.products.value || productStore.products.value.length === 0) productStore.fetchProducts()
+  productStore.getProductBySlug(props.slug)
+
+  product = productStore.product
+
+  selectedColor.value = product.colors.find(
+    (c) => c.name.toLocaleLowerCase() === slugArr[slugArr.length - 1]
+  )
+
+  if (route.query.size && selectedColor.value) {
+    selectedColor.value.selectedSize = selectedColor.value.sizes.find(
+      (s) => s.value.toLocaleLowerCase() === route.query.size
+    )
+  }
+})
 </script>
 <template>
-  <div class="bg-white">
+  <div class="bg-white" v-if="selectedColor">
     <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
       <div class="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
         <!-- Image gallery -->
