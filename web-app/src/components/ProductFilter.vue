@@ -111,7 +111,7 @@
       <div class="py-24">
         <h1 class="text-4xl font-bold tracking-tight text-gray-900">New Arrivals</h1>
         <p class="mx-auto mt-4 max-w-3xl text-base text-gray-500">
-          Thoughtfully designed objects for the workspace, home, and travel.
+          Thoughtfully designed Collection 1 for the workspace, home, and travel.
         </p>
       </div>
     </div>
@@ -305,7 +305,7 @@ const filters = [
     options: [
       { value: 'new-arrivals', label: 'All New Arrivals', checked: false },
       { value: 'tees', label: 'Tees', checked: false },
-      { value: 'objects', label: 'Objects', checked: true }
+      { value: 'Collection 1', label: 'Collection 1', checked: true }
     ]
   },
   {
@@ -336,7 +336,7 @@ const filters = [
     ]
   }
 ]
-const activeFilters = [{ value: 'objects', label: 'Objects' },{ value: 'objects', label: 'Objects' },{ value: 'objects', label: 'Objects' },{ value: 'objects', label: 'Objects' },{ value: 'objects', label: 'Objects' },{ value: 'objects', label: 'Objects' },{ value: 'objects', label: 'Objects' },{ value: 'objects', label: 'Objects' },{ value: 'objects', label: 'Objects' },{ value: 'objects', label: 'Objects' },{ value: 'objects', label: 'Objects' },{ value: 'objects', label: 'Objects' }]
+const activeFilters = [{ value: 'new-arrivals', label: 'Nouvels arrivés' }, { value: 'women-dresses', label: 'Robes femme' }, { value: 'gilr-dresses', label: 'Robes fille' }, { value: 'men-urnous', label: 'Burnous homme' },  { value: 'boy-urnous', label: 'Burnous garçon'}]
 
 const open = ref(false)
 </script>

@@ -193,7 +193,7 @@ onMounted(() => {
                             class="mt-8 inline-block border bg-white px-8 py-3 text-base font-medium text-gray-900 hover:bg-gray-100"
                             :to="`/collections/${collection.value}`"
                           >
-                            SHOP NOW
+                            DECOUVRIR
                           </router-link>
                         </div>
                       </div>
@@ -225,7 +225,7 @@ onMounted(() => {
                   class="mt-8 inline-block border bg-white px-8 py-3 text-base font-medium text-gray-900 hover:bg-gray-100"
                   to="/collections/men"
                 >
-                  SHOP NOW
+                  DECOUVRIR
                 </router-link>
               </div>
             </div>
@@ -267,7 +267,7 @@ onMounted(() => {
                             class="mt-8 inline-block border bg-white px-8 py-3 text-base font-medium text-gray-900 hover:bg-gray-100"
                             :to="`/collections/${accessory.value}`"
                           >
-                            SHOP NOW
+                            DECOUVRIR
                           </router-link>
                         </div>
                       </div>

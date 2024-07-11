@@ -38,12 +38,12 @@ const navigation = {
         {
           name: 'LES PLUS POPULAIRES',
 
-          imageSrc: '/images/categories/women.png'
+          imageSrc: '/images/categories/women-dresses.png'
         },
         {
           name: 'NOUVELLES ARRIVESS',
 
-          imageSrc: '/images/categories/women.png'
+          imageSrc: '/images/categories/women-dresses.png'
         }
       ],
       sections: [
@@ -87,12 +87,12 @@ const navigation = {
         {
           name: 'LES PLUS POPULAIRES',
 
-          imageSrc: '/images/categories/men.png'
+          imageSrc: '/images/categories/men-burnous.png'
         },
         {
           name: 'NOUVELLES ARRIVESS',
 
-          imageSrc: '/images/categories/men.png'
+          imageSrc: '/images/categories/men-burnous.png'
         }
       ],
       sections: [
@@ -126,12 +126,12 @@ const navigation = {
         {
           name: 'LES PLUS POPULAIRES',
 
-          imageSrc: '/images/categories/girl.png'
+          imageSrc: '/images/categories/girl-dresses.png'
         },
         {
           name: 'NOUVELLES ARRIVESS',
 
-          imageSrc: '/images/categories/boy.png'
+          imageSrc: '/images/categories/boys-burnous.png'
         }
       ],
       sections: [
@@ -171,22 +171,22 @@ const navigation = {
       name: 'Collections',
       featured: [
         {
-          name: 'New Arrivals',
+          name: 'Nouvels arrivés',
 
           imageSrc: '/images/collections/1.png'
         },
         {
-          name: 'Basic Tees',
+          name: 'Robes de fete',
 
           imageSrc: '/images/collections/2.png'
         },
         {
-          name: 'Accessories',
+          name: 'Robes de mariages',
 
           imageSrc: '/images/collections/3.png'
         },
         {
-          name: 'Carry',
+          name: 'Accessoires',
 
           imageSrc: '/images/collections/4.png'
         }
@@ -194,8 +194,8 @@ const navigation = {
     }
   ],
   pages: [
-    { name: 'New IN', path: 'new-in' },
-    { name: 'Promo', path: 'sale' }
+
+    { name: 'Nous contacter', path: 'contact' }
   ]
 }
 const mobileMenuOpen = ref(false)
@@ -444,7 +444,7 @@ const handleMouseOver = (event) => {
                                       <span class="absolute inset-0 z-10" aria-hidden="true" />
                                       {{ item.name }}
                                     </a>
-                                    <p aria-hidden="true" class="mt-1">Shop now</p>
+                                    <p aria-hidden="true" class="mt-1">DECOUVRIR</p>
                                   </div>
                                 </div>
                               </div>
@@ -459,7 +459,7 @@ const handleMouseOver = (event) => {
                                       class="group relative text-base sm:text-sm"
                                     >
                                       <div
-                                        class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75"
+                                        class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75 h-60"
                                       >
                                         <img
                                           :src="item.imageSrc"
