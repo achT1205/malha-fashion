@@ -1,6 +1,6 @@
 <script setup>
 import { useRouter } from 'vue-router'
-import ProductCard from '@/components/ProductCard.vue'
+import ProductCard from '@/components/ArrivalProductCard.vue'
 import { useProductStore } from '@/stores/productStore'
 import { onMounted } from 'vue'
 

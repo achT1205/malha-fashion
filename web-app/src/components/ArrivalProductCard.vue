@@ -49,7 +49,7 @@ onMounted(() => {
       />
     </div>
     <div
-      class="absolute inset-x-0 top-10 flex h-3/5 items-end justify-start overflow-hidden rounded-lg p-4"
+      class="absolute inset-x-0 top-0 flex h-4/5 items-end justify-start overflow-hidden rounded-lg p-4"
       @click="onProductSelect()"
     >
       <span
@@ -68,7 +68,7 @@ onMounted(() => {
         <div class="px-4 py-2">
           <div class="mt-1">
             <h2 class="text-l font-bold tracking-tight text-gray-900">QUICK ADD</h2>
-            <RadioGroup v-model="selectedColor.selectedSize" class="mt-4 grid grid-cols-4 gap-2">
+            <RadioGroup v-model="selectedColor.selectedSize" class="mt-4 grid grid-cols-8 gap-2">
               <RadioGroupOption
                 as="template"
                 v-for="size in selectedColor.sizes"
