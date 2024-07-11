@@ -1195,9 +1195,9 @@ export const ProductService = {
             { value: 'm-l', label: 'M/L', checked: false },
             { value: 'l-xl', label: 'L/XL', checked: false },
             { value: 'xl-xxl', label: 'XL/XXL', checked: false },
-            { value: 's', label: 'S', checked: false },
-            { value: 'm', label: 'M', checked: false },
-            { value: 'l', label: 'L', checked: false },
+            { value: 'Small', label: 'S', checked: false },
+            { value: 'Medium', label: 'M', checked: false },
+            { value: 'Large', label: 'L', checked: false },
             { value: 'xl', label: 'XL', checked: false },
             { value: 'xxl', label: 'XXL', checked: false }
           ]

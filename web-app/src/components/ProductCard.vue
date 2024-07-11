@@ -11,7 +11,9 @@ const props = defineProps({
   product: { type: Object, required: true }
 })
 
-selectedColor.value = props.product.colors[0]
+selectedColor.value = props.product.colors.find(
+  (c) => c.name.toLowerCase() === props.product.defaultColor.toLowerCase()
+)
 
 const onSelectSize = (event) => {
   event.stopPropagation()
@@ -30,7 +32,7 @@ const onSelectSize = (event) => {
 }
 
 const onProductSelect = () => {
-  router.push('/products/side-stripe-swim-short-in-pale-blue')
+  router.push(`/products/${selectedColor.value.slug}`)
 }
 </script>
 
@@ -39,7 +41,7 @@ const onProductSelect = () => {
   <div class="group relative cursor-pointer" v-if="selectedColor">
     <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden bg-gray-200">
       <img
-        :src="selectedColor.images[0].src"
+        :src="`/images/products/${props.product.name.toLowerCase()}_${selectedColor.name.toLowerCase()}_1.png`"
         :alt="`${props.product.name}_${selectedColor.name}`"
         class="h-full w-full object-cover object-center group-hover:opacity-75"
       />

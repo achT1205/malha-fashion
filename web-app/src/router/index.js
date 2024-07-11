@@ -22,7 +22,8 @@ const router = createRouter({
     {
       path: '/products/:slug',
       component: ProductView,
-      name:'product'
+      name:'product',
+      props : (route) =>({ slug: route.params.slug, size : route.query.size | '' })
     },
     {
       path: '/checkout',
