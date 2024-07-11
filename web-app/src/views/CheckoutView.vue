@@ -99,7 +99,7 @@ const selectedDeliveryMethod = ref(deliveryMethods[0])
                   <div
                     :class="[
                       checked ? 'border-transparent' : 'border-gray-300',
-                      active ? 'ring-2 ring-indigo-500' : '',
+                      active ? 'ring-2 ring-gray-500' : '',
                       'relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none'
                     ]"
                   >
@@ -118,13 +118,13 @@ const selectedDeliveryMethod = ref(deliveryMethods[0])
                     </span>
                     <CheckCircleIcon
                       v-if="checked"
-                      class="h-5 w-5 text-indigo-600"
+                      class="h-5 w-5 text-gray-600"
                       aria-hidden="true"
                     />
                     <span
                       :class="[
                         active ? 'border' : 'border-2',
-                        checked ? 'border-indigo-500' : 'border-transparent',
+                        checked ? 'border-gray-500' : 'border-transparent',
                         'pointer-events-none absolute -inset-px rounded-lg'
                       ]"
                       aria-hidden="true"
@@ -153,14 +153,14 @@ const selectedDeliveryMethod = ref(deliveryMethods[0])
                     name="payment-type"
                     type="radio"
                     checked=""
-                    class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    class="h-4 w-4 border-gray-300 text-gray-600 focus:ring-gray-500"
                   />
                   <input
                     v-else
                     :id="paymentMethod.id"
                     name="payment-type"
                     type="radio"
-                    class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    class="h-4 w-4 border-gray-300 text-gray-600 focus:ring-gray-500"
                   />
                   <label
                     :for="paymentMethod.id"
@@ -182,7 +182,7 @@ const selectedDeliveryMethod = ref(deliveryMethods[0])
                     id="card-number"
                     name="card-number"
                     autocomplete="cc-number"
-                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
                   />
                 </div>
               </div>
@@ -197,7 +197,7 @@ const selectedDeliveryMethod = ref(deliveryMethods[0])
                     id="name-on-card"
                     name="name-on-card"
                     autocomplete="cc-name"
-                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
                   />
                 </div>
               </div>
@@ -212,7 +212,7 @@ const selectedDeliveryMethod = ref(deliveryMethods[0])
                     name="expiration-date"
                     id="expiration-date"
                     autocomplete="cc-exp"
-                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
                   />
                 </div>
               </div>
@@ -225,7 +225,7 @@ const selectedDeliveryMethod = ref(deliveryMethods[0])
                     name="cvc"
                     id="cvc"
                     autocomplete="csc"
-                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
                   />
                 </div>
               </div>
@@ -288,7 +288,7 @@ const selectedDeliveryMethod = ref(deliveryMethods[0])
                         @change="cartStore.editItem(product, product.quantity)"
                         id="quantity"
                         name="quantity"
-                        class="rounded-md border border-gray-300 text-left text-base font-medium text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
+                        class="rounded-md border border-gray-300 text-left text-base font-medium text-gray-700 shadow-sm focus:border-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-500 sm:text-sm"
                       >
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -328,7 +328,7 @@ const selectedDeliveryMethod = ref(deliveryMethods[0])
             <div class="border-t border-gray-200 px-4 py-6 sm:px-6">
               <button
                 type="submit"
-                class="w-full rounded-md border border-transparent bg-indigo-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                class="w-full rounded-md border border-transparent bg-gray-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-50"
               >
                 Confirm order
               </button>

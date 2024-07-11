@@ -883,7 +883,7 @@ const onProductSelect = (product) => {
                                     size.inStock
                                       ? 'cursor-pointer bg-white text-gray-900 shadow-sm'
                                       : 'cursor-not-allowed bg-gray-50 text-gray-200',
-                                    active ? 'ring-2 ring-indigo-500' : '',
+                                    active ? 'ring-2 ring-gray-500' : '',
                                     'group relative flex items-center justify-center rounded-md border  px-4 py-3 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1'
                                   ]"
                                 >
@@ -892,7 +892,7 @@ const onProductSelect = (product) => {
                                     v-if="size.inStock"
                                     :class="[
                                       active ? 'border' : 'border-2',
-                                      checked ? 'border-indigo-500' : 'border-transparent',
+                                      checked ? 'border-gray-500' : 'border-transparent',
                                       'pointer-events-none absolute -inset-px rounded-md'
                                     ]"
                                     aria-hidden="true"

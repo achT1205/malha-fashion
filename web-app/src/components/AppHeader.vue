@@ -205,6 +205,10 @@ const toogleCart = (toogle) => {
   if (toogle === true && open.value === false && cartStore.itemCount === 0) return
   open.value = toogle
 }
+
+const handleMouseOver = (event) => {
+  event.target.click()
+}
 </script>
 
 <template>
@@ -386,9 +390,11 @@ const toogleCart = (toogle) => {
                       >
                         <div class="relative flex">
                           <PopoverButton
-                            class="relative z-10 flex items-center justify-center text-sm font-mediumtransition-colors duration-200 ease-out"
+                            @mouseover="handleMouseOver"
+                            class="relative z-10 flex items-center justify-center text-sm font-mediumtransition-colors duration-200 ease-out decoration-white"
                           >
                             {{ category.name }}
+                            <ChevronDownIcon :class="{ 'rotate-180 transform': open }" />
                             <span
                               :class="[
                                 open ? 'bg-black' : '',
@@ -463,7 +469,7 @@ const toogleCart = (toogle) => {
                                       </div>
 
                                       <router-link
-                                        :to="item.href"
+                                        :to="'/'"
                                         class="mt-6 block font-medium text-gray-900 no-underline"
                                       >
                                         <span class="absolute inset-0 z-10" aria-hidden="true" />

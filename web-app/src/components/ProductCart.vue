@@ -126,7 +126,7 @@ const emit = defineEmits(['toogle'])
                                     @change="cartStore.editItem(product, product.quantity)"
                                     id="quantity"
                                     name="quantity"
-                                    class="rounded-md border border-gray-300 text-left text-base font-medium text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
+                                    class="rounded-md border border-gray-300 text-left text-base font-medium text-gray-700 shadow-sm focus:border-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-500 sm:text-sm"
                                   >
                                     <option value="1">1</option>
                                     <option value="2">2</option>
@@ -157,7 +157,7 @@ const emit = defineEmits(['toogle'])
                     <div class="mt-6">
                       <span
                       @click="onCheckout"
-                        class="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 cursor-pointer"
+                        class="flex items-center justify-center rounded-md border border-transparent bg-gray-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-gray-700 cursor-pointer"
                         >Checkout</span
                       >
                     </div>
@@ -166,7 +166,7 @@ const emit = defineEmits(['toogle'])
                         ou {{ ' ' }}
                         <button
                           type="button"
-                          class="font-medium text-indigo-600 hover:text-indigo-500"
+                          class="font-medium text-gray-600 hover:text-gray-500"
                           @click="emit('toogle', false)"
                         >
                           Continue Shopping
