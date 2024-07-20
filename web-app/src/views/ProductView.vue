@@ -237,17 +237,17 @@ onMounted(() => {
               v-for="imageIndex in 4"
               :key="imageIndex"
               class="h-20 w-18 mt-2 mr-3"
-              :class="[
-                selectImageIndex === imageIndex
-                  ? 'border border-black border-spacing-2'
-                  : 'ring-transparent'
-              ]"
               @mouseover="onOverImage(imageIndex)"
               @click="onOverImage(imageIndex)"
             >
               <img
                 :src="`/images/products/${product.name.toLowerCase()}_${selectedColor.name.toLowerCase()}_${imageIndex}.png`"
-                class="h-full w-full object-cover object-cente"
+                class="h-full w-full object-cover object-cente rounded-md"
+                :class="[
+                  selectImageIndex === imageIndex
+                    ? 'border border-black border-spacing-2'
+                    : 'ring-transparent'
+                ]"
               />
             </div>
           </div>
@@ -418,7 +418,7 @@ onMounted(() => {
                     </DisclosureButton>
                   </h3>
                   <DisclosurePanel as="div" class="prose prose-sm pb-6">
-                    {{detail.details}}
+                    {{ detail.details }}
                   </DisclosurePanel>
                 </Disclosure>
               </div>
