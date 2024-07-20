@@ -107,38 +107,21 @@ export const useProductStore = defineStore('products', () => {
                 name: 'Classic',
                 value: 'classic'
               },
-              details: {
-                shippings: [
-                  {
-                    name: 'Hand cut and sewn locally',
-                    description: 'Hand cut and sewn locally',
-                    id: '2kQV0rtFX3XR9bQF4t5w'
-                  },
-                  {
-                    description: 'Ultra-soft 100% cotton',
-                    name: 'Ultra-soft 100% cotton'
-                  }
-                ],
-                returns: [
-                  {
-                    id: '1IKXabGDxHO3futz7Wit',
-                    name: 'La poste',
-                    description: 'La poste'
-                  },
-                  { description: 'DHL', name: 'DHL' }
-                ],
-                highlights: ['Durable ', 'Qualité prix'],
-                materialAndCares: [
-                  {
-                    description: 'Only the best materials',
-                    name: 'Only the best materials'
-                  },
-                  {
-                    name: 'Ethically and locally made',
-                    description: 'Ethically and locally made'
-                  }
-                ]
-              },
+              details: [
+                {
+                  title:"SHIPPING",
+                  details:'We offer FREE shipping for all orders £150 & above. All orders are shipped directly from our UK warehouse within 24-48 hours of the order being placed. Next working day delivery is available to purchase at checkout - please be aware we are not liable for any customs duties or taxes incurred. See our full Shipping Policy here.'
+                },
+                {
+                  title:"RETURNS",
+                  details:'We offer a 35 day returns or exchange policy if you are not happy with your order for whatever reason, please see our full Return Policy here.'
+                },
+                {
+                  title:"HOW IT WAS MADE",
+                  details:'We offer a 35 day returns or exchange policy if you are not happy with your order for whatever reason, please see our full Return Policy here.'
+                }
+                
+              ],
               category: {
                 imagePath: 'categories/1718055707845_9.png',
                 id: 'DkKF35gOLsiKs2wwNbE3',
@@ -385,27 +368,19 @@ export const useProductStore = defineStore('products', () => {
                   name: 'Classic',
                   value: 'classic'
                 },
-                details: {
-                  shippings: [
-                    {
-                      name: 'Hand cut and sewn locally',
-                      description: 'Hand cut and sewn locally',
-                      id: '2kQV0rtFX3XR9bQF4t5w'
+                details: [
+                   {
+                    title:'SHIPPING & RETURNS',
+                    shipping:{
+                      title:"Shipping",
+                      details:'We offer FREE shipping for all orders £150 & above. All orders are shipped directly from our UK warehouse within 24-48 hours of the order being placed. Next working day delivery is available to purchase at checkout - please be aware we are not liable for any customs duties or taxes incurred. See our full Shipping Policy here.'
                     },
-                    {
-                      description: 'Ultra-soft 100% cotton',
-                      name: 'Ultra-soft 100% cotton'
+                    returns:{
+                      title:"Returns",
+                      details:'We offer a 35 day returns or exchange policy if you are not happy with your order for whatever reason, please see our full Return Policy here.'
                     }
-                  ],
-                  returns: [
-                    {
-                      id: '1IKXabGDxHO3futz7Wit',
-                      name: 'La poste',
-                      description: 'La poste'
-                    },
-                    { description: 'DHL', name: 'DHL' }
-                  ],
-                  highlights: ['Durable ', 'Qualité prix'],
+                  },
+                /*  highlights: ['Durable ', 'Qualité prix'],
                   materialAndCares: [
                     {
                       description: 'Only the best materials',
@@ -415,8 +390,8 @@ export const useProductStore = defineStore('products', () => {
                       name: 'Ethically and locally made',
                       description: 'Ethically and locally made'
                     }
-                  ]
-                },
+                  ]*/
+                ],
                 category: {
                   imagePath: 'categories/1718055707845_9.png',
                   id: 'DkKF35gOLsiKs2wwNbE3',

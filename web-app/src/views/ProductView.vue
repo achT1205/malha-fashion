@@ -26,6 +26,7 @@ const props = defineProps({
 })
 
 const selectedColor = ref()
+const selectImageIndex = ref(1)
 const slugArr = props.slug.split('-in-')
 
 const cartStore = useCartStore()
@@ -172,6 +173,10 @@ let product = {}
   valid: true
 }*/
 
+const onOverImage = (index) => {
+  selectImageIndex.value = index
+}
+
 const addToCart = () => {
   const p = {
     id: product.id,
@@ -189,16 +194,19 @@ const addToCart = () => {
 const onSelectSize = () => {
   const query = {}
   query.size = selectedColor.value.selectedSize.value.toLocaleLowerCase()
+  selectImageIndex.value = 1
   router.push({ query: query })
 }
 
 const onSelectColor = () => {
   const params = {}
   params.slug = selectedColor.value.slug
+  selectImageIndex.value = 1
   router.push({ params: params })
 }
 
 onMounted(() => {
+  selectImageIndex.value = 1
   if (!productStore.products.value || productStore.products.value.length === 0)
     productStore.fetchProducts()
   productStore.getProductBySlug(props.slug)
@@ -221,57 +229,38 @@ onMounted(() => {
     <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
       <div class="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
         <!-- Image gallery -->
-        <TabGroup as="div" class="flex flex-row">
+        <div as="div" class="flex flex-row">
           <!-- Image selector -->
-          <!--<div class="mx-auto mt-6 hidden w-full max-w-2xl sm:block lg:max-w-none">
-            <TabList class="grid grid-cols-4 gap-6">
-              <Tab
-                v-for="imageIndex in 4"
-                :key="imageIndex"
-                class="relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4"
-                v-slot="{ selected }"
-              >
-                <span class="absolute inset-0 overflow-hidden rounded-md">
-                  <img
-                    :src="`/images/products/${product.name.toLowerCase()}_${selectedColor.name.toLowerCase()}_${imageIndex}.png`"
-                    class="h-full w-full object-cover object-center"
-                  />
-                </span>
-                <span
-                  :class="[
-                    selected ? 'ring-indigo-500' : 'ring-transparent',
-                    'pointer-events-none absolute inset-0 rounded-md ring-2 ring-offset-2'
-                  ]"
-                  aria-hidden="true"
-                />
-              </Tab>
-            </TabList>
-          </div>
--->
-          <TabList as="div" class="flex flex-col w-2/12">
-            <Tab
+          <div as="div" class="flex flex-col w-2/12">
+            <div
               as="div"
               v-for="imageIndex in 4"
               :key="imageIndex"
-              v-slot="{ selected }"
               class="h-20 w-18 mt-2 mr-3"
+              :class="[
+                selectImageIndex === imageIndex
+                  ? 'border border-black border-spacing-2'
+                  : 'ring-transparent'
+              ]"
+              @mouseover="onOverImage(imageIndex)"
+              @click="onOverImage(imageIndex)"
             >
-               <img
-                  :src="`/images/products/${product.name.toLowerCase()}_${selectedColor.name.toLowerCase()}_${imageIndex}.png`"
-                  class="h-full w-full object-cover object-cente"
-                />
-            </Tab>
-          </TabList>
-
-          <TabPanels class="aspect-h-1 aspect-w-1 w-10/12">
-            <TabPanel v-for="imageIndex in 4" :key="imageIndex">
               <img
                 :src="`/images/products/${product.name.toLowerCase()}_${selectedColor.name.toLowerCase()}_${imageIndex}.png`"
+                class="h-full w-full object-cover object-cente"
+              />
+            </div>
+          </div>
+
+          <div class="aspect-h-1 aspect-w-1 w-10/12">
+            <div>
+              <img
+                :src="`/images/products/${product.name.toLowerCase()}_${selectedColor.name.toLowerCase()}_${selectImageIndex}.png`"
                 class="h-full w-full object-cover object-center sm:rounded-lg"
               />
-            </TabPanel>
-          </TabPanels>
-        </TabGroup>
+            </div>
+          </div>
+        </div>
 
         <!-- Product info -->
         <div class="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
@@ -412,7 +401,7 @@ onMounted(() => {
                     >
                       <span
                         :class="[open ? 'text-gray-600' : 'text-gray-900', 'text-sm font-medium']"
-                        >{{ detail.name }}</span
+                        >{{ detail.title }}</span
                       >
                       <span class="ml-6 flex items-center">
                         <PlusIcon
@@ -429,9 +418,7 @@ onMounted(() => {
                     </DisclosureButton>
                   </h3>
                   <DisclosurePanel as="div" class="prose prose-sm pb-6">
-                    <ul role="list">
-                      <li v-for="item in detail.items" :key="item">{{ item }}</li>
-                    </ul>
+                    {{detail.details}}
                   </DisclosurePanel>
                 </Disclosure>
               </div>
