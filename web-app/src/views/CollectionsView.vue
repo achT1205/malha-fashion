@@ -14,7 +14,7 @@ onMounted(() => {
 
 <template>
   <div class="bg-white">
-    <div class="py-16 sm:py-24 lg:mx-auto lg:max-w-7xl lg:px-8">
+    <div class="py-16 sm:py-4 lg:mx-auto lg:max-w-7xl lg:px-8">
       <ProductFilter />
       <div class="relative mt-8">
         <div class="relative -mb-6 w-full overflow-x-auto pb-6">

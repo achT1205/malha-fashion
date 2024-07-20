@@ -1,17 +1,109 @@
-<!--
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
+
+<script setup>
+import { ref, computed } from 'vue'
+import {
+  Dialog,
+  DialogPanel,
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+  Popover,
+  PopoverButton,
+  PopoverGroup,
+  PopoverPanel,
+  TransitionChild,
+  TransitionRoot
+} from '@headlessui/vue'
+import { XMarkIcon } from '@heroicons/vue/24/outline'
+import { ChevronDownIcon } from '@heroicons/vue/20/solid'
+import BaseInput from '@/components/BaseInput.vue'
+
+const sortOptions = [
+  { name: 'Most Popular', href: '#', current: true },
+  { name: 'Best Rating', href: '#', current: false },
+  { name: 'Newest', href: '#', current: false }
+]
+const filters = ref()
+
+const minPrice = ref(20)
+const maxPrice = ref(1000)
+
+const priceRange = ref([20, 1000])
+
+filters.value = [
+  {
+    id: 'price',
+    name: 'Prix',
+    options: [{ value: 'traditionals', label: 'Célébrations traditionnelles', checked: false }]
+  },
+  {
+    id: 'category',
+    name: 'Category',
+    options: [
+      { value: 'new-arrivals', label: 'All New Arrivals', checked: false },
+      { value: 'dresses', label: 'Robe', checked: false }
+    ]
+  },
+  {
+    id: 'color',
+    name: 'Color',
+    options: [
+      { value: 'white', label: 'Blanc', checked: false },
+      { value: 'pink', label: 'Rose', checked: false },
+      { value: 'blue', label: 'Bleu', checked: false },
+      { value: 'green', label: 'Vert', checked: false },
+      { value: 'red', label: 'Rouge', checked: false }
+    ]
+  },
+  {
+    id: 'material',
+    name: 'Matière',
+    options: [
+      { value: 'coton', label: 'Cotonhite', checked: false },
+      { value: 'wool', label: 'Laine', checked: false }
+    ]
+  },
+  {
+    id: 'model',
+    name: 'Model',
+    options: [{ value: 'classical', label: 'Classique', checked: false }]
+  },
+  {
+    id: 'occasion',
+    name: 'Occasion',
+    options: [{ value: 'traditionals', label: 'Célébrations traditionnelles', checked: false }]
+  },
+  {
+    id: 'sizes',
+    name: 'Sizes',
+    options: [
+      { value: 'small', label: 'Small', checked: false },
+      { value: 'medium', label: 'Medium', checked: false },
+      { value: 'large', label: 'Large', checked: false }
+    ]
   }
-  ```
--->
+]
+const activeFilters = [
+  { value: 'new-arrivals', label: 'Nouvels arrivés' },
+  { value: 'women-dresses', label: 'Robes femme' },
+  { value: 'gilr-dresses', label: 'Robes fille' },
+  { value: 'men-urnous', label: 'Burnous homme' },
+  { value: 'boy-urnous', label: 'Burnous garçon' }
+]
+
+const open = ref(false)
+
+const leftPercentage = computed(
+  () => ((priceRange.value[0] - minPrice.value) / (maxPrice.value - minPrice.value)) * 100
+)
+const rightPercentage = computed(
+  () => 100 - ((priceRange.value[1] - minPrice.value) / (maxPrice.value - minPrice.value)) * 100
+)
+</script>
 <template>
   <div class="bg-white">
     <!-- Mobile filter dialog -->
@@ -89,7 +181,7 @@
                           :value="option.value"
                           type="checkbox"
                           :checked="option.checked"
-                          class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                          class="h-4 w-4 rounded border-gray-300 text-gray-600 focus:ring-gray-500"
                         />
                         <label
                           :for="`filter-mobile-${section.id}-${optionIdx}`"
@@ -175,7 +267,7 @@
             <div class="flow-root">
               <PopoverGroup class="-mx-4 flex items-center divide-x divide-gray-200">
                 <Popover
-                  v-for="(section, sectionIdx) in filters"
+                  v-for="section in filters"
                   :key="section.name"
                   class="relative inline-block px-4 text-left"
                 >
@@ -184,9 +276,11 @@
                   >
                     <span>{{ section.name }}</span>
                     <span
-                      v-if="sectionIdx === 0"
+                      v-if="
+                        section.id != 'price' && section.options.filter((o) => o.checked).length
+                      "
                       class="ml-1.5 rounded bg-gray-200 px-1.5 py-0.5 text-xs font-semibold tabular-nums text-gray-700"
-                      >1</span
+                      >{{ section.options.filter((o) => o.checked).length }}</span
                     >
                     <ChevronDownIcon
                       class="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
@@ -203,9 +297,9 @@
                     leave-to-class="transform opacity-0 scale-95"
                   >
                     <PopoverPanel
-                      class="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none"
+                      class="absolute left-0 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none flex w-screen max-w-max"
                     >
-                      <form class="space-y-4">
+                      <div class="space-y-4" v-if="section.id != 'price'">
                         <div
                           v-for="(option, optionIdx) in section.options"
                           :key="option.value"
@@ -216,8 +310,9 @@
                             :name="`${section.id}[]`"
                             :value="option.value"
                             type="checkbox"
+                            v-model="option.checked"
                             :checked="option.checked"
-                            class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                            class="h-4 w-4 rounded border-gray-300 text-gray-600 focus:ring-gray-500"
                           />
                           <label
                             :for="`filter-${section.id}-${optionIdx}`"
@@ -225,7 +320,92 @@
                             >{{ option.label }}</label
                           >
                         </div>
-                      </form>
+                      </div>
+                      <div class="space-y-4" v-else>
+                        <!--                        <div class="grid grid-flow-col auto-cols-max">
+                          <div>
+                            <BaseInput v-model="minPrice" type="number" class="p-2" />
+                          </div>
+                          <div class="mt-6 ml-10 mr-10">-</div>
+                          <div>
+                            <BaseInput v-model="maxPrice" type="number" class="p-2" />
+                          </div>
+                        </div>-->
+                        <div class="w-full p-4">
+                          <div class="flex justify-between items-center mb-4">
+                            <BaseInput
+                              v-model="minPrice"
+                              type="number"
+                              :id="'min-price'"
+                              :label="`Min Price: ${minPrice} €`"
+                              class="mr-2"
+                            />
+
+                            <!-- <div>
+                              <label for="min-price" class="block text-sm font-medium text-gray-700"
+                                >Min Price: £{{ priceRange[0] }}</label
+                              >
+                              <input
+                                id="min-price"
+                                type="number"
+                                v-model="priceRange[0]"
+                                class="border rounded p-2 mt-1"
+                                @change="handleRangeChange"
+                              />
+                            </div>-->
+                            <BaseInput
+                              v-model="maxPrice"
+                              type="number"
+                              :id="'max-price'"
+                              :label="`Min Price: ${maxPrice} €`"
+                              class="ml-2"
+                              :max="priceRange[1]"
+                              :min="minPrice"
+                            />
+                            <!--<div>
+                              <label for="max-price" class="block text-sm font-medium text-gray-700"
+                                >Max Price: £{{ priceRange[1] }}</label
+                              >
+                              <input
+                                id="max-price"
+                                type="number"
+                                v-model="priceRange[1]"
+                                class="border rounded p-2 mt-1"
+                                @change="handleRangeChange"
+                              />
+                            </div>-->
+                          </div>
+                          <div class="relative mt-4">
+                            <input
+                              type="range"
+                              :min="priceRange[0]"
+                              :max="maxPrice"
+                              v-model="minPrice"
+                              @input="handleRangeChange"
+                              :value="priceRange[0]"
+                              class="absolute w-full mt-[-7.5px] z-10"
+                            />
+                            <input
+                              type="range"
+                              :min="minPrice"
+                              :max="priceRange[1]"
+                              v-model="maxPrice"
+                              @input="handleRangeChange"
+                              :value="priceRange[1]"
+                              class="absolute w-full mt-[-7.5px] z-10"
+                            />
+                            <div class="absolute top-0 w-full h-1 bg-gray-200"></div>
+                            <div
+                              class="absolute top-0 h-1 bg-blue-500"
+                              :style="{ left: leftPercentage + '%', right: rightPercentage + '%' }"
+                            ></div>
+                          </div>
+                          <div class="flex justify-between mt-2">
+                            <span>£{{ minPrice }}</span>
+                            <span>£{{ maxPrice }}</span>
+                          </div>
+                        </div>
+                      </div>
                     </PopoverPanel>
                   </transition>
                 </Popover>
@@ -270,73 +450,33 @@
     </section>
   </div>
 </template>
+<style scoped>
+input[type='range'] {
+  -webkit-appearance: none;
+  width: 100%;
+  background: transparent;
+  pointer-events: none;
+}
 
-<script setup>
-import { ref } from 'vue'
-import {
-  Dialog,
-  DialogPanel,
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-  Popover,
-  PopoverButton,
-  PopoverGroup,
-  PopoverPanel,
-  TransitionChild,
-  TransitionRoot
-} from '@headlessui/vue'
-import { XMarkIcon } from '@heroicons/vue/24/outline'
-import { ChevronDownIcon } from '@heroicons/vue/20/solid'
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #1f2937;
+  cursor: pointer;
+  pointer-events: auto;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+}
 
-const sortOptions = [
-  { name: 'Most Popular', href: '#', current: true },
-  { name: 'Best Rating', href: '#', current: false },
-  { name: 'Newest', href: '#', current: false }
-]
-const filters = [
-  {
-    id: 'category',
-    name: 'Category',
-    options: [
-      { value: 'new-arrivals', label: 'All New Arrivals', checked: false },
-      { value: 'tees', label: 'Tees', checked: false },
-      { value: 'Collection 1', label: 'Collection 1', checked: true }
-    ]
-  },
-  {
-    id: 'color',
-    name: 'Color',
-    options: [
-      { value: 'white', label: 'White', checked: false },
-      { value: 'beige', label: 'Beige', checked: false },
-      { value: 'blue', label: 'Blue', checked: false }
-    ]
-  },
-  {
-    id: 'sizes',
-    name: 'Sizes',
-    options: [
-      { value: 's', label: 'S', checked: false },
-      { value: 'm', label: 'M', checked: false },
-      { value: 'l', label: 'L', checked: false }
-    ]
-  },
-  {
-    id: 'price',
-    name: 'Price',
-    options: [
-      { value: 's', label: 'S', checked: false },
-      { value: 'm', label: 'M', checked: false },
-      { value: 'l', label: 'L', checked: false }
-    ]
-  }
-]
-const activeFilters = [{ value: 'new-arrivals', label: 'Nouvels arrivés' }, { value: 'women-dresses', label: 'Robes femme' }, { value: 'gilr-dresses', label: 'Robes fille' }, { value: 'men-urnous', label: 'Burnous homme' },  { value: 'boy-urnous', label: 'Burnous garçon'}]
-
-const open = ref(false)
-</script>
+input[type='range']::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #1f2937;
+  cursor: pointer;
+  pointer-events: auto;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+}
+</style>

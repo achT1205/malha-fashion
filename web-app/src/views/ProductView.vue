@@ -1,5 +1,5 @@
 <script setup>
-import { ref , onMounted} from 'vue'
+import { ref, onMounted } from 'vue'
 import { StarIcon, PlusIcon, MinusIcon } from '@heroicons/vue/20/solid'
 import {
   Disclosure,
@@ -199,7 +199,8 @@ const onSelectColor = () => {
 }
 
 onMounted(() => {
-  if (!productStore.products.value || productStore.products.value.length === 0) productStore.fetchProducts()
+  if (!productStore.products.value || productStore.products.value.length === 0)
+    productStore.fetchProducts()
   productStore.getProductBySlug(props.slug)
 
   product = productStore.product
@@ -220,9 +221,9 @@ onMounted(() => {
     <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
       <div class="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
         <!-- Image gallery -->
-        <TabGroup as="div" class="flex flex-col-reverse">
+        <TabGroup as="div" class="flex flex-row">
           <!-- Image selector -->
-          <div class="mx-auto mt-6 hidden w-full max-w-2xl sm:block lg:max-w-none">
+          <!--<div class="mx-auto mt-6 hidden w-full max-w-2xl sm:block lg:max-w-none">
             <TabList class="grid grid-cols-4 gap-6">
               <Tab
                 v-for="imageIndex in 4"
@@ -246,8 +247,23 @@ onMounted(() => {
               </Tab>
             </TabList>
           </div>
+-->
+          <TabList as="div" class="flex flex-col w-2/12">
+            <Tab
+              as="div"
+              v-for="imageIndex in 4"
+              :key="imageIndex"
+              v-slot="{ selected }"
+              class="h-20 w-18 mt-2 mr-3"
+            >
+               <img
+                  :src="`/images/products/${product.name.toLowerCase()}_${selectedColor.name.toLowerCase()}_${imageIndex}.png`"
+                  class="h-full w-full object-cover object-cente"
+                />
+            </Tab>
+          </TabList>
 
-          <TabPanels class="aspect-h-1 aspect-w-1 w-full">
+          <TabPanels class="aspect-h-1 aspect-w-1 w-10/12">
             <TabPanel v-for="imageIndex in 4" :key="imageIndex">
               <img
                 :src="`/images/products/${product.name.toLowerCase()}_${selectedColor.name.toLowerCase()}_${imageIndex}.png`"
