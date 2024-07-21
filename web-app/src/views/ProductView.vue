@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, watchEffect } from 'vue'
+import { ref, onMounted, watchEffect, watch } from 'vue'
 import { StarIcon, PlusIcon, MinusIcon } from '@heroicons/vue/20/solid'
 import {
   Disclosure,
@@ -24,10 +24,10 @@ const props = defineProps({
 const outfits = ref([])
 const selectedColor = ref()
 const selectImageIndex = ref(0)
-const slugArr = props.slug.split('-in-')
+const slugArr = ref()
 
 const cartStore = useCartStore()
-let product = {}
+const product = ref()
 const onOverImage = (index) => {
   selectImageIndex.value = index
 }
@@ -53,13 +53,6 @@ const onSelectSize = () => {
   router.push({ query: query })
 }
 
-const onSelectColor = () => {
-  const params = {}
-  params.slug = selectedColor.value.slug
-  selectImageIndex.value = 0
-  router.push({ params: params })
-}
-
 const onSelectOutfit = (outfit) => {
   if (!outfit.slug) return
   const params = {}
@@ -67,22 +60,7 @@ const onSelectOutfit = (outfit) => {
   router.replace({ params: params })
 }
 
-onMounted(() => {
-  productStore.fetchProducts()
-  selectImageIndex.value = 0
-  productStore.getProductBySlug(props.slug)
-  product = productStore.product
-
-  selectedColor.value = product.colors.find(
-    (c) => c.name.toLocaleLowerCase() === slugArr[slugArr.length - 1]
-  )
-  fetchOutfits()
-  if (route.query.size && selectedColor.value) {
-    selectedColor.value.selectedSize = selectedColor.value.sizes.find(
-      (s) => s.value.toLocaleLowerCase() === route.query.size
-    )
-  }
-})
+onMounted(() => handleRouteChange())
 
 const fetchOutfits = () => {
   outfits.value = []
@@ -101,6 +79,27 @@ const fetchOutfits = () => {
     })
   }
 }
+const handleRouteChange = () => {
+  slugArr.value = props.slug.split('-in-')
+
+  product.value = {}
+  productStore.fetchProducts()
+  selectImageIndex.value = 0
+  productStore.getProductBySlug(props.slug)
+  product.value = productStore.product
+
+  selectedColor.value = product.value.colors.find(
+    (c) => c.name.toLocaleLowerCase() === slugArr.value[slugArr.value.length - 1]
+  )
+  fetchOutfits()
+  if (route.query.size && selectedColor.value) {
+    selectedColor.value.selectedSize = selectedColor.value.sizes.find(
+      (s) => s.value.toLocaleLowerCase() === route.query.size
+    )
+  }
+}
+
+watch(() => route.fullPath, handleRouteChange)
 watchEffect(() => fetchOutfits())
 </script>
 <template>
@@ -187,22 +186,22 @@ watchEffect(() => fetchOutfits())
                   :key="color.name"
                   :value="color"
                   :aria-label="color.name"
-                  @click="onSelectColor"
                   v-slot="{ active, checked }"
                 >
-                  <div
-                    :class="[
-                      color.class,
-                      active && checked ? 'ring ring-offset-1' : '',
-                      !active && checked ? 'ring-2' : '',
-                      'relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 ring-current focus:outline-none'
-                    ]"
-                  >
-                    <span
-                      aria-hidden="true"
-                      class="h-4 w-4 rounded-full border border-black border-opacity-10 bg-current"
-                    />
-                  </div>
+                  <router-link :to="`/products/${color.slug}`">
+                    <div
+                      :class="[
+                        color.class,
+                        active && checked ? 'ring ring-offset-1' : '',
+                        !active && checked ? 'ring-2' : '',
+                        'relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 ring-current focus:outline-none'
+                      ]"
+                    >
+                      <span
+                        aria-hidden="true"
+                        class="h-4 w-4 rounded-full border border-black border-opacity-10 bg-current"
+                      /></div
+                  ></router-link>
                 </RadioGroupOption>
               </RadioGroup>
             </fieldset>

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 
 import { useRouter } from 'vue-router'
 import { RadioGroup, RadioGroupOption } from '@headlessui/vue'
@@ -28,14 +28,13 @@ const onSelectSize = (event) => {
   cartStore.addItem(product)
 }
 
+selectedColor.value = props.product.colors.find(
+  (c) => c.name.toLowerCase() === props.product.defaultColor.toLowerCase()
+)
+
 const onProductSelect = () => {
   router.push(`/products/${selectedColor.value.slug}`)
 }
-onMounted(() => {
-  selectedColor.value = props.product.colors.find(
-    (c) => c.name.toLowerCase() === props.product.defaultColor.toLowerCase()
-  )
-})
 </script>
 
 
@@ -139,7 +138,7 @@ onMounted(() => {
           <div
             :class="[
               color.class,
-              active && checked ? 'ring ring-offset-1' : '',
+              (active && checked) || selectedColor.name === color.name ? 'ring ring-offset-1' : '',
               !active && checked ? 'ring-2' : '',
               'relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 ring-current focus:outline-none'
             ]"
