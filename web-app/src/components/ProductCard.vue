@@ -22,7 +22,7 @@ const onSelectSize = (event) => {
     color: selectedColor.value.name.toLowerCase(),
     size: selectedColor.value.selectedSize.value,
     reviews: selectedColor.value.reviews,
-    image: selectedColor.value.images[0].src,
+    image: selectedColor.value.image,
     quantity: 1
   }
   cartStore.addItem(product)
@@ -43,7 +43,7 @@ onMounted(() => {
   <div class="group relative cursor-pointer" v-if="selectedColor">
     <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden bg-gray-200">
       <img
-        :src="`/images/products/${props.product.name.toLowerCase()}_${selectedColor.name.toLowerCase()}_1.png`"
+        :src="selectedColor.image"
         :alt="`${props.product.name}_${selectedColor.name}`"
         class="h-full w-full object-cover object-center group-hover:opacity-75"
       />

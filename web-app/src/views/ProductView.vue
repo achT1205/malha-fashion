@@ -1,21 +1,17 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watchEffect } from 'vue'
 import { StarIcon, PlusIcon, MinusIcon } from '@heroicons/vue/20/solid'
 import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
   RadioGroup,
-  RadioGroupOption,
-  Tab,
-  TabGroup,
-  TabList,
-  TabPanel,
-  TabPanels
+  RadioGroupOption
 } from '@headlessui/vue'
 import { useCartStore } from '@/stores/cartStore'
 import { useRouter, useRoute } from 'vue-router'
 import { useProductStore } from '@/stores/productStore'
+import ProductCard from '@/components/ArrivalProductCard.vue'
 
 const productStore = useProductStore()
 const router = useRouter()
@@ -25,154 +21,13 @@ const props = defineProps({
   slug: { type: String, required: true }
 })
 
+const outfits = ref([])
 const selectedColor = ref()
-const selectImageIndex = ref(1)
+const selectImageIndex = ref(0)
 const slugArr = props.slug.split('-in-')
 
 const cartStore = useCartStore()
-
 let product = {}
-/*
-{
-  updatedAt: 1718312207906,
-  id: 1,
-  collection: {
-    imageSrc:
-      'https://firebasestorage.googleapis.com/v0/b/halha-fashion.appspot.com/o/collections%2F1718055580716_1.png?alt=media&token=4b2cf17f-0d7c-409a-adf3-a4477ba5603f',
-    imagePath: 'collections/1718055580716_1.png',
-    name: 'Nouvels arrivés',
-    description:
-      "Inspirée par les motifs lunaires récurrents dans l'art kabyle, cette collection capture la mystique et l'élégance des bijoux traditionnels.",
-    id: 'Qr6Jr1FczDJQxiGgzNNm'
-  },
-  occasions: [{ value: 'fete', description: 'Fete', name: 'Fete' }],
-  tags: ['Recycling ', 'Green Tech'],
-  createAt: 1718295686415,
-  status: 'Draft',
-  description:
-    'Volutpat maecenas volutpat blandit aliquam etiam erat velit scelerisque in. Duis ultricies lacus sed turpis tincidunt id. Sed tempus urna et pharetra. Metus vulputate eu scelerisque felis imperdiet proin fermentum. Venenatis urna cursus eget nunc scelerisque viverra mauris in. Viverra justo nec ultrices dui sapien eget mi proin. Laoreet suspendisse interdum consectetur libero id faucibus.',
-  material: { value: 'coton', name: 'Coton', description: 'Coton' },
-  colors: [
-    {
-      slug: 'thalssa-in-red',
-      class: 'text-red-700',
-      price: 55,
-      selectedClass: 'ring-gray-400',
-      name: 'Red',
-      sizes: [
-        { value: 'Medium', name: 'M', description: 'M', quantity: 120 },
-        { name: 'L', value: 'Large', quantity: 110, description: 'L' }
-      ],
-      reviews: { average: 4.7, totalCount: 860 },
-      images: [
-        {
-          path: 'products/others/red_1.png',
-          src: '/images/p1.png'
-        },
-        {
-          path: 'products/others/red_6.png',
-          src: '/images/p1.png'
-        }
-      ]
-    },
-    {
-      slug: 'thalssa-in-green',
-      sizes: [{ value: 'Medium', description: 'M', name: 'M', quantity: 78 }],
-      selectedClass: 'ring-gray-900',
-      name: 'Green',
-      images: [
-        {
-          path: 'products/others/green_1.png',
-          src: '/images/p2.png'
-        },
-        {
-          src: '/images/p2.png',
-          path: 'products/others/green_2.png'
-        }
-      ],
-      reviews: { average: 4.7, totalCount: 860 },
-      price: 900,
-      class: 'text-green-200'
-    },
-    {
-      slug: 'thalssa-in-pink',
-      price: 23,
-      class: 'text-pink-200',
-      reviews: { average: 4.7, totalCount: 860 },
-      selectedClass: 'ring-gray-400',
-      images: [
-        {
-          path: 'products/others/pink_1718312207909_1.png',
-          src: '/images/p3.png'
-        },
-        {
-          path: 'products/others/pink_1718312207910_4.png',
-          src: '/images/p3.png'
-        },
-        {
-          src: '/images/p3.png',
-          path: 'products/others/pink_1718312207910_2.png'
-        },
-        {
-          path: 'products/others/pink_1718312207910_3.png',
-          src: '/images/p3.png'
-        }
-      ],
-      sizes: [{ quantity: 356, description: 'L', name: 'L', value: 'Large' }],
-      name: 'Pink'
-    }
-  ],
-  defaultColor: 'pink',
-  name: 'Thalssa',
-  model: {
-    description: 'Classic',
-    name: 'Classic',
-    value: 'classic'
-  },
-  details: {
-    shippings: [
-      {
-        name: 'Hand cut and sewn locally',
-        description: 'Hand cut and sewn locally',
-        id: '2kQV0rtFX3XR9bQF4t5w'
-      },
-      {
-        description: 'Ultra-soft 100% cotton',
-        name: 'Ultra-soft 100% cotton'
-      }
-    ],
-    returns: [
-      {
-        id: '1IKXabGDxHO3futz7Wit',
-        name: 'La poste',
-        description: 'La poste'
-      },
-      { description: 'DHL', name: 'DHL' }
-    ],
-    highlights: ['Durable ', 'Qualité prix'],
-    materialAndCares: [
-      {
-        description: 'Only the best materials',
-        name: 'Only the best materials'
-      },
-      {
-        name: 'Ethically and locally made',
-        description: 'Ethically and locally made'
-      }
-    ]
-  },
-  category: {
-    imagePath: 'categories/1718055707845_9.png',
-    id: 'DkKF35gOLsiKs2wwNbE3',
-    name: 'Robes kabyles pour femme',
-    description:
-      'Mettant en avant le rayonnement et la modernité des designs tout en restant fidèle aux racines berbères traditionnelles.',
-    imageSrc:
-      'https://firebasestorage.googleapis.com/v0/b/halha-fashion.appspot.com/o/categories%2F1718055707845_9.png?alt=media&token=0fd3adb9-0c40-4be8-a120-e9387d40256f'
-  },
-  valid: true
-}*/
-
 const onOverImage = (index) => {
   selectImageIndex.value = index
 }
@@ -201,51 +56,74 @@ const onSelectSize = () => {
 const onSelectColor = () => {
   const params = {}
   params.slug = selectedColor.value.slug
-  selectImageIndex.value = 1
+  selectImageIndex.value = 0
   router.push({ params: params })
 }
 
-onMounted(() => {
-  selectImageIndex.value = 1
-  if (!productStore.products.value || productStore.products.value.length === 0)
-    productStore.fetchProducts()
-  productStore.getProductBySlug(props.slug)
+const onSelectOutfit = (outfit) => {
+  if (!outfit.slug) return
+  const params = {}
+  params.slug = outfit.slug
+  router.replace({ params: params })
+}
 
+onMounted(() => {
+  productStore.fetchProducts()
+  selectImageIndex.value = 0
+  productStore.getProductBySlug(props.slug)
   product = productStore.product
 
   selectedColor.value = product.colors.find(
     (c) => c.name.toLocaleLowerCase() === slugArr[slugArr.length - 1]
   )
-
+  fetchOutfits()
   if (route.query.size && selectedColor.value) {
     selectedColor.value.selectedSize = selectedColor.value.sizes.find(
       (s) => s.value.toLocaleLowerCase() === route.query.size
     )
   }
 })
+
+const fetchOutfits = () => {
+  outfits.value = []
+  if (selectedColor.value && selectedColor.value.outfits && selectedColor.value.outfits.length) {
+    outfits.value.push({
+      src: selectedColor.value.images[0].src
+    })
+    selectedColor.value.outfits.forEach((ot) => {
+      outfits.value.push({
+        isSeparator: true
+      })
+      outfits.value.push({
+        slug: ot.slug,
+        src: ot.image.src
+      })
+    })
+  }
+}
+watchEffect(() => fetchOutfits())
 </script>
 <template>
   <div class="bg-white" v-if="selectedColor">
-    <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+    <div class="mx-auto max-w-2xl px-4 py-4 sm:px-6 sm:py-6 lg:max-w-7xl lg:px-8">
       <div class="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
         <!-- Image gallery -->
-        <div as="div" class="flex flex-row">
+        <div class="flex flex-row">
           <!-- Image selector -->
-          <div as="div" class="flex flex-col w-2/12">
+          <div class="flex flex-col w-2/12 overflow-y-scroll h-96">
             <div
-              as="div"
-              v-for="imageIndex in 4"
+              v-for="(colorImage, imageIndex) in selectedColor.images"
               :key="imageIndex"
               class="h-20 w-18 mt-2 mr-3"
               @mouseover="onOverImage(imageIndex)"
               @click="onOverImage(imageIndex)"
             >
               <img
-                :src="`/images/products/${product.name.toLowerCase()}_${selectedColor.name.toLowerCase()}_${imageIndex}.png`"
+                :src="colorImage.src"
                 class="h-full w-full object-cover object-cente rounded-md"
                 :class="[
                   selectImageIndex === imageIndex
-                    ? 'border border-black border-spacing-2'
+                    ? 'border-black border-spacing-2   border-solid border-2 '
                     : 'ring-transparent'
                 ]"
               />
@@ -255,7 +133,7 @@ onMounted(() => {
           <div class="aspect-h-1 aspect-w-1 w-10/12">
             <div>
               <img
-                :src="`/images/products/${product.name.toLowerCase()}_${selectedColor.name.toLowerCase()}_${selectImageIndex}.png`"
+                :src="selectedColor.images[selectImageIndex].src"
                 class="h-full w-full object-cover object-center sm:rounded-lg"
               />
             </div>
@@ -421,11 +299,74 @@ onMounted(() => {
                     {{ detail.details }}
                   </DisclosurePanel>
                 </Disclosure>
+
+                <div v-if="outfits.length">
+                  <h3>
+                    <div
+                      class="group relative flex w-full items-center justify-between py-6 text-left"
+                    >
+                      <span :class="['text-gray-900', 'text-sm font-medium']">SHOP THE LOOK</span>
+                      <MinusIcon
+                        class="block h-6 w-6 text-gray-400 group-hover:text-gray-500"
+                        aria-hidden="true"
+                      />
+                    </div>
+                  </h3>
+
+                  <div as="div" class="prose prose-sm pb-6">
+                    <div class="flex flex-row">
+                      <div v-for="outfit in outfits" :key="outfit.slug">
+                        <div class="h-20 w-18 mr-3 text-center mt-20" v-if="outfit.isSeparator">
+                          <PlusIcon class="block h-6 w-6 text-gray-400 group-hover:text-gray-500" />
+                        </div>
+
+                        <div
+                          class="h-40 w-32 mt-2 mr-3"
+                          :class="[outfit.slug ? 'cursor-pointer' : '']"
+                          v-else
+                          @click="onSelectOutfit(outfit)"
+                        >
+                          <img
+                            :src="outfit.src"
+                            class="h-full w-full object-cover object-cente rounded-md"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <!-- YOU MAY ALSO LIKE -->
+    <section aria-labelledby="trending-heading" class="bg-white">
+      <div class="py-16 sm:py-24 lg:mx-auto lg:max-w-12xl lg:px-4 lg:py-16">
+        <div class="flex items-center justify-center px-4 sm:px-6 lg:px-0">
+          <h2 id="trending-heading" class="text-xl font-bold tracking-tight text-gray-900">
+            YOU MAY ALSO LIKE
+          </h2>
+        </div>
+
+        <div class="relative mt-8">
+          <div class="relative w-full overflow-x-auto">
+            <ul
+              role="list"
+              class="mx-4 inline-flex space-x-8 sm:mx-6 lg:mx-0 lg:grid lg:grid-cols-5 lg:gap-x-2 lg:space-x-0"
+            >
+              <li
+                v-for="product in productStore.products"
+                :key="product.id"
+                class="inline-flex w-64 flex-col text-center lg:w-auto"
+              >
+                <ProductCard :product="product" />
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
