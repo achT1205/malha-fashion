@@ -249,7 +249,7 @@ const selectedDeliveryMethod = ref(deliveryMethods[0])
               >
                 <div class="flex-shrink-0">
                   <img
-                    :src="`/images/products/${product.name.toLowerCase()}_${product.color}_1.png`"
+                    :src="product.image"
                     :alt="`${product.name}_${product.color}_${product.size}`"
                     class="w-20 h-24 rounded-md"
                   />

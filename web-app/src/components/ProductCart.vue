@@ -83,7 +83,7 @@ const emit = defineEmits(['toogle'])
                               class="h-24 w-20 flex-shrink-0 overflow-hidden rounded-md border border-gray-200"
                             >
                               <img
-                                :src="`/images/products/${product.name.toLowerCase()}_${product.color}_1.png`"
+                                :src="product.image"
                                 :alt="`${product.name}_${product.color}_${product.size}`"
                                 class="h-full w-full object-cover object-center"
                               />

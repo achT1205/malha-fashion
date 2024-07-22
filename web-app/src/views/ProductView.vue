@@ -21,6 +21,7 @@ const props = defineProps({
   slug: { type: String, required: true }
 })
 
+const zoomableImage = ref(null)
 const outfits = ref([])
 const selectedColor = ref()
 const selectImageIndex = ref(0)
@@ -99,6 +100,23 @@ const handleRouteChange = () => {
   }
 }
 
+const onMouseMove = (e) => {
+  const rect = zoomableImage.value.getBoundingClientRect()
+  const x = e.clientX - rect.left
+  const y = e.clientY - rect.top
+
+  const xPercent = (x / rect.width) * 100
+  const yPercent = (y / rect.height) * 100
+
+  zoomableImage.value.style.transformOrigin = `${xPercent}% ${yPercent}%`
+  zoomableImage.value.style.transform = 'scale(2)' // Adjust the scale value to control zoom level
+}
+
+const onMouseLeave = () => {
+  zoomableImage.value.style.transformOrigin = 'center center'
+  zoomableImage.value.style.transform = 'scale(1)'
+}
+
 watch(() => route.fullPath, handleRouteChange)
 watchEffect(() => fetchOutfits())
 </script>
@@ -130,10 +148,26 @@ watchEffect(() => fetchOutfits())
           </div>
 
           <div class="aspect-h-1 aspect-w-1 w-10/12">
-            <div>
+            <!--           <div
+              class="relative overflow-hidden h-full w-full hover:zoom"
+              @mousemove="onMouseMove"
+              @mouseleave="onMouseLeave"
+            >
               <img
                 :src="selectedColor.images[selectImageIndex].src"
-                class="h-full w-full object-cover object-center sm:rounded-lg"
+                class="h-full w-full object-cover object-center sm:rounded-lg hover:cursor-zoom-in"
+              />
+            </div>
+-->
+            <div
+              class="relative overflow-hidden h-full w-full hover:zoom hover:cursor-zoom-in"
+              @mousemove="onMouseMove"
+              @mouseleave="onMouseLeave"
+            >
+              <img
+                :src="selectedColor.images[selectImageIndex].src"
+                class="object-cover w-full h-full transform transition-transform duration-300 ease-in-out"
+                ref="zoomableImage"
               />
             </div>
           </div>
@@ -369,3 +403,8 @@ watchEffect(() => fetchOutfits())
     </section>
   </div>
 </template>
+<style>
+.hover\:zoom:hover img {
+  transform: scale(2); /* Adjust the scale value to control zoom level */
+}
+</style>
