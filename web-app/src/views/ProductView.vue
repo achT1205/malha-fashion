@@ -13,7 +13,10 @@ import { useRouter, useRoute } from 'vue-router'
 import { useProductStore } from '@/stores/productStore'
 import ProcuctList from '@/components/ProcuctList.vue'
 import ProductReviews from '@/components/ProductReviews.vue'
+import { useScreenSize } from '@/composables/useScreenSize'
 
+
+const { isMobile, isTablet, isDesktop } = useScreenSize()
 const productStore = useProductStore()
 const router = useRouter()
 const route = useRoute()
@@ -382,7 +385,10 @@ watchEffect(() => fetchOutfits())
             YOU MAY ALSO LIKE
           </h2>
         </div>
-        <ProcuctList :products="productStore.products" />
+        <ProcuctList
+          :products="productStore.products"
+          :width="isDesktop ? 'w-1/6' : isTablet ? 'w-1/3' : isMobile ? 'w-1/2' : '1/6'"
+        />
       </div>
     </section>
     <section aria-labelledby="trending-heading" class="bg-white" ref="reviewsSection">

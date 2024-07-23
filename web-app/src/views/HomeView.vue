@@ -2,10 +2,12 @@
 import { useRouter } from 'vue-router'
 import ProcuctList from '@/components/ProcuctList.vue'
 import { useProductStore } from '@/stores/productStore'
+import { useScreenSize } from '@/composables/useScreenSize'
 import { onMounted } from 'vue'
 
 const productStore = useProductStore()
 const router = useRouter()
+const { isMobile, isTablet, isDesktop } = useScreenSize()
 
 const offers = [
   { name: 'Livraison gratuite', description: 'pour des achats de +150€' },
@@ -128,7 +130,10 @@ onMounted(() => {
                 NOUVELS ARRIVES
               </h2>
             </div>
-            <ProcuctList :products="productStore.products" :width="'w-1/5'" />
+            <ProcuctList
+              :products="productStore.products"
+              :width="isDesktop ? 'w-1/5' : isTablet ? 'w-1/3' : isMobile ? 'w-1/2' : '1/6'"
+            />
             <div class="relative mx-auto flex max-w-3xl flex-col items-center text-center mt-8">
               <router-link
                 class="mt-8 inline-block border bg-white px-8 py-3 text-base font-medium text-gray-900 hover:bg-gray-100"
