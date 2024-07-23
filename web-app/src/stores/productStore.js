@@ -16,6 +16,28 @@ export const useProductStore = defineStore('products', () => {
           "Inspirée par les motifs lunaires récurrents dans l'art kabyle, cette collection capture la mystique et l'élégance des bijoux traditionnels.",
         id: 'Qr6Jr1FczDJQxiGgzNNm'
       },
+      reviews :[
+        {
+          id: 1,
+          rating: 5,
+          content: `
+            <p>This is the bag of my dreams. I took it on my last vacation and was able to fit an absurd amount of snacks for the many long and hungry flights.</p>
+          `,
+          author: 'Emily Selman',
+          avatarSrc:
+            'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80',
+        },
+        {
+          id: 1,
+          rating: 5,
+          content: `
+            <p>This is the bag of my dreams. I took it on my last vacation and was able to fit an absurd amount of snacks for the many long and hungry flights.</p>
+          `,
+          author: 'Emily Selman',
+          avatarSrc:
+            'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80',
+        }
+      ],
       occasions: [{ value: 'fete', description: 'Fete', name: 'Fete' }],
       tags: ['Recycling ', 'Green Tech'],
       createAt: 1718295686415,

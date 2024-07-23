@@ -389,9 +389,8 @@ const handleMouseOver = (event) => {
                         v-slot="{ open }"
                       >
                         <div class="relative flex">
-                          <PopoverButton
-                            @mouseover="handleMouseOver"
-                            class="relative z-10 flex items-center justify-center text-sm font-mediumtransition-colors duration-200 ease-out decoration-white"
+                          <PopoverButton 
+                            class="relative z-10 flex items-center justify-center text-sm font-mediumtransition-colors duration-200 ease-out decoration-white cursor-pointer"
                           >
                             {{ category.name }}
                             <ChevronDownIcon :class="{ 'rotate-180 transform': open }" />

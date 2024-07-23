@@ -12,6 +12,7 @@ import { useCartStore } from '@/stores/cartStore'
 import { useRouter, useRoute } from 'vue-router'
 import { useProductStore } from '@/stores/productStore'
 import ProductCard from '@/components/ArrivalProductCard.vue'
+import ProductReviews from '@/components/ProductReviews.vue'
 
 const productStore = useProductStore()
 const router = useRouter()
@@ -148,17 +149,6 @@ watchEffect(() => fetchOutfits())
           </div>
 
           <div class="aspect-h-1 aspect-w-1 w-10/12">
-            <!--           <div
-              class="relative overflow-hidden h-full w-full hover:zoom"
-              @mousemove="onMouseMove"
-              @mouseleave="onMouseLeave"
-            >
-              <img
-                :src="selectedColor.images[selectImageIndex].src"
-                class="h-full w-full object-cover object-center sm:rounded-lg hover:cursor-zoom-in"
-              />
-            </div>
--->
             <div
               class="relative overflow-hidden h-full w-full hover:zoom hover:cursor-zoom-in"
               @mousemove="onMouseMove"
@@ -401,6 +391,8 @@ watchEffect(() => fetchOutfits())
         </div>
       </div>
     </section>
+
+    <ProductReviews :reviews="product.reviews" />
   </div>
 </template>
 <style>
