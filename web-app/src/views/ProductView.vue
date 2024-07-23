@@ -34,6 +34,12 @@ const onOverImage = (index) => {
   selectImageIndex.value = index
 }
 
+const reviewsSection = ref(null)
+
+const scrollToSection = () => {
+  reviewsSection.value.scrollIntoView({ behavior: 'smooth' })
+}
+
 const addToCart = () => {
   const p = {
     id: product.id,
@@ -191,8 +197,10 @@ watchEffect(() => fetchOutfits())
                 </div>
                 <div aria-hidden="true" class="ml-4 text-sm text-gray-300">·</div>
                 <div class="ml-4 flex">
-                  <a href="#" class="text-sm font-medium text-blue-600 hover:text-blue-500"
-                    >Voir toutes les {{ selectedColor.reviews.totalCount }} reviews</a
+                  <span
+                    @click="scrollToSection"
+                    class="text-sm font-medium text-blue-600 hover:text-blue-500 cursor-pointer"
+                    >Voir toutes les {{ selectedColor.reviews.totalCount }} reviews</span
                   >
                 </div>
               </div>
@@ -391,8 +399,9 @@ watchEffect(() => fetchOutfits())
         </div>
       </div>
     </section>
-
-    <ProductReviews :reviews="product.reviews" />
+    <section aria-labelledby="trending-heading" class="bg-white" ref="reviewsSection">
+      <ProductReviews :reviews="product.reviews" />
+    </section>
   </div>
 </template>
 <style>
