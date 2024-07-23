@@ -11,7 +11,7 @@ import {
 import { useCartStore } from '@/stores/cartStore'
 import { useRouter, useRoute } from 'vue-router'
 import { useProductStore } from '@/stores/productStore'
-import ProductCard from '@/components/ArrivalProductCard.vue'
+import ProcuctList from '@/components/ProcuctList.vue'
 import ProductReviews from '@/components/ProductReviews.vue'
 
 const productStore = useProductStore()
@@ -68,7 +68,9 @@ const onSelectOutfit = (outfit) => {
   router.replace({ params: params })
 }
 
-onMounted(() => handleRouteChange())
+onMounted(() => {
+  handleRouteChange()
+})
 
 const fetchOutfits = () => {
   outfits.value = []
@@ -199,7 +201,7 @@ watchEffect(() => fetchOutfits())
                 <div class="ml-4 flex">
                   <span
                     @click="scrollToSection"
-                    class="text-sm font-medium text-gray-600 hover:text-black cursor-pointer"
+                    class="text-sm font-medium text-gray-600 hover:text-gray-500 cursor-pointer"
                     >Voir toutes les {{ selectedColor.reviews.totalCount }} reviews</span
                   >
                 </div>
@@ -373,30 +375,14 @@ watchEffect(() => fetchOutfits())
       </div>
     </div>
     <!-- YOU MAY ALSO LIKE -->
-    <section aria-labelledby="trending-heading" class="bg-white">
+    <section aria-labelledby="trending-heading" class="bg-white" v-if="productStore.products">
       <div class="py-16 sm:py-24 lg:mx-auto lg:max-w-12xl lg:px-4 lg:py-16">
         <div class="flex items-center justify-center px-4 sm:px-6 lg:px-0">
           <h2 id="trending-heading" class="text-xl font-bold tracking-tight text-gray-900">
             YOU MAY ALSO LIKE
           </h2>
         </div>
-
-        <div class="relative mt-8">
-          <div class="relative w-full overflow-x-auto">
-            <ul
-              role="list"
-              class="mx-4 inline-flex space-x-8 sm:mx-6 lg:mx-0 lg:grid lg:grid-cols-5 lg:gap-x-2 lg:space-x-0"
-            >
-              <li
-                v-for="product in productStore.products"
-                :key="product.id"
-                class="inline-flex w-64 flex-col text-center lg:w-auto"
-              >
-                <ProductCard :product="product" />
-              </li>
-            </ul>
-          </div>
-        </div>
+        <ProcuctList :products="productStore.products" />
       </div>
     </section>
     <section aria-labelledby="trending-heading" class="bg-white" ref="reviewsSection">
@@ -409,3 +395,5 @@ watchEffect(() => fetchOutfits())
   transform: scale(2); /* Adjust the scale value to control zoom level */
 }
 </style>
+
+

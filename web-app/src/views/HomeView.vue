@@ -1,6 +1,6 @@
 <script setup>
 import { useRouter } from 'vue-router'
-import ProductCard from '@/components/ArrivalProductCard.vue'
+import ProcuctList from '@/components/ProcuctList.vue'
 import { useProductStore } from '@/stores/productStore'
 import { onMounted } from 'vue'
 
@@ -121,31 +121,14 @@ onMounted(() => {
         </nav>
 
         <!-- new arrivals -->
-        <section aria-labelledby="trending-heading" class="bg-white">
+        <section aria-labelledby="trending-heading" class="bg-white" v-if="productStore.products">
           <div class="py-16 sm:py-24 lg:mx-auto lg:max-w-12xl lg:px-4 lg:py-16">
             <div class="flex items-center justify-center px-4 sm:px-6 lg:px-0">
               <h2 id="trending-heading" class="text-xl font-bold tracking-tight text-gray-900">
                 NOUVELS ARRIVES
               </h2>
             </div>
-
-            <div class="relative mt-8">
-              <div class="relative w-full overflow-x-auto">
-                <ul
-                  role="list"
-                  class="mx-4 inline-flex space-x-8 sm:mx-6 lg:mx-0 lg:grid lg:grid-cols-5 lg:gap-x-2 lg:space-x-0"
-                >
-                  <li
-                    v-for="product in productStore.products"
-                    :key="product.id"
-                    class="inline-flex w-64 flex-col text-center lg:w-auto"
-                  >
-                    <ProductCard :product="product" />
-                  </li>
-                </ul>
-              </div>
-            </div>
-
+            <ProcuctList :products="productStore.products" :width="'w-1/5'" />
             <div class="relative mx-auto flex max-w-3xl flex-col items-center text-center mt-8">
               <router-link
                 class="mt-8 inline-block border bg-white px-8 py-3 text-base font-medium text-gray-900 hover:bg-gray-100"

@@ -21,7 +21,7 @@ import {
   MagnifyingGlassIcon,
   ShoppingCartIcon,
   UserIcon,
-  XMarkIcon
+  XMarkIcon,
 } from '@heroicons/vue/24/outline'
 import { ChevronDownIcon } from '@heroicons/vue/20/solid'
 import Cart from './ProductCart.vue'
