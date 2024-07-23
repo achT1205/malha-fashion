@@ -189,7 +189,7 @@ watchEffect(() => fetchOutfits())
                     v-for="rating in [0, 1, 2, 3, 4]"
                     :key="rating"
                     :class="[
-                      selectedColor.reviews.average > rating ? 'text-yellow-400' : 'text-gray-200',
+                      selectedColor.reviews.average > rating ? 'text-black-400' : 'text-gray-200',
                       'h-5 w-5 flex-shrink-0'
                     ]"
                     aria-hidden="true"
@@ -199,7 +199,7 @@ watchEffect(() => fetchOutfits())
                 <div class="ml-4 flex">
                   <span
                     @click="scrollToSection"
-                    class="text-sm font-medium text-blue-600 hover:text-blue-500 cursor-pointer"
+                    class="text-sm font-medium text-gray-600 hover:text-black cursor-pointer"
                     >Voir toutes les {{ selectedColor.reviews.totalCount }} reviews</span
                   >
                 </div>
