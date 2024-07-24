@@ -1,49 +1,33 @@
-<script>
-import { defineComponent, ref } from 'vue'
-
-export default defineComponent({
-  name: 'HorizontalScrollImages',
-  setup() {
-    const images = ref([
-      { src: 'https://via.placeholder.com/150', alt: 'Image 1' },
-      { src: 'https://via.placeholder.com/150', alt: 'Image 2' },
-      { src: 'https://via.placeholder.com/150', alt: 'Image 3' },
-      { src: 'https://via.placeholder.com/150', alt: 'Image 4' },
-      { src: 'https://via.placeholder.com/150', alt: 'Image 5' },
-      { src: 'https://via.placeholder.com/150', alt: 'Image 1' },
-      { src: 'https://via.placeholder.com/150', alt: 'Image 2' },
-      { src: 'https://via.placeholder.com/150', alt: 'Image 3' },
-      { src: 'https://via.placeholder.com/150', alt: 'Image 4' },
-      { src: 'https://via.placeholder.com/150', alt: 'Image 5' }
-      // Add more images as needed
-    ])
-
-    return {
-      images
-    }
-  }
-})
-</script>
-
 <template>
-  <div class="container mx-auto py-4">
-    <div class="overflow-x-auto whitespace-nowrap hide-scrollbar">
-      <div class="inline-block" v-for="(image, index) in images" :key="index">
-        <img :src="image.src" :alt="image.alt" class="w-48 h-48 object-cover m-2" />
-      </div>
-    </div>
+  <div class="p-4">
+    <Slider :value="sliderValue" :min="0" :max="100" :range="isRange" />
+    <button @click="toggleRange" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded">Toggle Range Mode</button>
+    <p class="mt-4">Current Value: {{ sliderValue }}</p>
   </div>
 </template>
 
-<style scoped>
-/* Add this CSS to your global styles or within a <style> block in your component */
+<script>
+import Slider from '@/components/Slider.vue';
 
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
+export default {
+  components: {
+    Slider,
+  },
+  data() {
+    return {
+      sliderValue: 50,
+      isRange: false,
+    };
+  },
+  methods: {
+    toggleRange() {
+      this.isRange = !this.isRange;
+      this.sliderValue = this.isRange ? [20, 80] : 50;
+    },
+  },
+};
+</script>
 
-.hide-scrollbar {
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
-  scrollbar-width: none; /* Firefox */
-}
+<style>
+/* Add any global styles if needed */
 </style>

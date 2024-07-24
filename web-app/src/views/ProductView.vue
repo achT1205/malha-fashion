@@ -15,7 +15,6 @@ import ProcuctList from '@/components/ProcuctList.vue'
 import ProductReviews from '@/components/ProductReviews.vue'
 import { useScreenSize } from '@/composables/useScreenSize'
 
-
 const { isMobile, isTablet, isDesktop } = useScreenSize()
 const productStore = useProductStore()
 const router = useRouter()
@@ -392,7 +391,7 @@ watchEffect(() => fetchOutfits())
       </div>
     </section>
     <section aria-labelledby="trending-heading" class="bg-white" ref="reviewsSection">
-      <ProductReviews :reviews="product.reviews" />
+      <ProductReviews :reviews="product.reviews" @scrollToSection="scrollToSection" />
     </section>
   </div>
 </template>
