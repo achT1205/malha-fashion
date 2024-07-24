@@ -237,8 +237,11 @@ watchEffect(() => fetchOutfits())
                         aria-hidden="true"
                         class="h-4 w-4 rounded-full border border-black border-opacity-10 bg-current"
                       /></div
-                  ></router-link>
+                  >
+                  </router-link>
+                  
                 </RadioGroupOption>
+                
               </RadioGroup>
             </fieldset>
           </div>
@@ -252,7 +255,7 @@ watchEffect(() => fetchOutfits())
             <fieldset aria-label="Choose a size" class="mt-2">
               <RadioGroup
                 v-model="selectedColor.selectedSize"
-                class="grid grid-cols-6 gap-3 sm:grid-cols-6"
+                class="grid grid-cols-6 gap-3 sm:grid-cols-12"
               >
                 <RadioGroupOption
                   as="template"
@@ -268,11 +271,12 @@ watchEffect(() => fetchOutfits())
                       size.quantity > 0
                         ? 'cursor-pointer focus:outline-none'
                         : 'cursor-not-allowed opacity-25',
-                      active ? 'ring-2 ring-gray-500 ring-offset-2' : '',
+                      active ? 'ring-2 ring-gray-500 ' : '',
                       checked
                         ? 'border-transparent bg-gray-600 text-white hover:bg-gray-700'
                         : 'border-gray-200 bg-white text-gray-900 hover:bg-gray-50',
-                      'flex items-center justify-center rounded-md border px-3 py-3 text-sm font-medium uppercase sm:flex-1'
+                      'flex items-center justify-center rounded-md border px-3 py-3 text-sm font-medium uppercase sm:flex-1 h-9',
+                      size.name.length > 3 ? 'w-12' : 'w-10'
                     ]"
                   >
                     {{ size.name }}

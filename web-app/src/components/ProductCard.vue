@@ -53,12 +53,16 @@ selectedColor.value = props.product.colors.find(
     >
       <span
         :class="[
-          'inline-flex items-center rounded-full  px-1.5 py-0.5 text-xs font-medium  group-hover:hidden transition-all',
-          selectedColor.promo ? 'text-red-700 bg-red-100' : 'text-gray-600 bg-gray-100'
+          'inline-flex items-center rounded-full  px-1.5 py-0.5 text-xs font-medium  group-hover:hidden transition-all w-full',
+          selectedColor.isNewArrival === true
+            ? 'text-gray-600 bg-gray-100'
+            : selectedColor.discount
+            ? 'text-red-700 bg-red-100'
+            : ''
         ]"
       >
-        <span v-if="selectedColor.promo">{{ selectedColor.promo }}OFF</span>
-        <span v-else>NOUVEAU</span>
+        <span v-if="selectedColor.isNewArrival === true">NOUVEAU</span>
+        <span v-else-if="selectedColor.discount">{{ selectedColor.discount.label }}</span>
       </span>
 
       <div
@@ -83,7 +87,8 @@ selectedColor.value = props.product.colors.find(
                       ? 'cursor-pointer bg-white text-gray-900 shadow-sm'
                       : 'cursor-not-allowed bg-gray-50 text-gray-200',
                     active ? 'ring-2 ring-black' : '',
-                    'group relative flex items-center justify-center rounded-md border h-5  px-4 py-3 text-sm font-medium uppercase hover:bg-black hover:text-white focus:outline-none sm:flex-1'
+                    'group relative flex items-center justify-center rounded-md border h-8 px-4 py-3 text-sm font-medium uppercase hover:bg-black hover:text-white focus:outline-none sm:flex-1',
+                    size.name.length > 3 ? 'w-12' : 'w-8'
                   ]"
                 >
                   <span>{{ size.name }}</span>

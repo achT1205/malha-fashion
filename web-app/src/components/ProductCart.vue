@@ -1,5 +1,4 @@
 <script setup>
-import { ref } from 'vue'
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { XMarkIcon } from '@heroicons/vue/24/outline'
 import { useCartStore } from '@/stores/cartStore'
@@ -119,8 +118,27 @@ const emit = defineEmits(['toogle'])
                               </div>
 
                               <div class="flex flex-1 items-end justify-between pt-2">
-                                <p class="mt-1 text-sm font-medium text-gray-900">
-                                  {{ product.price * product.quantity }} €
+                                <p>
+                                  <span
+                                    :class="
+                                      product.discountPrice &&
+                                      product.discountPrice < product.price * product.quantity
+                                        ? 'line-through text-red-600'
+                                        : ''
+                                    "
+                                  >
+                                    {{ product.price * product.quantity }} €</span
+                                  >
+
+                                  <span
+                                    class="mt-1 text-sm font-medium text-gray-900 ml-4"
+                                    v-if="
+                                      product.discountPrice &&
+                                      product.discountPrice < product.price * product.quantity
+                                    "
+                                    >{{ product.discountPrice }}
+                                    €
+                                  </span>
                                 </p>
 
                                 <div class="ml-4">
@@ -153,7 +171,14 @@ const emit = defineEmits(['toogle'])
                   <div class="border-t border-gray-200 px-4 py-6 sm:px-6">
                     <div class="flex justify-between text-base font-medium text-gray-900">
                       <p>Total</p>
-                      <p>{{ cartStore.totalPrice }} €</p>
+                      <p>
+                        <span
+                          :class="cartStore.totalDiscountPrice ? 'line-through text-red-600' : ''"
+                          >{{ cartStore.totalPrice }} € </span
+                        >
+                        
+                        <span class="ml-3">{{ cartStore.totalDiscountPrice }} €</span>
+                      </p>
                     </div>
                     <p class="mt-0.5 text-sm text-gray-500">
                       Frais de port et taxes calculés à la caisse.

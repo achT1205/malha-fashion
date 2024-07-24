@@ -62,6 +62,12 @@ const onSorting = (sort) => {
               <p class="ml-2 mt-3 text-sm text-gray-900">
                 Based on {{ plateformReviews.totalCount }} reviews
               </p>
+              <p class="ml-2 mt-3 text-sm text-gray-900">
+                <a
+                  class="mt-6 inline-flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-8 py-2 text-sm font-medium text-gray-900 hover:bg-gray-50 sm:w-auto lg:w-full cursor-pointer"
+                  >Write a review</a
+                >
+              </p>
             </div>
           </div>
           <div
@@ -142,7 +148,7 @@ const onSorting = (sort) => {
                           @click="onSorting(option.name)"
                         >
                           <a
-                          class=" cursor-pointer"
+                            class="cursor-pointer"
                             :class="[
                               option.current ? 'font-medium text-gray-900' : 'text-gray-500',
                               active ? 'bg-gray-100' : '',
