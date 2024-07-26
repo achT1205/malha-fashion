@@ -26,6 +26,7 @@ import {
 import { ChevronDownIcon } from '@heroicons/vue/20/solid'
 import Cart from './ProductCart.vue'
 import LogoView from './LogoView.vue'
+import SearchComponent from './SearchComponent.vue'
 import { useCartStore } from '@/stores/cartStore'
 
 const cartStore = useCartStore()
@@ -197,10 +198,15 @@ const navigation = {
 }
 const mobileMenuOpen = ref(false)
 const open = ref(false)
+const openSearch = ref(false)
 
 const toogleCart = (toogle) => {
   if (toogle === true && open.value === false && cartStore.itemCount === 0) return
   open.value = toogle
+}
+
+const toogleSeach = (toogle) => {
+  openSearch.value = toogle
 }
 
 const handleMouseOver = (event) => {
@@ -505,10 +511,13 @@ const handleMouseOver = (event) => {
                   </button>
 
                   <!-- Search -->
-                  <a href="#" class="ml-2 p-2 text-gray-400 hover:text-gray-500">
+                  <span
+                    @click="toogleSeach(true)"
+                    class="ml-2 p-2 text-gray-400 hover:text-gray-500"
+                  >
                     <span class="sr-only">Search</span>
                     <MagnifyingGlassIcon class="h-6 w-6" aria-hidden="true" />
-                  </a>
+                  </span>
                 </div>
 
                 <!-- Logo (lg-) -->
@@ -547,10 +556,13 @@ const handleMouseOver = (event) => {
                   <div class="flex items-center lg:ml-8">
                     <div class="flex space-x-8">
                       <div class="hidden lg:flex">
-                        <a href="#" class="-m-2 p-2 text-gray-400 hover:text-gray-500">
+                        <span
+                          @click="toogleSeach(true)"
+                          class="-m-2 p-2 text-gray-400 hover:text-gray-500 cursor-pointer"
+                        >
                           <span class="sr-only">Search</span>
                           <MagnifyingGlassIcon class="h-6 w-6" aria-hidden="true" />
-                        </a>
+                        </span>
                       </div>
 
                       <div class="flex">
@@ -585,5 +597,6 @@ const handleMouseOver = (event) => {
       </nav>
     </header>
     <Cart :open="open" @toogle="toogleCart" />
+    <SearchComponent :open="openSearch" @toogle="toogleSeach" />
   </div>
 </template>
