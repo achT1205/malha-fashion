@@ -4,17 +4,16 @@ import { useCartStore } from '@/stores/cartStore'
 import { RadioGroup, RadioGroupOption } from '@headlessui/vue'
 import { CheckCircleIcon, TrashIcon } from '@heroicons/vue/20/solid'
 import BaseInput from '../components/BaseInput.vue'
-import BaseSelect from '../components/BaseSelect.vue'
 
 const cartStore = useCartStore()
 const shippingFee = 5
 const taxesFee = 4
 const deliveryMethods = [
-  { id: 1, title: 'Standard', turnaround: '4–10 business days', price: '$5.00' },
-  { id: 2, title: 'Express', turnaround: '2–5 business days', price: '$16.00' }
+  { id: 1, title: 'Standard', turnaround: '4 à 10 jours ouvrables', price: '$5.00' },
+  { id: 2, title: 'Express', turnaround: '2 à 5 jours ouvrables', price: '$16.00' }
 ]
 const paymentMethods = [
-  { id: 'credit-card', title: 'Credit card' },
+  { id: 'credit-card', title: 'Carte de crédit' },
   { id: 'paypal', title: 'PayPal' },
   { id: 'etransfer', title: 'eTransfer' }
 ]
@@ -34,60 +33,170 @@ const selectedDeliveryMethod = ref(deliveryMethods[0])
       <form class="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
         <div>
           <div>
-            <h2 class="text-lg font-medium text-gray-900">Contact information</h2>
+            <h2 class="text-lg font-medium text-gray-900">Coordonnées</h2>
 
             <div class="mt-4">
-              <BaseInput
-                v-model="user.firstName"
-                label="Email address"
-                type="email"
-                id="email-address"
-                name="email-address"
-                autocomplete="email"
-              />
+              <label for="email-address" class="block text-sm font-medium text-gray-700"
+                >Email address</label
+              >
+              <div class="mt-1">
+                <BaseInput
+                  v-model="user.email"
+                  type="email"
+                  id="email-address"
+                  name="email-address"
+                  autocomplete="email"
+                  class="block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
+                />
+              </div>
             </div>
           </div>
 
           <div class="mt-10 border-t border-gray-200 pt-10">
-            <h2 class="text-lg font-medium text-gray-900">Shipping information</h2>
+            <h2 class="text-lg font-medium text-gray-900">Informations sur la livraison</h2>
 
             <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-              <BaseInput v-model="user.firstName" label="Prénom" type="text" />
-
-              <BaseInput v-model="user.lastName" label="Nom" type="text" />
-
               <div>
-                <BaseInput v-model="user.address" label="Adresse" type="text" />
+                <label for="first-name" class="block text-sm font-medium text-gray-700"
+                  >Prénom</label
+                >
+                <div class="mt-1">
+                  <BaseInput
+                    v-model="user.firstName"
+                    type="text"
+                    id="last-name"
+                    name="last-name"
+                    autocomplete="family-name"
+                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
+                  />
+                </div>
               </div>
 
-              <BaseInput v-model="user.city" label="Ville" type="text" />
-              <BaseSelect
-                :options="['Canada', 'Mexico']"
-                v-model="user.country"
-                label="Choisir un pays"
-              />
+              <div>
+                <label for="last-name" class="block text-sm font-medium text-gray-700">Nom</label>
+                <div class="mt-1">
+                  <BaseInput
+                    v-model="user.lastName"
+                    type="text"
+                    id="last-name"
+                    name="last-name"
+                    autocomplete="family-name"
+                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
+                  />
+                </div>
+              </div>
 
-              <BaseInput v-model="user.region" label="State / Province" type="text" />
+              <div class="sm:col-span-2">
+                <label for="address" class="block text-sm font-medium text-gray-700">Adresse</label>
+                <div class="mt-1">
+                  <BaseInput
+                    v-model="user.address"
+                    type="text"
+                    name="address"
+                    id="address"
+                    autocomplete="street-address"
+                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
+                  />
+                </div>
+              </div>
 
-              <BaseInput v-model="user.region" label="Postal code" type="number" />
+              <div class="sm:col-span-2">
+                <label for="apartment" class="block text-sm font-medium text-gray-700"
+                  >Appartement, suite, etc. (facultatif).</label
+                >
+                <div class="mt-1">
+                  <BaseInput
+                    v-model="user.apartment"
+                    type="text"
+                    name="apartment"
+                    id="apartment"
+                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
+                  />
+                </div>
+              </div>
 
-              <BaseInput
-                v-model="user.phone"
-                label="Phone"
-                type="text"
-                name="phone"
-                id="phone"
-                autocomplete="tel"
-              />
+              <div>
+                <label for="city" class="block text-sm font-medium text-gray-700">Ville</label>
+                <div class="mt-1">
+                  <BaseInput
+                    type="text"
+                    name="city"
+                    v-model="user.city"
+                    id="city"
+                    autocomplete="address-level2"
+                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label for="country" class="block text-sm font-medium text-gray-700">Pays</label>
+                <div class="mt-1">
+                  <BaseInput
+                    v-model="user.country"
+                    id="country"
+                    name="country"
+                    autocomplete="country-name"
+                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label for="region" class="block text-sm font-medium text-gray-700"
+                  >État/Province</label
+                >
+                <div class="mt-1">
+                  <BaseInput
+                    v-model="user.region"
+                    type="text"
+                    name="region"
+                    id="region"
+                    autocomplete="address-level1"
+                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label for="postal-code" class="block text-sm font-medium text-gray-700"
+                  >Code Postal</label
+                >
+                <div class="mt-1">
+                  <BaseInput
+                    v-model="user.postalCode"
+                    type="text"
+                    name="postal-code"
+                    id="postal-code"
+                    autocomplete="postal-code"
+                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
+                  />
+                </div>
+              </div>
+
+              <div class="sm:col-span-2">
+                <label for="phone" class="block text-sm font-medium text-gray-700">Téléphone</label>
+                <div class="mt-1">
+                  <BaseInput
+                    v-model="user.phone"
+                    type="text"
+                    name="phone"
+                    id="phone"
+                    autocomplete="tel"
+                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
+                  />
+                </div>
+              </div>
             </div>
           </div>
 
           <div class="mt-10 border-t border-gray-200 pt-10">
-            <fieldset>
-              <legend class="text-lg font-medium text-gray-900">Delivery method</legend>
+            <h2 class="text-lg font-medium text-gray-900">Méthode de livraison</h2>
+
+            <fieldset aria-label="Méthode de livraison" class="mt-4">
               <RadioGroup
                 v-model="selectedDeliveryMethod"
-                class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4"
+                class="grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4"
               >
                 <RadioGroupOption
                   as="template"
@@ -139,7 +248,7 @@ const selectedDeliveryMethod = ref(deliveryMethods[0])
 
           <!-- Payment -->
           <div class="mt-10 border-t border-gray-200 pt-10">
-            <h2 class="text-lg font-medium text-gray-900">Payment</h2>
+            <h2 class="text-lg font-medium text-gray-900">Paiement</h2>
 
             <fieldset class="mt-4">
               <legend class="sr-only">Payment type</legend>
@@ -176,7 +285,7 @@ const selectedDeliveryMethod = ref(deliveryMethods[0])
             <div class="mt-6 grid grid-cols-4 gap-x-4 gap-y-6">
               <div class="col-span-4">
                 <label for="card-number" class="block text-sm font-medium text-gray-700"
-                  >Card number</label
+                  >Numéro de carte</label
                 >
                 <div class="mt-1">
                   <input
@@ -191,7 +300,7 @@ const selectedDeliveryMethod = ref(deliveryMethods[0])
 
               <div class="col-span-4">
                 <label for="name-on-card" class="block text-sm font-medium text-gray-700"
-                  >Name on card</label
+                  >Nom sur la carte</label
                 >
                 <div class="mt-1">
                   <input
@@ -206,7 +315,7 @@ const selectedDeliveryMethod = ref(deliveryMethods[0])
 
               <div class="col-span-3">
                 <label for="expiration-date" class="block text-sm font-medium text-gray-700"
-                  >Expiration date (MM/YY)</label
+                  >Date d'expiration (MM/AA)</label
                 >
                 <div class="mt-1">
                   <input
@@ -235,9 +344,9 @@ const selectedDeliveryMethod = ref(deliveryMethods[0])
           </div>
         </div>
 
-        <!-- Order summary -->
+        <!-- Récapitulatif de la commande -->
         <div class="mt-10 lg:mt-0">
-          <h2 class="text-lg font-medium text-gray-900">Order summary</h2>
+          <h2 class="text-lg font-medium text-gray-900">Récapitulatif de la commande</h2>
 
           <div class="mt-4 rounded-lg border border-gray-200 bg-white shadow-sm">
             <h3 class="sr-only">Items in your cart</h3>
@@ -282,7 +391,28 @@ const selectedDeliveryMethod = ref(deliveryMethods[0])
                   </div>
 
                   <div class="flex flex-1 items-end justify-between pt-2">
-                    <p class="mt-1 text-sm font-medium text-gray-900">{{ product.price }} €</p>
+                    <p>
+                      <span
+                        :class="
+                          product.discountPrice &&
+                          product.discountPrice < product.price * product.quantity
+                            ? 'line-through text-red-600'
+                            : ''
+                        "
+                      >
+                        {{ product.price * product.quantity }} €</span
+                      >
+
+                      <span
+                        class="mt-1 text-sm font-medium text-gray-900 ml-4"
+                        v-if="
+                          product.discountPrice &&
+                          product.discountPrice < product.price * product.quantity
+                        "
+                        >{{ product.discountPrice }}
+                        €
+                      </span>
+                    </p>
 
                     <div class="ml-4">
                       <label for="quantity" class="sr-only">Quantity</label>
@@ -309,11 +439,11 @@ const selectedDeliveryMethod = ref(deliveryMethods[0])
             </ul>
             <dl class="space-y-6 border-t border-gray-200 px-4 py-6 sm:px-6">
               <div class="flex items-center justify-between">
-                <dt class="text-sm">Subtotal</dt>
+                <dt class="text-sm">Total(Sans frais)</dt>
                 <dd class="text-sm font-medium text-gray-900">{{ cartStore.totalPrice }} €</dd>
               </div>
               <div class="flex items-center justify-between">
-                <dt class="text-sm">Shipping</dt>
+                <dt class="text-sm">Expédition</dt>
                 <dd class="text-sm font-medium text-gray-900">{{ shippingFee }} €</dd>
               </div>
               <div class="flex items-center justify-between">
@@ -323,7 +453,15 @@ const selectedDeliveryMethod = ref(deliveryMethods[0])
               <div class="flex items-center justify-between border-t border-gray-200 pt-6">
                 <dt class="text-base font-medium">Total</dt>
                 <dd class="text-base font-medium text-gray-900">
-                  {{ shippingFee + taxesFee + cartStore.totalPrice }}€
+                  <p>
+                    <span :class="cartStore.totalDiscountPrice ? 'line-through text-red-600' : ''"
+                      >{{ shippingFee + taxesFee + cartStore.totalPrice }} €
+                    </span>
+
+                    <span class="ml-3"
+                      >{{ shippingFee + taxesFee + cartStore.totalDiscountPrice }} €</span
+                    >
+                  </p>
                 </dd>
               </div>
             </dl>

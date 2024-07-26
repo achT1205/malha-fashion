@@ -73,9 +73,9 @@
           </ul>
         </section>
 
-        <!-- Order summary -->
+        <!-- Récapitulatif de la commande -->
         <section aria-labelledby="summary-heading" class="mt-16 rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8">
-          <h2 id="summary-heading" class="text-lg font-medium text-gray-900">Order summary</h2>
+          <h2 id="summary-heading" class="text-lg font-medium text-gray-900">Récapitulatif de la commande</h2>
 
           <dl class="mt-6 space-y-4">
             <div class="flex items-center justify-between">

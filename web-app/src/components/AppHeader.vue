@@ -21,11 +21,11 @@ import {
   MagnifyingGlassIcon,
   ShoppingCartIcon,
   UserIcon,
-  XMarkIcon,
+  XMarkIcon
 } from '@heroicons/vue/24/outline'
 import { ChevronDownIcon } from '@heroicons/vue/20/solid'
 import Cart from './ProductCart.vue'
-
+import LogoView from './LogoView.vue'
 import { useCartStore } from '@/stores/cartStore'
 
 const cartStore = useCartStore()
@@ -193,10 +193,7 @@ const navigation = {
       ]
     }
   ],
-  pages: [
-
-    { name: 'Nous contacter', path: 'contact' }
-  ]
+  pages: [{ name: 'Nous contacter', path: 'contact' }]
 }
 const mobileMenuOpen = ref(false)
 const open = ref(false)
@@ -348,33 +345,7 @@ const handleMouseOver = (event) => {
                 <div class="hidden lg:flex lg:items-center">
                   <a href="/">
                     <span class="sr-only">Your Company</span>
-                    <svg
-                      width="64"
-                      height="64"
-                      viewBox="0 0 64 64"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <text
-                        x="8"
-                        y="40"
-                        font-family="Roboto, Arial, sans-serif"
-                        font-size="32"
-                        font-style="italic"
-                        fill="black"
-                      >
-                        M
-                      </text>
-                      <text
-                        x="25"
-                        y="40"
-                        font-family="Roboto, Arial, sans-serif"
-                        font-size="32"
-                        font-style="italic"
-                        fill="black"
-                      >
-                        C
-                      </text>
-                    </svg>
+                    <LogoView />
                   </a>
                 </div>
 
@@ -389,7 +360,7 @@ const handleMouseOver = (event) => {
                         v-slot="{ open }"
                       >
                         <div class="relative flex">
-                          <PopoverButton 
+                          <PopoverButton
                             class="relative z-10 flex items-center justify-center text-sm font-mediumtransition-colors duration-200 ease-out decoration-white cursor-pointer"
                           >
                             {{ category.name }}
@@ -583,10 +554,10 @@ const handleMouseOver = (event) => {
                       </div>
 
                       <div class="flex">
-                        <a href="#" class="-m-2 p-2 text-gray-400 hover:text-gray-500">
+                        <router-link to="/login" class="-m-2 p-2 text-gray-400 hover:text-gray-500">
                           <span class="sr-only">Account</span>
                           <UserIcon class="h-6 w-6" aria-hidden="true" />
-                        </a>
+                        </router-link>
                       </div>
                     </div>
 

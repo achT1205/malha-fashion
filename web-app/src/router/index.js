@@ -1,9 +1,15 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import AboutView from '../views/AboutView.vue'
+import LoginView from '../views/LoginView.vue'
+import ResetPasswordView from '../views/ResetPasswordView.vue'
+import RegistrationView from '../views/RegistrationView.vue'
 import CollectionsView from '../views/CollectionsView.vue'
 import ProductView from '../views/ProductView.vue'
 import CheckoutView from '../views/CheckoutView.vue'
+
+
+
 
 
 const router = createRouter({
@@ -29,6 +35,26 @@ const router = createRouter({
       path: '/checkout',
       component: CheckoutView,
       name:'checkout'
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: LoginView 
+    },
+    {
+      path: '/reset-password',
+      name: 'reset-password',
+      component: ResetPasswordView 
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: LoginView 
+    },
+    {
+      path: '/registration',
+      name: 'registration',
+      component: RegistrationView 
     },
     {
       path: '/about',

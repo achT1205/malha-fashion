@@ -20,7 +20,7 @@
       <form class="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
         <div>
           <div>
-            <h2 class="text-lg font-medium text-gray-900">Contact information</h2>
+            <h2 class="text-lg font-medium text-gray-900">Coordonnées</h2>
 
             <div class="mt-4">
               <label for="email-address" class="block text-sm font-medium text-gray-700">Email address</label>
@@ -31,18 +31,18 @@
           </div>
 
           <div class="mt-10 border-t border-gray-200 pt-10">
-            <h2 class="text-lg font-medium text-gray-900">Shipping information</h2>
+            <h2 class="text-lg font-medium text-gray-900">Informations sur la livraison</h2>
 
             <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
               <div>
-                <label for="first-name" class="block text-sm font-medium text-gray-700">First name</label>
+                <label for="first-name" class="block text-sm font-medium text-gray-700">Prénom</label>
                 <div class="mt-1">
                   <input type="text" id="first-name" name="first-name" autocomplete="given-name" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 sm:text-sm" />
                 </div>
               </div>
 
               <div>
-                <label for="last-name" class="block text-sm font-medium text-gray-700">Last name</label>
+                <label for="last-name" class="block text-sm font-medium text-gray-700">Nom</label>
                 <div class="mt-1">
                   <input type="text" id="last-name" name="last-name" autocomplete="family-name" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 sm:text-sm" />
                 </div>
@@ -88,14 +88,14 @@
               </div>
 
               <div>
-                <label for="region" class="block text-sm font-medium text-gray-700">State / Province</label>
+                <label for="region" class="block text-sm font-medium text-gray-700">État/Province</label>
                 <div class="mt-1">
                   <input type="text" name="region" id="region" autocomplete="address-level1" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 sm:text-sm" />
                 </div>
               </div>
 
               <div>
-                <label for="postal-code" class="block text-sm font-medium text-gray-700">Postal code</label>
+                <label for="postal-code" class="block text-sm font-medium text-gray-700">Code Postal</label>
                 <div class="mt-1">
                   <input type="text" name="postal-code" id="postal-code" autocomplete="postal-code" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 sm:text-sm" />
                 </div>
@@ -112,7 +112,7 @@
 
           <div class="mt-10 border-t border-gray-200 pt-10">
             <RadioGroup v-model="selectedDeliveryMethod">
-              <RadioGroupLabel class="text-lg font-medium text-gray-900">Delivery method</RadioGroupLabel>
+              <RadioGroupLabel class="text-lg font-medium text-gray-900">Méthode de livraison</RadioGroupLabel>
 
               <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
                 <RadioGroupOption as="template" v-for="deliveryMethod in deliveryMethods" :key="deliveryMethod.id" :value="deliveryMethod" v-slot="{ checked, active }">
@@ -149,21 +149,21 @@
 
             <div class="mt-6 grid grid-cols-4 gap-x-4 gap-y-6">
               <div class="col-span-4">
-                <label for="card-number" class="block text-sm font-medium text-gray-700">Card number</label>
+                <label for="card-number" class="block text-sm font-medium text-gray-700">Numéro de carte</label>
                 <div class="mt-1">
                   <input type="text" id="card-number" name="card-number" autocomplete="cc-number" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 sm:text-sm" />
                 </div>
               </div>
 
               <div class="col-span-4">
-                <label for="name-on-card" class="block text-sm font-medium text-gray-700">Name on card</label>
+                <label for="name-on-card" class="block text-sm font-medium text-gray-700">Nom sur la carte</label>
                 <div class="mt-1">
                   <input type="text" id="name-on-card" name="name-on-card" autocomplete="cc-name" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 sm:text-sm" />
                 </div>
               </div>
 
               <div class="col-span-3">
-                <label for="expiration-date" class="block text-sm font-medium text-gray-700">Expiration date (MM/YY)</label>
+                <label for="expiration-date" class="block text-sm font-medium text-gray-700">Date d'expiration (MM/AA)</label>
                 <div class="mt-1">
                   <input type="text" name="expiration-date" id="expiration-date" autocomplete="cc-exp" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 sm:text-sm" />
                 </div>
@@ -179,9 +179,9 @@
           </div>
         </div>
 
-        <!-- Order summary -->
+        <!-- Récapitulatif de la commande -->
         <div class="mt-10 lg:mt-0">
-          <h2 class="text-lg font-medium text-gray-900">Order summary</h2>
+          <h2 class="text-lg font-medium text-gray-900">Récapitulatif de la commande</h2>
 
           <div class="mt-4 rounded-lg border border-gray-200 bg-white shadow-sm">
             <h3 class="sr-only">Items in your cart</h3>
@@ -277,11 +277,11 @@ const products = [
   // More products...
 ]
 const deliveryMethods = [
-  { id: 1, title: 'Standard', turnaround: '4–10 business days', price: '$5.00' },
-  { id: 2, title: 'Express', turnaround: '2–5 business days', price: '$16.00' },
+  { id: 1, title: 'Standard', turnaround: '4 à 10 jours ouvrables', price: '$5.00' },
+  { id: 2, title: 'Express', turnaround: '2 à 5 jours ouvrables', price: '$16.00' },
 ]
 const paymentMethods = [
-  { id: 'credit-card', title: 'Credit card' },
+  { id: 'credit-card', title: 'Carte de crédit' },
   { id: 'paypal', title: 'PayPal' },
   { id: 'etransfer', title: 'eTransfer' },
 ]

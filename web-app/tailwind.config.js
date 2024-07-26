@@ -1,4 +1,6 @@
+/* eslint-disable no-undef */
 /** @type {import('tailwindcss').Config} */
+// tailwind.config.js
 export default {
   content: [
     "./index.html",
@@ -8,9 +10,9 @@ export default {
     extend: {},
   },
   plugins: [
-    '@tailwindcss/forms',
-    '@tailwindcss/typography',
-    '@tailwindcss/aspect-ratio'
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/aspect-ratio'),
   ],
 }
 

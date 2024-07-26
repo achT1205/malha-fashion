@@ -55,7 +55,7 @@ const singin = async (email, password) => {
             <div class="mb-3">
                 <h2>Login to your account</h2>
                 <p>
-                    Forgot password? <router-link to="/auth/forgotpassword" class="font-semibold cursor-pointer primary-color">Click here</router-link>
+                    Mot de passe oublié? <router-link to="/auth/forgotpassword" class="font-semibold cursor-pointer primary-color">Click here</router-link>
                     to reset.
                 </p>
             </div>
