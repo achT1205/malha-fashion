@@ -2,8 +2,29 @@
 <script setup>
 import { ref } from 'vue'
 import BaseInput from '@/components/BaseInput.vue'
+import { useForm } from 'vee-validate'
+import { object, string } from 'yup'
 
-const user = ref({})
+const { errors, defineField, handleSubmit } = useForm({
+  validationSchema: object({
+    email: string()
+      .email('Le format du email est incorrect')
+      .max(200, `Le email ne peut pas dépaccer 200 caractères`)
+      .required(`L'email est requis`)
+  })
+})
+
+const [email, emailAttrs] = defineField('email', {
+  validateOnModelUpdate: false
+})
+
+const user = ref({
+  email: email
+})
+
+const onSubmit = handleSubmit((values) => {
+  console.log(JSON.stringify(values, null, 2))
+})
 </script>
 
 <template>
@@ -16,7 +37,7 @@ const user = ref({})
 
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
       <div class="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
-        <form class="space-y-6" action="#" method="POST">
+        <form class="space-y-6" @submit="onSubmit">
           <div>
             <label for="email" class="block text-sm font-medium leading-6 text-gray-900"
               >Adresse e-mail</label
@@ -28,8 +49,13 @@ const user = ref({})
                 id="email"
                 name="email-address"
                 autocomplete="email"
+                v-bind="emailAttrs"
+                :invalid="errors.email ? true : false"
                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6"
               />
+              <small class="mt-2 text-sm text-red-600" v-show="errors.email">{{
+                errors.email
+              }}</small>
             </div>
           </div>
 

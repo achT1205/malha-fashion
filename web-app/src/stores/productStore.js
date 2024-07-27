@@ -1,10 +1,19 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue'
+import { useFirestore, useCollection } from 'vuefire';
+import { collection } from 'firebase/firestore';
+
+
 
 
 export const useProductStore = defineStore('products', () => {
 
-    const productsData = [ 
+  const db = useFirestore();
+
+  const products1 = useCollection(collection(db, 'products'))
+  console.log(products1.data)
+
+  const productsData = [ 
       {
       updatedAt: 1718312207906,
       id: 1,

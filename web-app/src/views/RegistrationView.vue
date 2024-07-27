@@ -2,8 +2,95 @@
 <script setup>
 import { ref } from 'vue'
 import BaseInput from '@/components/BaseInput.vue'
+import { useForm } from 'vee-validate'
+import { object, string } from 'yup'
+import { collection, setDoc, doc } from 'firebase/firestore'
+import { useFirestore } from 'vuefire'
+import { useRouter } from 'vue-router'
+import { useFirebaseAuth } from 'vuefire'
+import { createUserWithEmailAndPassword } from '@firebase/auth'
+import { useToast } from '../composables/useToast'
+import { updateProfile } from 'firebase/auth'
 
-const user = ref({})
+const router = useRouter()
+const auth = useFirebaseAuth()
+const db = useFirestore()
+const { toasts, add } = useToast()
+
+const { errors, defineField, handleSubmit } = useForm({
+  validationSchema: object({
+    email: string()
+      .email('Le format du email est incorrect')
+      .max(200, `Le email ne peut pas dépaccer 200 caractères`)
+      .required(`L'email est requis`),
+    password: string()
+      .min(8, 'Le mot de passe doit être au moins de 8 caractères')
+      .max(200, 'Le mot de passe ne peut pas dépaccer 200 caractères')
+      .required('Le mot de passe est requis'),
+    firstName: string()
+      .min(2, 'Le Prénom doit être au moins de 2 caractères')
+      .max(200, 'Le Prénom ne peut pas dépaccer 200 caractères')
+      .required('Le Prénom est requis'),
+    lastName: string()
+      .min(2, 'Le Nom doit être au moins de 2 caractères')
+      .max(200, 'Le Nom ne peut pas dépaccer 200 caractères')
+      .required('Le Nom est requis')
+  })
+})
+
+const [email, emailAttrs] = defineField('email', {
+  validateOnModelUpdate: false
+})
+
+const [password, passwordAttrs] = defineField('password', {
+  validateOnModelUpdate: false
+})
+
+const [firstName, firstNameAttrs] = defineField('firstName', {
+  validateOnModelUpdate: false
+})
+
+const [lastName, lastNameAttrs] = defineField('lastName', {
+  validateOnModelUpdate: false
+})
+
+const user = ref({
+  password: password,
+  email: email,
+  firstName: firstName,
+  lastName: lastName
+})
+
+const onSubmit = handleSubmit((values) => {
+  createUser(values)
+})
+
+const createUser = async (u) => {
+  createUserWithEmailAndPassword(auth, u.email, u.password).then(async (userCredential) => {
+    updateProfile(auth.currentUser, {
+      firstName: u.firstName,
+      lastName: u.lastName,
+      displayName: `${u.firstName} ${u.lastName}`,
+      photoURL: 'https://picsum.photos/id/237/200/300'
+    })
+      .then(async () => {
+        const user = userCredential.user
+        const docRef = doc(collection(db, 'users'), user.uid)
+
+        await setDoc(docRef, {
+          createdAt: Date.now(),
+          firstName: u.firstName,
+          lastName: u.lastName
+        })
+        router.push('/')
+      })
+      .catch((error) => {
+        console.log(error)
+        // An error occurred
+        // ...
+      })
+  })
+}
 </script>
 
 <template>
@@ -16,7 +103,7 @@ const user = ref({})
 
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
       <div class="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
-        <form class="space-y-6" action="#" method="POST">
+        <form class="space-y-6" @submit="onSubmit">
           <div>
             <label for="email" class="block text-sm font-medium leading-6 text-gray-900"
               >Prénom</label
@@ -24,12 +111,17 @@ const user = ref({})
             <div class="mt-2">
               <BaseInput
                 v-model="user.firstName"
+                v-bind="firstNameAttrs"
+                :invalid="errors.firstName ? true : false"
                 type="text"
                 id="firstName"
                 name="first-name"
                 autocomplete="first-name"
                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6"
               />
+              <small class="mt-2 text-sm text-red-600" v-show="errors.firstName">{{
+                errors.firstName
+              }}</small>
             </div>
           </div>
           <div>
@@ -37,12 +129,17 @@ const user = ref({})
             <div class="mt-2">
               <BaseInput
                 v-model="user.lastName"
+                v-bind="lastNameAttrs"
+                :invalid="errors.lastName ? true : false"
                 type="text"
                 id="lastName"
                 name="last-name"
                 autocomplete="last-name"
                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6"
               />
+              <small class="mt-2 text-sm text-red-600" v-show="errors.lastName">{{
+                errors.lastName
+              }}</small>
             </div>
           </div>
 
@@ -53,12 +150,17 @@ const user = ref({})
             <div class="mt-2">
               <BaseInput
                 v-model="user.email"
+                v-bind="emailAttrs"
+                :invalid="errors.email ? true : false"
                 type="email"
                 id="email"
                 name="email-address"
                 autocomplete="email"
                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6"
               />
+              <small class="mt-2 text-sm text-red-600" v-show="errors.email">{{
+                errors.email
+              }}</small>
             </div>
           </div>
 
@@ -69,6 +171,8 @@ const user = ref({})
             <div class="mt-2">
               <BaseInput
                 v-model="user.password"
+                v-bind="passwordAttrs"
+                :invalid="errors.password ? true : false"
                 id="password"
                 name="password"
                 type="password"
@@ -76,6 +180,9 @@ const user = ref({})
                 required=""
                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6"
               />
+              <small class="mt-2 text-sm text-red-600" v-show="errors.password">{{
+                errors.password
+              }}</small>
             </div>
           </div>
           <div>
@@ -147,10 +254,10 @@ const user = ref({})
       </div>
 
       <p class="mt-10 text-center text-sm text-gray-500">
-        Pas encore membre?
+        Déjà membre ?
         {{ ' ' }}
-        <a href="#" class="font-semibold leading-6 text-gray-600 hover:text-gray-500"
-          >Créer un compte ici</a
+        <router-link to="/login" class="font-semibold leading-6 text-gray-600 hover:text-gray-500"
+          >Connectez-vous ici</router-link
         >
       </p>
     </div>

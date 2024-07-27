@@ -2,8 +2,57 @@
 <script setup>
 import { ref } from 'vue'
 import BaseInput from '@/components/BaseInput.vue'
+import { useForm } from 'vee-validate'
+import { object, string } from 'yup'
+import { useRouter } from 'vue-router'
+import { useFirebaseAuth } from 'vuefire'
+import { signInWithEmailAndPassword } from '@firebase/auth'
+//import { GoogleAuthProvider } from 'firebase/auth'
+//export const googleAuthProvider = new GoogleAuthProvider()
 
-const user = ref({})
+
+const router = useRouter()
+const auth = useFirebaseAuth()
+const { errors, defineField, handleSubmit } = useForm({
+  validationSchema: object({
+    email: string()
+      .email('Le format du email est incorrect')
+      .max(200, `Le email ne peut pas dépaccer 200 caractères`)
+      .required(`L'email est requis`),
+    password: string()
+      .max(200, 'Le mot de passe ne peut pas dépaccer 200 caractères')
+      .required('Le mot de passe est requis')
+  })
+})
+
+const [email, emailAttrs] = defineField('email', {
+  validateOnModelUpdate: false
+})
+
+const [password, passwordAttrs] = defineField('password', {
+  validateOnModelUpdate: false
+})
+
+const user = ref({
+  password: password,
+  email: email
+})
+
+const onSubmit = handleSubmit((values) => {
+  singin(values.email, values.password)
+})
+
+const singin = async (email, password) => {
+  signInWithEmailAndPassword(auth, email, password)
+    .then(async (userCredential) => {
+      const user = userCredential.user
+      console.log(user)
+      router.push('/')
+    })
+    .catch((error) => {
+      console.log(JSON.stringify(error))
+    })
+}
 </script>
 
 <template>
@@ -16,7 +65,7 @@ const user = ref({})
 
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
       <div class="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
-        <form class="space-y-6" action="#" method="POST">
+        <form class="space-y-6" @submit="onSubmit">
           <div>
             <label for="email" class="block text-sm font-medium leading-6 text-gray-900"
               >Adresse e-mail</label
@@ -28,8 +77,13 @@ const user = ref({})
                 id="email"
                 name="email-address"
                 autocomplete="email"
+                v-bind="emailAttrs"
+                :invalid="errors.email ? true : false"
                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6"
               />
+              <small class="mt-2 text-sm text-red-600" v-show="errors.email">{{
+                errors.email
+              }}</small>
             </div>
           </div>
 
@@ -40,13 +94,17 @@ const user = ref({})
             <div class="mt-2">
               <BaseInput
                 v-model="user.password"
+                v-bind="passwordAttrs"
+                :invalid="errors.password ? true : false"
                 id="password"
                 name="password"
                 type="password"
                 autocomplete="current-password"
-                required=""
                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6"
               />
+              <small class="mt-2 text-sm text-red-600" v-show="errors.password">{{
+                errors.password
+              }}</small>
             </div>
           </div>
 

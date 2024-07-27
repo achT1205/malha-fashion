@@ -28,8 +28,14 @@ import Cart from './ProductCart.vue'
 import LogoView from './LogoView.vue'
 import SearchComponent from './SearchComponent.vue'
 import { useCartStore } from '@/stores/cartStore'
+import { useCurrentUser, useFirebaseAuth } from 'vuefire'
+import { signOut } from '@firebase/auth'
+import { useRouter } from 'vue-router'
 
+const auth = useFirebaseAuth()
+const user = useCurrentUser()
 const cartStore = useCartStore()
+const router = useRouter()
 
 const navigation = {
   categories: [
@@ -196,6 +202,12 @@ const navigation = {
   ],
   pages: [{ name: 'Nous contacter', path: 'contact' }]
 }
+
+const profileMenus = [
+  { name: 'Mes commandes', to: '/commandes' },
+  { name: 'Profile', to: '/profile' }
+]
+
 const mobileMenuOpen = ref(false)
 const open = ref(false)
 const openSearch = ref(false)
@@ -207,6 +219,17 @@ const toogleCart = (toogle) => {
 
 const toogleSeach = (toogle) => {
   openSearch.value = toogle
+}
+
+const logout = async () => {
+  await signOut(auth)
+    .then(() => {
+      console.log('logged out')
+      router.push('/')
+    })
+    .catch((error) => {
+      console.log(error)
+    })
 }
 
 const handleMouseOver = (event) => {
@@ -566,10 +589,57 @@ const handleMouseOver = (event) => {
                       </div>
 
                       <div class="flex">
-                        <router-link to="/login" class="-m-2 p-2 text-gray-400 hover:text-gray-500">
+                        <router-link
+                          v-if="!user"
+                          to="/login"
+                          class="-m-2 p-2 text-gray-400 hover:text-gray-500"
+                        >
                           <span class="sr-only">Account</span>
-                          <UserIcon class="h-6 w-6" aria-hidden="true" />
+                          <UserIcon class="h-8 w-8" aria-hidden="true" />
                         </router-link>
+                        <span v-else>
+                          <Popover class="relative">
+                            <PopoverButton
+                              class="inline-flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900"
+                            >
+                              <img
+                                class="inline-block h-6 w-6 rounded-full"
+                                :src="user.providerData[0].photoURL"
+                                alt=""
+                              />
+                              <span class="ml-3">{{ user.providerData[0].displayName }}</span>
+                              <ChevronDownIcon class="h-5 w-5" aria-hidden="true" />
+                            </PopoverButton>
+
+                            <transition
+                              enter-active-class="transition ease-out duration-200"
+                              enter-from-class="opacity-0 translate-y-1"
+                              enter-to-class="opacity-100 translate-y-0"
+                              leave-active-class="transition ease-in duration-150"
+                              leave-from-class="opacity-100 translate-y-0"
+                              leave-to-class="opacity-0 translate-y-1"
+                            >
+                              <PopoverPanel
+                                class="absolute left-1/2 z-10 mt-5 flex w-screen max-w-min -translate-x-1/2 px-4"
+                              >
+                                <div
+                                  class="w-56 shrink rounded-xl bg-white p-4 text-sm font-semibold leading-6 text-gray-900 shadow-lg ring-1 ring-gray-900/5"
+                                >
+                                  <router-link
+                                    v-for="item in profileMenus"
+                                    :key="item.name"
+                                    :to="item.to"
+                                    class="block p-2 hover:text-gray-600"
+                                    >{{ item.name }}</router-link
+                                  >
+                                  <a @click="logout" class="block p-2 hover:text-gray-600 cursor-pointer"
+                                    >Deconexion</a
+                                  >
+                                </div>
+                              </PopoverPanel>
+                            </transition>
+                          </Popover>
+                        </span>
                       </div>
                     </div>
 
