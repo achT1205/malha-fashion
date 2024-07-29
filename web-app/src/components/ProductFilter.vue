@@ -1,6 +1,6 @@
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import {
   Dialog,
   DialogPanel,
@@ -21,12 +21,25 @@ import {
 import { XMarkIcon } from '@heroicons/vue/24/outline'
 import { ChevronDownIcon } from '@heroicons/vue/20/solid'
 import BaseInput from '@/components/BaseInput.vue'
+import { useRouter, useRoute } from 'vue-router'
 
 const sortOptions = [
   { name: 'Most Popular', href: '#', current: true },
   { name: 'Best Rating', href: '#', current: false },
   { name: 'Newest', href: '#', current: false }
 ]
+
+/*
+const onSelectSize = () => {
+  const query = {}
+  query.size = selectedColor.value.selectedSize.value.toLocaleLowerCase()
+  selectImageIndex.value = 1
+  router.push({ query: query })
+}*/
+
+const router = useRouter()
+const route = useRoute()
+
 const filters = ref()
 
 const minPrice = ref(20)
@@ -88,12 +101,35 @@ filters.value = [
   }
 ]
 const activeFilters = [
-  { value: 'new-arrivals', label: 'Nouvels arrivés' },
-  { value: 'women-dresses', label: 'Robes femme' },
-  { value: 'gilr-dresses', label: 'Robes fille' },
-  { value: 'men-urnous', label: 'Burnous homme' },
-  { value: 'boy-urnous', label: 'Burnous garçon' }
+  {
+    value: 'new-in',
+    label: 'Nouvels arrivés',
+    description: 'Thoughtfully designed Collection 1 for'
+  },
+  {
+    value: 'women-dresses',
+    label: 'Robes femme',
+    description: 'Thoughtfully designed Collection 1 for'
+  },
+  {
+    value: 'gilr-dresses',
+    label: 'Robes fille',
+    description: 'Thoughtfully designed Collection 1 for'
+  },
+  {
+    value: 'men-urnous',
+    label: 'Burnous homme',
+    description: 'Thoughtfully designed Collection 1 for'
+  },
+  {
+    value: 'boy-urnous',
+    label: 'Burnous garçon',
+    description: 'Thoughtfully designed Collection 1 for'
+  },
+  { value: 'jewelry', label: 'Bijoux', description: 'Thoughtfully designed Collection 1 for' },
+  { value: 'bags', label: 'Sacs', description: 'Thoughtfully designed Collection 1 for' }
 ]
+const selectedFilter = ref()
 
 const open = ref(false)
 
@@ -103,6 +139,51 @@ const leftPercentage = computed(
 const rightPercentage = computed(
   () => 100 - ((priceRange.value[1] - minPrice.value) / (maxPrice.value - minPrice.value)) * 100
 )
+
+const onSelectFilter = (filter) => {
+  selectedFilter.value = filter
+
+  filters.value.forEach((filter) => {
+    filter.options.forEach((_) => (_.checked = false))
+  })
+}
+
+const handleRouteChange = () => {
+  selectedFilter.value = activeFilters.find(
+    (f) => f.value.toLocaleLowerCase() === route.params.slug
+  )
+
+  if (route.query) {
+    const query = route.query
+    for (const key in query) {
+      if (query.hasOwnProperty(key)) {
+        const index = filters.value.findIndex((_) => _.id === key)
+        filters.value[index].options.forEach((option) => {
+          if (query[key].indexOf(option.value) > -1) {
+            option.checked = true
+          } else {
+            option.checked = false
+          }
+        })
+      }
+    }
+  }
+}
+
+watch(
+  filters.value,
+  (newfilters) => {
+    const query = {}
+    newfilters.forEach((filter) => {
+      const checkeds = filter.options.filter((_) => _.checked)
+      if (checkeds.length > 0) query[filter.id] = checkeds.map((_) => _.value)
+    })
+    router.push({ query: query })
+  },
+  { deep: true }
+)
+
+onMounted(() => route.fullPath, handleRouteChange())
 </script>
 <template>
   <div class="bg-white">
@@ -199,11 +280,14 @@ const rightPercentage = computed(
       </Dialog>
     </TransitionRoot>
 
-    <div class="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:max-w-7xl lg:px-8">
-      <div class="py-24">
-        <h1 class="text-4xl font-bold tracking-tight text-gray-900">New Arrivals</h1>
+    <div
+      class="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:max-w-7xl lg:px-8"
+      v-if="selectedFilter"
+    >
+      <div class="py-20">
+        <h1 class="text-4xl font-bold tracking-tight text-gray-900">{{ selectedFilter.label }}</h1>
         <p class="mx-auto mt-4 max-w-3xl text-base text-gray-500">
-          Thoughtfully designed Collection 1 for the workspace, home, and travel.
+          {{ selectedFilter.description }}
         </p>
       </div>
     </div>
@@ -427,22 +511,20 @@ const rightPercentage = computed(
 
           <div class="mt-2 sm:ml-4 sm:mt-0">
             <div class="-m-1 flex flex-wrap items-center">
-              <span
+              <router-link
+                :to="`/collections/${activeFilter.value}`"
                 v-for="activeFilter in activeFilters"
                 :key="activeFilter.value"
-                class="m-1 inline-flex items-center rounded-full border border-gray-200 bg-white py-1.5 pl-3 pr-2 text-sm font-medium text-gray-900"
+                class="m-1 inline-flex items-center rounded-full border py-1.5 pl-3 pr-2 text-sm font-medium text-gray-900 cursor-pointer"
+                :class="
+                  selectedFilter && selectedFilter.value === activeFilter.value
+                    ? 'border-gray-500 bg-gray-200'
+                    : 'border-gray-200 bg-white'
+                "
+                @click="onSelectFilter(activeFilter)"
               >
                 <span>{{ activeFilter.label }}</span>
-                <button
-                  type="button"
-                  class="ml-1 inline-flex h-4 w-4 flex-shrink-0 rounded-full p-1 text-gray-400 hover:bg-gray-200 hover:text-gray-500"
-                >
-                  <span class="sr-only">Remove filter for {{ activeFilter.label }}</span>
-                  <svg class="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
-                    <path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7" />
-                  </svg>
-                </button>
-              </span>
+              </router-link>
             </div>
           </div>
         </div>

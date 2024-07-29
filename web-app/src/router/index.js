@@ -23,9 +23,10 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/collections/:name',
+      path: '/collections/:slug',
       component: CollectionsView,
-      name:'collections'
+      name:'collections',
+      props : (route) =>({ slug: route.params.slug })
     },
     {
       path: '/products/:slug',
