@@ -19,8 +19,8 @@ import {
   TransitionRoot
 } from '@headlessui/vue'
 import { XMarkIcon } from '@heroicons/vue/24/outline'
-import { ChevronDownIcon } from '@heroicons/vue/20/solid'
-import BaseInput from '@/components/BaseInput.vue'
+import { ChevronDownIcon, PlayCircleIcon, PhoneIcon } from '@heroicons/vue/20/solid'
+import MultiSlider from '@/components/MultiSlider.vue'
 import { useRouter, useRoute } from 'vue-router'
 
 const sortOptions = [
@@ -29,6 +29,10 @@ const sortOptions = [
   { name: 'Newest', href: '#', current: false }
 ]
 
+const callsToAction = [
+  { name: 'Watch demo', href: '#', icon: PlayCircleIcon },
+  { name: 'Contact sales', href: '#', icon: PhoneIcon }
+]
 /*
 const onSelectSize = () => {
   const query = {}
@@ -43,9 +47,9 @@ const route = useRoute()
 const filters = ref()
 
 const minPrice = ref(20)
-const maxPrice = ref(1000)
+const maxPrice = ref(150)
 
-const priceRange = ref([20, 1000])
+const priceRange = ref([10, 200])
 
 filters.value = [
   {
@@ -133,13 +137,6 @@ const selectedFilter = ref()
 
 const open = ref(false)
 
-const leftPercentage = computed(
-  () => ((priceRange.value[0] - minPrice.value) / (maxPrice.value - minPrice.value)) * 100
-)
-const rightPercentage = computed(
-  () => 100 - ((priceRange.value[1] - minPrice.value) / (maxPrice.value - minPrice.value)) * 100
-)
-
 const onSelectFilter = (filter) => {
   selectedFilter.value = filter
 
@@ -152,7 +149,6 @@ const handleRouteChange = () => {
   selectedFilter.value = activeFilters.find(
     (f) => f.value.toLocaleLowerCase() === route.params.slug
   )
-
   if (route.query) {
     const query = route.query
     for (const key in query) {
@@ -168,6 +164,12 @@ const handleRouteChange = () => {
       }
     }
   }
+}
+
+const handleRangeChange = (range) => {
+  const query = route.query
+  query['range'] = range
+  router.push({ query: query })
 }
 
 watch(
@@ -406,90 +408,20 @@ onMounted(() => route.fullPath, handleRouteChange())
                         </div>
                       </div>
                       <div class="space-y-4" v-else>
-                        <!--                        <div class="grid grid-flow-col auto-cols-max">
-                          <div>
-                            <BaseInput v-model="minPrice" type="number" class="p-2" />
-                          </div>
-                          <div class="mt-6 ml-10 mr-10">-</div>
-                          <div>
-                            <BaseInput v-model="maxPrice" type="number" class="p-2" />
-                          </div>
-                        </div>-->
-                        <div class="w-full p-4">
-                          <div class="flex justify-between items-center mb-4">
-                            <BaseInput
-                              v-model="minPrice"
-                              type="number"
-                              :id="'min-price'"
-                              :label="`Min Price: ${minPrice} €`"
-                              class="mr-2"
-                            />
-
-                            <!-- <div>
-                              <label for="min-price" class="block text-sm font-medium text-gray-700"
-                                >Min Price: £{{ priceRange[0] }}</label
-                              >
-                              <input
-                                id="min-price"
-                                type="number"
-                                v-model="priceRange[0]"
-                                class="border rounded p-2 mt-1"
-                                @change="handleRangeChange"
-                              />
-                            </div>-->
-                            <BaseInput
-                              v-model="maxPrice"
-                              type="number"
-                              :id="'max-price'"
-                              :label="`Min Price: ${maxPrice} €`"
-                              class="ml-2"
-                              :max="priceRange[1]"
-                              :min="minPrice"
-                            />
-                            <!--<div>
-                              <label for="max-price" class="block text-sm font-medium text-gray-700"
-                                >Max Price: £{{ priceRange[1] }}</label
-                              >
-                              <input
-                                id="max-price"
-                                type="number"
-                                v-model="priceRange[1]"
-                                class="border rounded p-2 mt-1"
-                                @change="handleRangeChange"
-                              />
-                            </div>-->
-                          </div>
-                          <div class="relative mt-4">
-                            <input
-                              type="range"
-                              :min="priceRange[0]"
-                              :max="maxPrice"
-                              v-model="minPrice"
-                              @input="handleRangeChange"
-                              :value="priceRange[0]"
-                              class="absolute w-full mt-[-7.5px] z-10"
-                            />
-                            <input
-                              type="range"
-                              :min="minPrice"
-                              :max="priceRange[1]"
-                              v-model="maxPrice"
-                              @input="handleRangeChange"
-                              :value="priceRange[1]"
-                              class="absolute w-full mt-[-7.5px] z-10"
-                            />
-                            <div class="absolute top-0 w-full h-1 bg-gray-200"></div>
-                            <div
-                              class="absolute top-0 h-1 bg-blue-500"
-                              :style="{ left: leftPercentage + '%', right: rightPercentage + '%' }"
-                            ></div>
-                          </div>
-                          <div class="flex justify-between mt-2">
-                            <span>£{{ minPrice }}</span>
-                            <span>£{{ maxPrice }}</span>
-                          </div>
-                        </div>
+                        <MultiSlider
+                          :min="priceRange[0]"
+                          :max="priceRange[1]"
+                          :minVal="minPrice"
+                          :maxVal="maxPrice"
+                          @handleRangeChange="handleRangeChange"
+                        />
                       </div>
+                      <!--<div class="grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50">
+            <a v-for="item in callsToAction" :key="item.name" :href="item.href" class="flex items-center justify-center gap-x-2.5 p-3 font-semibold text-gray-900 hover:bg-gray-100">
+              <component :is="item.icon" class="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
+              {{ item.name }}
+            </a>
+          </div>-->
                     </PopoverPanel>
                   </transition>
                 </Popover>
