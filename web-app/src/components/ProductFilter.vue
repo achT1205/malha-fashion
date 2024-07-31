@@ -1,4 +1,3 @@
-
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import {
@@ -117,7 +116,11 @@ const activeFilters = [
     label: 'Burnous garçon',
     description: 'Thoughtfully designed Collection 1 for'
   },
-  { value: 'jewelry', label: 'Bijoux', description: 'Thoughtfully designed Collection 1 for' },
+  {
+    value: 'jewelry',
+    label: 'Bijoux',
+    description: 'Thoughtfully designed Collection 1 for'
+  },
   { value: 'bags', label: 'Sacs', description: 'Thoughtfully designed Collection 1 for' }
 ]
 const selectedFilter = ref()
@@ -128,7 +131,7 @@ const onSelectFilter = (filter) => {
   selectedFilter.value = filter
 
   filters.value.forEach((filter) => {
-    filter.options.forEach((_) => (_.checked = false))
+    if (filter.option) filter.options.forEach((_) => (_.checked = false))
   })
 }
 
@@ -195,7 +198,7 @@ const handleFiltershange = () => {
   })
   query['min-price'] = minPrice.value
   query['max-price'] = maxPrice.value
-  query['sort'] = sort.value.name
+  query['sort'] = sort.value?.name
   canApplyFilter.value = false
 
   router.push({ query: query })
@@ -311,7 +314,9 @@ watch(
       v-if="selectedFilter"
     >
       <div class="py-20">
-        <h1 class="text-4xl font-bold tracking-tight text-gray-900">{{ selectedFilter.label }}</h1>
+        <h1 class="text-4xl font-bold tracking-tight text-gray-900">
+          {{ selectedFilter.label }}
+        </h1>
         <p class="mx-auto mt-4 max-w-3xl text-base text-gray-500">
           {{ selectedFilter.description }}
         </p>
@@ -448,8 +453,7 @@ watch(
                 </Popover>
                 <button
                   class="inline-block border px-2 py-1 text-base text-gray-900 hover:bg-gray-100"
-                  :class="!canApplyFilter ? 'bg-gray-300' : 'bg-white'"
-                  :disabled="!canApplyFilter"
+                  :class="canApplyFilter ? 'bg-gray-300' : 'bg-white'"
                   @click="handleFiltershange"
                 >
                   APPLIQUER
