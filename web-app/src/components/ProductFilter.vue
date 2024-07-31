@@ -19,43 +19,30 @@ import {
   TransitionRoot
 } from '@headlessui/vue'
 import { XMarkIcon } from '@heroicons/vue/24/outline'
-import { ChevronDownIcon, PlayCircleIcon, PhoneIcon } from '@heroicons/vue/20/solid'
+import { ChevronDownIcon } from '@heroicons/vue/20/solid'
 import MultiSlider from '@/components/MultiSlider.vue'
 import { useRouter, useRoute } from 'vue-router'
 
-const sortOptions = [
-  { name: 'Most Popular', href: '#', current: true },
-  { name: 'Best Rating', href: '#', current: false },
-  { name: 'Newest', href: '#', current: false }
-]
-
-const callsToAction = [
-  { name: 'Watch demo', href: '#', icon: PlayCircleIcon },
-  { name: 'Contact sales', href: '#', icon: PhoneIcon }
-]
-/*
-const onSelectSize = () => {
-  const query = {}
-  query.size = selectedColor.value.selectedSize.value.toLocaleLowerCase()
-  selectImageIndex.value = 1
-  router.push({ query: query })
-}*/
+const sortOptions = ref([
+  { name: 'Most Popular', current: true },
+  { name: 'Best Rating', current: false },
+  { name: 'Newest', current: false }
+])
 
 const router = useRouter()
 const route = useRoute()
-
+const sort = ref(null)
 const filters = ref()
 
 const minPrice = ref(20)
 const maxPrice = ref(150)
-
+const canApplyFilter = ref(false)
 const priceRange = ref([10, 200])
 
 filters.value = [
   {
     id: 'price',
-    name: 'Prix',
-    options: [{ value: 'traditionals', label: 'Célébrations traditionnelles', checked: false }]
+    name: 'Prix'
   },
   {
     id: 'category',
@@ -145,6 +132,14 @@ const onSelectFilter = (filter) => {
   })
 }
 
+const handleSortOptionChange = (selectedOption) => {
+  sortOptions.value.forEach((option) => {
+    option.current = option === selectedOption
+    sort.value = selectedOption
+  })
+  canApplyFilter.value = true
+}
+
 const handleRouteChange = () => {
   selectedFilter.value = activeFilters.find(
     (f) => f.value.toLocaleLowerCase() === route.params.slug
@@ -154,38 +149,67 @@ const handleRouteChange = () => {
     for (const key in query) {
       if (query.hasOwnProperty(key)) {
         const index = filters.value.findIndex((_) => _.id === key)
-        filters.value[index].options.forEach((option) => {
-          if (query[key].indexOf(option.value) > -1) {
-            option.checked = true
-          } else {
-            option.checked = false
+        if (index === -1) {
+          if (key === 'min-price') {
+            const val = parseInt(query['min-price'])
+            minPrice.value = val < priceRange.value[0] ? priceRange.value[0] : val
           }
-        })
+          if (key === 'max-price') {
+            const val = parseInt(query['max-price'])
+            maxPrice.value = val > priceRange.value[1] ? priceRange.value[1] : val
+          }
+          if (key === 'sort') {
+            sort.value = sortOptions.value.find((_) => _.name === query['sort'])
+            handleSortOptionChange(sort.value)
+          }
+        } else {
+          filters.value[index].options.forEach((option) => {
+            if (query[key].indexOf(option.value) > -1) {
+              option.checked = true
+            } else {
+              option.checked = false
+            }
+          })
+        }
       }
     }
   }
+
+  canApplyFilter.value = false
 }
 
 const handleRangeChange = (range) => {
-  const query = route.query
-  query['range'] = range
+  minPrice.value = range[0]
+  maxPrice.value = range[1]
+  canApplyFilter.value = true
+}
+
+const handleFiltershange = () => {
+  const query = {}
+  const newfilters = filters.value
+  newfilters.forEach((filter) => {
+    if (filter.id !== 'price') {
+      const checkeds = filter.options.filter((_) => _.checked)
+      if (checkeds.length > 0) query[filter.id] = checkeds.map((_) => _.value)
+    }
+  })
+  query['min-price'] = minPrice.value
+  query['max-price'] = maxPrice.value
+  query['sort'] = sort.value.name
+  canApplyFilter.value = false
+
   router.push({ query: query })
 }
 
+onMounted(() => route.fullPath, handleRouteChange())
+
 watch(
   filters.value,
-  (newfilters) => {
-    const query = {}
-    newfilters.forEach((filter) => {
-      const checkeds = filter.options.filter((_) => _.checked)
-      if (checkeds.length > 0) query[filter.id] = checkeds.map((_) => _.value)
-    })
-    router.push({ query: query })
+  () => {
+    canApplyFilter.value = true
   },
   { deep: true }
 )
-
-onMounted(() => route.fullPath, handleRouteChange())
 </script>
 <template>
   <div class="bg-white">
@@ -305,7 +329,7 @@ onMounted(() => route.fullPath, handleRouteChange())
               <MenuButton
                 class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900"
               >
-                Sort
+                Sort <span v-if="sort">({{ sort.name }})</span>
                 <ChevronDownIcon
                   class="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                   aria-hidden="true"
@@ -326,14 +350,14 @@ onMounted(() => route.fullPath, handleRouteChange())
               >
                 <div class="py-1">
                   <MenuItem v-for="option in sortOptions" :key="option.name" v-slot="{ active }">
-                    <a
-                      :href="option.href"
+                    <span
+                      @click="handleSortOptionChange(option)"
                       :class="[
                         option.current ? 'font-medium text-gray-900' : 'text-gray-500',
                         active ? 'bg-gray-100' : '',
-                        'block px-4 py-2 text-sm'
+                        'block px-4 py-2 text-sm cursor-pointer'
                       ]"
-                      >{{ option.name }}</a
+                      >{{ option.name }}</span
                     >
                   </MenuItem>
                 </div>
@@ -367,6 +391,9 @@ onMounted(() => route.fullPath, handleRouteChange())
                       "
                       class="ml-1.5 rounded bg-gray-200 px-1.5 py-0.5 text-xs font-semibold tabular-nums text-gray-700"
                       >{{ section.options.filter((o) => o.checked).length }}</span
+                    >
+                    <span v-if="section.id === 'price' && minPrice && maxPrice"
+                      >({{ minPrice }}-{{ maxPrice }})€</span
                     >
                     <ChevronDownIcon
                       class="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
@@ -416,15 +443,17 @@ onMounted(() => route.fullPath, handleRouteChange())
                           @handleRangeChange="handleRangeChange"
                         />
                       </div>
-                      <!--<div class="grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50">
-            <a v-for="item in callsToAction" :key="item.name" :href="item.href" class="flex items-center justify-center gap-x-2.5 p-3 font-semibold text-gray-900 hover:bg-gray-100">
-              <component :is="item.icon" class="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
-              {{ item.name }}
-            </a>
-          </div>-->
                     </PopoverPanel>
                   </transition>
                 </Popover>
+                <button
+                  class="inline-block border px-2 py-1 text-base text-gray-900 hover:bg-gray-100"
+                  :class="!canApplyFilter ? 'bg-gray-300' : 'bg-white'"
+                  :disabled="!canApplyFilter"
+                  @click="handleFiltershange"
+                >
+                  APPLIQUER
+                </button>
               </PopoverGroup>
             </div>
           </div>

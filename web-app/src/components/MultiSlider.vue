@@ -63,7 +63,7 @@ watch([minVal, maxVal], () => {
       <div>
         <div class="mt-1 flex justify-start">
           <BaseInput
-            v-model="minVal"
+            v-model.number="minVal"
             :min="min"
             :max="maxVal - 1"
             type="number"
@@ -78,7 +78,7 @@ watch([minVal, maxVal], () => {
       <div>
         <div class="mt-1 flex justify-end">
           <BaseInput
-            v-model="maxVal"
+            v-model.number="maxVal"
             :min="minVal + 1"
             :max="max"
             type="number"
@@ -95,7 +95,7 @@ watch([minVal, maxVal], () => {
         type="range"
         :min="min"
         :max="max"
-        v-model="minVal"
+        v-model.number="minVal"
         @input="updateMinVal"
         class="thumb thumb--left"
         :style="{ zIndex: minVal > max - 100 ? 5 : '' }"
@@ -104,7 +104,7 @@ watch([minVal, maxVal], () => {
         type="range"
         :min="min"
         :max="max"
-        v-model="maxVal"
+        v-model.number="maxVal"
         @input="updateMaxVal"
         class="thumb thumb--right"
       />
